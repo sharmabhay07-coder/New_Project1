@@ -1,0 +1,208 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.cta {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 350px; /* Height kam */
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.55)
+    ),
+    url("https://media.istockphoto.com/id/1325306868/photo/businessman-logging-on-to-a-password-protected-website.jpg?s=612x612&w=0&k=20&c=ae7kDZD2vlt_svxtxltfgQuu3qIK4vlE9_U3FzIE68Y=");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Content */
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 850px;
+
+  text-align: center;
+
+  padding: 50px;
+}
+
+/* Badge */
+
+.cta-badge {
+  display: inline-block;
+
+  padding: 10px 22px;
+
+  border-radius: 50px;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 25px;
+}
+
+/* Title */
+
+.cta-title {
+  font-size: 60px;
+  font-weight: 800;
+
+  color: #fff;
+
+  line-height: 1.1;
+
+  margin-bottom: 20px;
+
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Description */
+
+.cta-description {
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 18px;
+  line-height: 1.8;
+
+  margin-bottom: 35px;
+}
+
+/* Form */
+
+.cta-form {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+/* Input */
+
+.cta-form input {
+  width: 350px;
+
+  padding: 18px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: white;
+  font-size: 16px;
+
+  outline: none;
+
+  transition: 0.3s ease;
+}
+
+.cta-form input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.cta-form input:focus {
+  border-color: #fff;
+}
+
+/* Button */
+
+.cta-form button {
+  padding: 18px 35px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.cta-form button:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25);
+}
+
+/* Note */
+
+.cta-note {
+  margin-top: 15px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 14px;
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+  .cta {
+    padding: 80px 20px;
+  }
+
+  .cta-title {
+    font-size: 42px;
+  }
+
+  .cta-description {
+    font-size: 16px;
+  }
+
+  .cta-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-form input,
+  .cta-form button {
+    width: 100%;
+    max-width: 420px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .cta {
+    padding: 60px 15px;
+  }
+
+  .cta-title {
+    font-size: 32px;
+  }
+
+  .cta-description {
+    font-size: 15px;
+  }
+
+  .cta-content {
+    padding: 0;
+  }
+}
