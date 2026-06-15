@@ -1,10 +1,34 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./CTA.css";
 
 const CTA = () => {
+  const ctaRef = useRef(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry], obs) => {
+        if (entry.isIntersecting) {
+          setShow(true);
+          obs.unobserve(entry.target); // run only once
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ctaRef.current) {
+      observer.observe(ctaRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="cta">
-      <div className="cta-circle"></div>
+    <section
+      ref={ctaRef}
+      className={`cta ${show ? "active" : ""}`}
+    >
+      <div className="cta-bg"></div>
 
       <div className="cta-content">
         <span className="cta-badge">

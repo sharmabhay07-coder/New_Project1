@@ -1,0 +1,289 @@
+/* =========================
+   SECTION
+========================= */
+
+.cards-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  overflow: hidden;
+  background: #0f172a;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.left-content {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 70px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 22px;
+
+  border-radius: 999px;
+
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+
+  color: #10b981;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  margin-bottom: 20px;
+}
+
+.left-content h2 {
+  font-size: 4.2rem;
+  line-height: 1.1;
+  font-weight: 900;
+
+  color: #fff;
+
+  margin-bottom: 20px;
+
+  letter-spacing: -2px;
+}
+
+.left-content h2 span {
+  color: #10b981;
+}
+
+.left-content p {
+  max-width: 800px;
+
+  margin: 0 auto 30px;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.start-btn {
+  padding: 16px 36px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #10b981,
+    #3b82f6
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.35s ease;
+}
+
+.start-btn:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 12px 30px rgba(16, 185, 129, 0.3);
+}
+
+/* =========================
+   SLIDER
+========================= */
+
+.cards-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.cards-track {
+  display: flex;
+  width: max-content;
+
+  animation: scrollCards 30s linear infinite;
+}
+
+.cards-track:hover {
+  animation-play-state: paused;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+  width: 320px;
+  height: 220px;
+
+  margin-right: 24px;
+
+  position: relative;
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  border-radius: 24px;
+
+  border: 2px solid transparent;
+
+  background:
+    linear-gradient(#0f172a, #0f172a) padding-box,
+    linear-gradient(
+      135deg,
+      #10b981,
+      #3b82f6,
+      #8b5cf6
+    ) border-box;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.25);
+
+  transition: all .4s ease;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform .8s ease,
+    filter .8s ease;
+}
+
+.card:hover img {
+  transform: scale(1.12);
+  filter: brightness(1.1);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+
+  box-shadow:
+    0 18px 35px rgba(0,0,0,.35),
+    0 0 25px rgba(16,185,129,.25);
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: flex-end;
+
+  padding: 20px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.95),
+    rgba(0,0,0,.35),
+    transparent
+  );
+}
+
+.card-overlay h3 {
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes scrollCards {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 992px) {
+
+  .left-content h2 {
+    font-size: 3rem;
+  }
+
+  .card {
+    width: 280px;
+    height: 190px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .cards-wrapper {
+    padding: 60px 15px;
+  }
+
+  .left-content h2 {
+    font-size: 2.3rem;
+  }
+
+  .left-content p {
+    font-size: 15px;
+  }
+
+  .card {
+    width: 240px;
+    height: 160px;
+  }
+
+  .card-overlay h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .left-content h2 {
+    font-size: 1.9rem;
+  }
+
+  .card {
+    width: 210px;
+    height: 145px;
+  }
+
+  .start-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}

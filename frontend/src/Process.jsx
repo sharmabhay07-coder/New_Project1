@@ -1,49 +1,63 @@
-import React from 'react'
-import "./process.css"
+import React, { useEffect, useRef, useState } from "react";
+import "./process.css";
+
 const Process = () => {
-    const step = [{
-        number: "01",
-        title: "Create your Account",
-        description: "Free sign-up with email or Google. Zero waiting, zero approval process.",
-    },
-    {
-        number: "02",
-        title: "Pick a Task",
-        description:
-            "Browse surveys, games, videos, app installs — hundreds of new tasks added daily.",
-    },
-    {
-        number: "03",
-        title: "Get Paid Daily",
-        description:
-            "Cash out via PayPal, crypto, or gift cards every single day without waiting.",
-    },
-    ];
+  const sectionRef = useRef(null);
+  const [show, setShow] = useState(false);
 
-    return (
-        <section className='process'>
-            <div className='container'>
-                <span className='section-tag'>THE PROCESS</span>
-                <h2 className='section-title'>
-                    3 steps to your first payout
-                </h2>
-                <p className='section-subtitle'>
-                    Takes under 2 minutes to set up and earn your very first reward today.
-                </p>
-                <div className='steps'>
-                    {step.map((step) => (
-                        <div className='step' key={step.number}>
-                            <div className='step-number'>{step.number}</div>
-                            <h3>{step.title}</h3>
-                            <p>{step.description}</p>
-                        </div>
-                    ))}
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setShow(true);
+      }
+    });
 
-                </div>
-            </div>
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
-        </section>
-    )
-}
+    return () => observer.disconnect();
+  }, []);
 
-export default Process
+  return (
+    <section ref={sectionRef} className={`process ${show ? "show" : ""}`}>
+      <div className="container">
+
+        <span className="section-tag">How It Works</span>
+
+        <h2 className="section-title">
+          Simple 3 Step Process
+        </h2>
+
+        <p className="section-subtitle">
+          Follow these steps to complete your journey quickly and efficiently with a smooth workflow experience.
+        </p>
+
+        <div className="steps">
+
+          <div className="step">
+            <div className="step-number">1</div>
+            <h3>Create Account</h3>
+            <p>Sign up in seconds using email or social login and get started instantly.</p>
+          </div>
+
+          <div className="step">
+            <div className="step-number">2</div>
+            <h3>Complete Tasks</h3>
+            <p>Choose tasks from dashboard and complete them easily with simple steps.</p>
+          </div>
+
+          <div className="step">
+            <div className="step-number">3</div>
+            <h3>Get Paid</h3>
+            <p>Withdraw your earnings securely using multiple payment methods.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default Process;

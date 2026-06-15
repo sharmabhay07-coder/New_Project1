@@ -5,6 +5,7 @@ import Process from './Process'
 import CTA from './CTA'
 import Features from './Features'
 import Footer from './Footer'
+import HeroCards from './HeroCards'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <>
       <Navbar />
       <Hero />
+      <HeroCards/>
       <Features />
       <CTA />
       <Process />

@@ -42,23 +42,26 @@ const features = [
 ];
 
 const Features = () => {
-  const ref = useRef(null);
+  const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);   // ENTER → render
-        } else {
-          setVisible(false);  // EXIT → remove (rerender trigger)
+          setVisible(true);
+
+          // Animation only once
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.2 }
+      {
+        threshold: 0.2,
+      }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
 
     return () => observer.disconnect();
@@ -66,7 +69,7 @@ const Features = () => {
 
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       className={`features ${visible ? "show" : ""}`}
     >
       <div className="features-header">
@@ -75,15 +78,26 @@ const Features = () => {
         <h2>Everything you need to earn more</h2>
 
         <p>
-          No experience needed. No approval required. Sign up in seconds and earn your first dollar today.
+          No experience needed. No approval required. Sign up in seconds and
+          earn your first dollar today.
         </p>
       </div>
 
       <div className="features-grid">
         {features.map((feature, index) => (
-          <div className="feature-card" key={index}>
+          <div
+            className="feature-card"
+            key={index}
+            style={{
+              transitionDelay: visible
+                ? `${index * 120}ms`
+                : "0ms",
+            }}
+          >
             <div className="feature-icon">{feature.icon}</div>
+
             <h3>{feature.title}</h3>
+
             <p>{feature.description}</p>
 
             {feature.tags && (
