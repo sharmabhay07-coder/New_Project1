@@ -1,11 +1,18 @@
+/* =========================
+   RESET
+========================= */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-/* Navbar */
+/* =========================
+   BASE NAVBAR (TRANSPARENT)
+========================= */
+
 .navbar {
   width: 100%;
   height: 72px;
@@ -16,50 +23,92 @@
 
   padding: 0 55px;
 
-  background: rgba(238, 242, 242, 0.7);
-  backdrop-filter: blur(12px);
+  /* initial glass effect */
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 
   position: sticky;
   top: 0;
   z-index: 1000;
 
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
+/* subtle glow */
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(16,185,129,0.08), transparent 60%);
+  z-index: -1;
+}
+
+/* =========================
+   SCROLLED STATE (IMPORTANT)
+========================= */
+
+.navbar.scrolled {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* text contrast fix on scroll */
+.navbar.scrolled .logo-text {
+  color: #ffffff;
+}
+
+.navbar.scrolled .nav-links a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar.scrolled .nav-links a:hover {
+  color: #ffffff;
+}
+
+/* =========================
+   LOGO
+========================= */
+
 .logo-text {
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 800;
-  color: #000; /* Earn = black */
+  letter-spacing: -0.5px;
+  color: #0f172a;
 }
 
 .logo-text span {
-  color: #10b981; /* Hub = light green */
+  color: #10b981;
 }
 
-/* Nav Links */
+/* =========================
+   NAV LINKS
+========================= */
+
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 30px;
-}
-
-.nav-links li {
-  position: relative;
+  gap: 28px;
 }
 
 .nav-links a {
   text-decoration: none;
-  color: #475569;
+  color: #334155;
   font-size: 15px;
   font-weight: 500;
 
-  transition: 0.3s;
   position: relative;
+  transition: all 0.3s ease;
 }
 
-/* Hover underline animation */
+/* underline animation */
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -70,86 +119,50 @@
   height: 2px;
 
   background: linear-gradient(90deg, #10b981, #06b6d4);
-  transition: 0.3s;
+  transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
   color: #0f172a;
+  transform: translateY(-1px);
 }
 
 .nav-links a:hover::after {
   width: 100%;
 }
 
-/* Right Section */
+/* =========================
+   RIGHT SECTION
+========================= */
+
 .nav-right {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Theme Toggle */
-.theme-toggle {
-  width: 85px;
-  height: 38px;
+/* =========================
+   BUTTONS
+========================= */
 
-  background: #e2e8f0;
-  border-radius: 50px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 8px;
-  cursor: pointer;
-
-  position: relative;
-
-  transition: 0.3s;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.05);
-}
-
-.toggle-circle {
-  position: absolute;
-
-  width: 26px;
-  height: 26px;
-
-  background: white;
-  border-radius: 50%;
-
-  left: 6px;
-
-  transition: 0.3s;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.theme-toggle.active .toggle-circle {
-  left: 52px;
-}
-
-/* Buttons */
 .login-btn {
   padding: 9px 18px;
 
-  border: 1px solid #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.4);
   border-radius: 10px;
 
-  background: white;
-  color: #0f172a;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
 
+  color: #0f172a;
   font-weight: 600;
   cursor: pointer;
 
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .login-btn:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.7);
   transform: translateY(-2px);
 }
 
@@ -165,7 +178,7 @@
   font-weight: 600;
   cursor: pointer;
 
-  transition: 0.3s;
+  transition: all 0.3s ease;
 
   box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
 }
@@ -175,7 +188,10 @@
   box-shadow: 0 12px 25px rgba(16, 185, 129, 0.35);
 }
 
-/* Responsive */
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media (max-width: 992px) {
   .navbar {
     padding: 0 25px;
@@ -191,21 +207,13 @@
     display: none;
   }
 
-  .logo h1 {
-    font-size: 26px;
+  .logo-text {
+    font-size: 24px;
   }
 
   .login-btn,
   .signup-btn {
     padding: 7px 14px;
     font-size: 13px;
-  }
-
-  .theme-toggle {
-    width: 75px;
-  }
-
-  .theme-toggle.active .toggle-circle {
-    left: 45px;
   }
 }

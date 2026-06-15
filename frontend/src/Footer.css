@@ -1,42 +1,199 @@
-.footer {
-  background: #000;
-  color: #fff;
-  padding: 30px 20px;
-  text-align: center;
+/* =========================
+   FONT IMPORT
+========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* =========================
+   RESET (optional safe)
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.footer-content h2 {
-  margin-bottom: 15px;
-  font-size: 28px;
+/* =========================
+   FOOTER BASE
+========================= */
+
+.footer {
+  position: relative;
+  background: radial-gradient(circle at top, #136ddb96, #0ba5d4a9);
+  color: #fff;
+  padding: 70px 20px 30px;
+  text-align: center;
+  overflow: hidden;
+  font-family: "Inter", system-ui, sans-serif;
 }
+
+/* =========================
+   DARK OVERLAY (IMPORTANT FOR VISIBILITY)
+========================= */
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* =========================
+   ANIMATED BACKGROUND GLOW
+========================= */
+
+.footer::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  filter: blur(120px);
+  background: rgba(47, 108, 207, 0.25);
+  bottom: -150px;
+  right: -120px;
+  animation: floatGlow 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* second glow (extra layer) */
+.footer-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(120px);
+  background: rgba(0, 183, 255, 0.08);
+  top: -150px;
+  left: -120px;
+  animation: floatGlow 10s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* =========================
+   CONTENT WRAPPER
+========================= */
+
+.footer-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+/* =========================
+   TITLE (FIXED VISIBILITY)
+========================= */
+
+.footer-content h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+
+  background: linear-gradient(90deg, #ffffff, #d1d5db);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   LINKS
+========================= */
 
 .footer-links {
   list-style: none;
   display: flex;
   justify-content: center;
-  gap: 25px;
-  margin-bottom: 15px;
+  gap: 28px;
+  margin-bottom: 18px;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 .footer-links a {
-  color: #ccc;
+  position: relative;
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
-  transition: 0.3s;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+/* underline animation */
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #00ff88, #3b82f6);
+  transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
-  color: #00ff88;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
-.footer p {
-  color: #888;
-  font-size: 14px;
+.footer-links a:hover::after {
+  width: 100%;
 }
+
+/* =========================
+   COPYRIGHT TEXT
+========================= */
+
+.footer p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1);
+  }
+  50% {
+    transform: translateY(20px) translateX(10px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) scale(1);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 768px) {
   .footer-links {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+  }
+
+  .footer-content h2 {
+    font-size: 22px;
   }
 }
