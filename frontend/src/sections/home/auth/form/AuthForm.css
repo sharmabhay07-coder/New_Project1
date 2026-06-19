@@ -1,0 +1,534 @@
+/* ══ RIGHT PANEL — Pure white, exactly like screenshot 2 ══ */
+.right {
+    flex: 1;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 36px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* TABS — exact match to screenshot 2 */
+.tab-row {
+    display: flex;
+    background: #f5f5f5;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    padding: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    background: transparent;
+    color: #a0a0a0;
+    transition: all .22s;
+}
+
+.tab:not(.active):hover {
+    background: #ebebeb;
+    color: #555;
+}
+
+.tab.active {
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.30);
+}
+
+/* GOOGLE — screenshot 2 style: white bg, light border, G icon */
+.btn-google {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: 1.5px solid #e0e0e0;
+    background: #ffffff;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all .22s;
+    margin-bottom: 16px;
+}
+
+.btn-google:hover {
+    background: #f9f9f9;
+    border-color: #10b981;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.10);
+}
+
+.g-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* DIVIDER */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.dline {
+    flex: 1;
+    height: 1px;
+    background: #ebebeb;
+}
+
+.dtxt {
+    font-size: 11px;
+    color: #b0b0b0;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* PANEL HEADING */
+.right-head {
+    margin-bottom: 16px;
+}
+
+.right-title {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -.4px;
+    color: #1a1a1a;
+    margin-bottom: 3px;
+}
+
+.right-sub {
+    font-size: 13px;
+    color: #999;
+}
+
+/* FIELDS — exactly like screenshot 2: light grey bg, no colored tint */
+.field {
+    margin-bottom: 12px;
+}
+
+.field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.fw {
+    position: relative;
+}
+
+.fw input {
+    width: 100%;
+    padding: 11px 38px 11px 13px;
+    border-radius: 8px;
+    border: 1.5px solid #e5e5e5;
+    background: #f9f9f9;
+    color: #1a1a1a;
+    font-size: 13.5px;
+    outline: none;
+    font-family: inherit;
+    transition: all .22s;
+}
+
+.fw input::placeholder {
+    color: #bbb;
+    font-size: 13px;
+}
+
+.fw input:hover {
+    border-color: #d0d0d0;
+    background: #f5f5f5;
+}
+
+.fw input:focus {
+    border-color: #10b981;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.fw input.err {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.10);
+}
+
+.fw .fi {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #ccc;
+    pointer-events: none;
+}
+
+.fw .fi.click {
+    pointer-events: auto;
+    cursor: pointer;
+    transition: color .2s;
+}
+
+.fw .fi.click:hover {
+    color: #10b981;
+}
+
+.ferr {
+    font-size: 11px;
+    color: #ef4444;
+    margin-top: 4px;
+    display: none;
+}
+
+.ferr.show {
+    display: block;
+}
+
+/* PHONE — same clean look */
+.phone-row {
+    display: flex;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9f9f9;
+    transition: all .22s;
+}
+
+.phone-row:hover {
+    border-color: #d0d0d0;
+    background: #f5f5f5;
+}
+
+.phone-row:focus-within {
+    border-color: #10b981;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.phone-row.err {
+    border-color: #ef4444;
+}
+
+.phone-pfx {
+    padding: 11px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #555;
+    background: #f0f0f0;
+    border-right: 1.5px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.phone-row input {
+    flex: 1;
+    padding: 11px 12px;
+    border: none;
+    background: transparent;
+    color: #1a1a1a;
+    font-size: 13.5px;
+    outline: none;
+    font-family: inherit;
+}
+
+.phone-row input::placeholder {
+    color: #bbb;
+    font-size: 13px;
+}
+
+/* PW STRENGTH */
+.pw-str {
+    margin-top: 6px;
+    display: none;
+}
+
+.pw-str.show {
+    display: block;
+}
+
+.pw-bars {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 3px;
+}
+
+.pw-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: #e8e8e8;
+    transition: background .3s;
+}
+
+.pw-bar.weak {
+    background: #ef4444;
+}
+
+.pw-bar.medium {
+    background: #f59e0b;
+}
+
+.pw-bar.strong {
+    background: #10b981;
+}
+
+.pw-lbl {
+    font-size: 11px;
+    color: #999;
+}
+
+/* REFERRAL */
+.ref-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #aaa;
+    cursor: pointer;
+    margin-bottom: 11px;
+    user-select: none;
+    width: fit-content;
+    transition: color .2s;
+}
+
+.ref-toggle:hover {
+    color: #10b981;
+}
+
+.ref-arr {
+    transition: transform .2s;
+    font-size: 10px;
+}
+
+.ref-arr.open {
+    transform: rotate(90deg);
+}
+
+.ref-field {
+    display: none;
+    margin-bottom: 11px;
+}
+
+.ref-field.show {
+    display: block;
+}
+
+/* FORGOT */
+.forgot-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -2px;
+    margin-bottom: 14px;
+}
+
+.forgot-link {
+    font-size: 12px;
+    color: #10b981;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.forgot-link:hover {
+    color: #059669;
+}
+
+/* TERMS */
+.terms-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.terms-row input[type=checkbox] {
+    width: 15px;
+    height: 15px;
+    accent-color: #10b981;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.terms-row label {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.terms-row a {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.terms-row a:hover {
+    color: #059669;
+}
+
+/* SUBMIT — screenshot 2: solid green, white text, rounded */
+.btn-submit {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    border: none;
+    background: #10b981;
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .25s;
+    letter-spacing: .1px;
+}
+
+.btn-submit:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.38);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit.loading {
+    pointer-events: none;
+    opacity: .8;
+}
+
+.btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin: 0 auto;
+}
+
+.btn-submit.loading .btn-text {
+    display: none;
+}
+
+.btn-submit.loading .btn-spinner {
+    display: block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* SWITCH */
+.switch-row {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #999;
+}
+
+.switch-link {
+    color: #10b981;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color .2s;
+}
+
+.switch-link:hover {
+    color: #059669;
+}
+
+/* PANELS */
+.form-panel {
+    display: none;
+}
+
+.form-panel.active {
+    display: block;
+    animation: fadeUp .3s ease both;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TOAST */
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-16px);
+    z-index: 200;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transition: all .32s;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── React additions ── */
+.spin {
+    animation: spin 0.8s linear infinite;
+}
+
+.btn-google-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.ferr {
+    display: none;
+}
+
+.fw input.err {
+    border-color: #ef4444 !important;
+}

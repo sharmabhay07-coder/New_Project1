@@ -1,0 +1,136 @@
+.footer {
+  padding: 70px 8% 30px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.footer-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.footer-logo span {
+  color: #10b981;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.footer-text {
+  max-width: 650px;
+  margin: 0 auto 40px;
+
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.footer-links {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #475569;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #10b981;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.footer-divider {
+  width: 100%;
+  max-width: 800px;
+  height: 1px;
+
+  margin: 0 auto 22px;
+  background: #e2e8f0;
+}
+
+/* =========================
+   COPYRIGHT
+========================= */
+
+.footer-copy {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 60px 5% 30px;
+  }
+
+  .footer-links {
+    gap: 22px;
+  }
+
+  .footer-text {
+    font-size: 15px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 50px 20px 25px;
+  }
+
+  .footer-logo {
+    font-size: 1.7rem;
+  }
+
+  .footer-text {
+    font-size: 14px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+  }
+}
