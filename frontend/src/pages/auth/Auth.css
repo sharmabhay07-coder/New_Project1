@@ -1,0 +1,58 @@
+/* PAGE BG */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  /* background: linear-gradient(135deg, #060d1a 0%, #0a1628 40%, #060e1c 100%); */
+}
+
+.page-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(16, 185, 129, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
+}
+
+.page-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* MODAL */
+.modal {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  width: 960px;
+  max-width: 96vw;
+  min-height: 600px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: popIn .5s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(.94) translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
