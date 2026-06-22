@@ -17,15 +17,44 @@ const userSchema = new mongoose.Schema(
             trim: true,
         },
 
+        mobileNumber: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
+
         password: {
             type: String,
             required: true,
         },
-        
+
         role: {
             type: String,
             enum: Object.values(ROLES),
             default: ROLES.USER,
+        },
+
+        balance: {
+            type: Number,
+            default: 0,
+        },
+
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
+
+        referralCode: {
+            type: String,
+            unique: true,
+            sparse: true,
+        },
+
+        referredBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null,
         },
 
     },
