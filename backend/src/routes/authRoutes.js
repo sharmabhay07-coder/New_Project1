@@ -1,8 +1,8 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
 const validate = require("../middleware/validationMiddleware");
-const { registerValidation, loginValidation, sendOtpValidation } = require("../validators/authValidator");
-const { registerUser, sendOtpController, loginUser, getMe } = require("../controllers/authController");
+const { registerValidation, loginValidation, sendOtpValidation, verifyOtpValidation } = require("../validators/authValidator");
+const { registerUser, sendOtpController, verifyOtpController, loginUser, getMe } = require("../controllers/authController");
 const authorizeRoles = require("../middleware/roleMiddleware");
 const ROLES = require("../constants/roles");
 
@@ -19,6 +19,13 @@ router.post(
     sendOtpValidation,
     validate,
     sendOtpController
+);
+
+router.post(
+    "/verify-otp",
+    verifyOtpValidation,
+    validate,
+    verifyOtpController
 );
 
 router.post("/login",

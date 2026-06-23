@@ -91,17 +91,77 @@ const sendOtpController = asyncHandler(async (req, res) => {
 
 });
 
-const loginUser = asyncHandler(async (req, res) => {
+const verifyOtpController = asyncHandler(async (req, res) => {
 
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { userId, otp } = req.body;
+
+    const otpRecord = await Otp.findOne({
+        user: userId,
+        otp,
+    });
+
+    if (!otpRecord) {
+        res.status(400);
+        throw new Error("Invalid OTP");
+    }
+
+    if (otpRecord.isUsed) {
+        res.status(400);
+        throw new Error("OTP already used");
+    }
+
+    if (otpRecord.expiresAt < new Date()) {
+        res.status(400);
+        throw new Error("OTP expired");
+    }
+
+    const user = await User.findById(userId);
 
     if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    user.isVerified = true;
+    await user.save();
+
+    otpRecord.isUsed = true;
+    await otpRecord.save();
+
+    res.status(200).json({
+        success: true,
+        message: "OTP verified successfully",
+    });
+
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+
+    const { identifier, password } = req.body;
+
+    const user = await User.findOne({
+        $or: [
+            { email: identifier.toLowerCase() },
+            { mobileNumber: identifier },
+        ],
+    });
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    if (!user.isVerified) {
+        res.status(403);
+        throw new Error(
+            "Please verify your account before logging in"
+        );
+    }
+
+    const isMatch = await bcrypt.compare(
+        password,
+        user.password
+    );
 
     if (!isMatch) {
         res.status(401);
@@ -119,7 +179,9 @@ const loginUser = asyncHandler(async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                mobileNumber: user.mobileNumber,
                 role: user.role,
+                isVerified: user.isVerified,
             },
         },
     });
@@ -140,6 +202,7 @@ const getMe = asyncHandler(async (req, res) => {
 module.exports = {
     registerUser,
     sendOtpController,
+    verifyOtpController,
     loginUser,
     getMe,
 };

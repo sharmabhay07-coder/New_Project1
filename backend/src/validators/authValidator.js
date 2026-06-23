@@ -19,6 +19,12 @@ const registerValidation = [
 ];
 
 const loginValidation = [
+    body("identifier")
+        .notEmpty()
+        .withMessage(
+            "Email or mobile number is required"
+        ),
+
     body("password")
         .notEmpty()
         .withMessage("Password is required"),
