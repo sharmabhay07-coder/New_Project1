@@ -32,11 +32,11 @@ function Navbar() {
       className={`navbar ${scrolled ? "scrolled" : ""
         }`}
     >
-      <div className="logo">
-        <h1 className="logo-text">
-          Earn <span>Hub</span>
-        </h1>
-      </div>
+<div className="logo" onClick={() => window.location.href = "/"} style={{ cursor: "pointer" }}>
+  <h1 className="logo-text">
+    Earn <span>Hub</span>
+  </h1>
+</div>
 
       <ul className="nav-links">
         {navLinks.map((link) => (
