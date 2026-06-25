@@ -13,8 +13,7 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
-  border-bottom: 1px solid
-    rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 
   position: sticky;
   top: 0;
@@ -27,23 +26,18 @@
 }
 
 .navbar.scrolled {
-  background: rgba(
-    15,
-    23,
-    42,
-    0.85
-  );
+  background: rgba(15,
+      23,
+      42,
+      0.85);
 
-  border-color: rgba(
-    255,
-    255,
-    255,
-    0.08
-  );
+  border-color: rgba(255,
+      255,
+      255,
+      0.08);
 
   box-shadow:
-    0 10px 30px
-    rgba(0, 0, 0, 0.25);
+    0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* LOGO */
@@ -86,12 +80,10 @@
 }
 
 .navbar.scrolled .nav-links a {
-  color: rgba(
-    255,
-    255,
-    255,
-    0.85
-  );
+  color: rgba(255,
+      255,
+      255,
+      0.85);
 }
 
 .navbar.scrolled .nav-links a:hover {
@@ -110,9 +102,10 @@
 
 .login-btn,
 .signup-btn {
+  text-decoration: none;
+
   padding: 10px 18px;
   border-radius: 10px;
-
   cursor: pointer;
   font-weight: 600;
 
@@ -123,15 +116,12 @@
 }
 
 .login-btn {
-  border: 1px solid
-    rgba(148, 163, 184, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.4);
 
-  background: rgba(
-    255,
-    255,
-    255,
-    0.4
-  );
+  background: rgba(255,
+      255,
+      255,
+      0.4);
 
   color: #0f172a;
 }
@@ -144,22 +134,17 @@
   border: none;
 
   background:
-    linear-gradient(
-      90deg,
+    linear-gradient(90deg,
       #10b981,
-      #06b6d4
-    );
+      #06b6d4);
 
   color: white;
 
   box-shadow:
-    0 8px 20px
-    rgba(
-      16,
+    0 8px 20px rgba(16,
       185,
       129,
-      0.25
-    );
+      0.25);
 }
 
 .signup-btn:hover {

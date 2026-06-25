@@ -301,39 +301,54 @@
 
 /* REFERRAL */
 .ref-toggle {
+    display: block;
+    width: 100%;
+    margin-bottom: 11px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ref-toggle-inner {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #aaa;
-    cursor: pointer;
-    margin-bottom: 11px;
-    user-select: none;
-    width: fit-content;
-    transition: color .2s;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px dashed #d0f0e8;
+    background: #f0fdf9;
+    transition: all 0.2s ease;
 }
 
-.ref-toggle:hover {
+.ref-toggle-inner:hover {
+    border-color: #10b981;
+    background: #e8fdf5;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.10);
+}
+
+.ref-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ref-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.ref-toggle-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.ref-toggle-sub {
+    font-size: 11px;
     color: #10b981;
+    font-weight: 500;
+    margin-top: 1px;
 }
 
-.ref-arr {
-    transition: transform .2s;
-    font-size: 10px;
-}
-
-.ref-arr.open {
-    transform: rotate(90deg);
-}
-
-.ref-field {
-    display: none;
-    margin-bottom: 11px;
-}
-
-.ref-field.show {
-    display: block;
-}
 
 /* FORGOT */
 .forgot-row {
@@ -531,4 +546,73 @@
 
 .fw input.err {
     border-color: #ef4444 !important;
+}
+
+/* OTP SCREEN */
+.otp-screen {
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.otp-screen-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.otp-screen-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: #1a1a1a;
+    letter-spacing: -0.4px;
+    margin-bottom: 8px;
+}
+
+.otp-screen-sub {
+    font-size: 13px;
+    color: #999;
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.otp-big-input-wrap {
+    margin-bottom: 16px;
+}
+
+.otp-big-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid #e5e5e5;
+    background: #f9f9f9;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 12px;
+    text-align: center;
+    color: #1a1a1a;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.otp-big-input:focus {
+    border-color: #10b981;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.otp-timer {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 20px;
+    min-height: 20px;
+}
+
+.otp-resend {
+    color: #10b981;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.otp-resend:hover {
+    color: #059669;
 }
