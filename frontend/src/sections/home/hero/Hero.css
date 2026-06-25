@@ -148,6 +148,7 @@
 
 .btn-primary,
 .btn-secondary {
+  text-decoration: none;
   padding: 15px 30px;
 
   border-radius: 12px;

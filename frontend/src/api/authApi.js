@@ -10,16 +10,25 @@ async function request(path, body) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data?.message || 'Something went wrong. Please try again.');
+    // handles both { message: '...' } and { errors: [{ msg: '...' }] }
+    const message =
+      data?.message ||
+      data?.errors?.[0]?.msg ||
+      'Something went wrong. Please try again.';
+    throw new Error(message);
   }
+
   return data;
 }
 
-export const loginUser = ({ email, password }) =>
-  request('/auth/login', { email, password });
+export const registerUser = ({ name, email, password, mobileNumber, referralCode }) =>
+  request('/auth/register', { name, email, mobileNumber, password, referralCode });
 
-export const registerUser = ({ name, email, password, mobile, referralCode }) =>
-  request('/auth/register', { name, email, password, mobile, referralCode });
+export const sendOtp = ({ userId }) =>
+  request('/auth/send-otp', { userId });
 
-export const googleAuth = (credential) =>
-  request('/auth/google', { credential });
+export const verifyOtp = ({ userId, otp }) =>
+  request('/auth/verify-otp', { userId, otp });
+
+export const loginUser = ({ identifier, password }) =>
+  request('/auth/login', { identifier, password });

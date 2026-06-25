@@ -1,14 +1,18 @@
 import { useState } from 'react';
-import '../../../sections/home/auth/form/AuthForm.css';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { User, Eye, EyeOff, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { loginSchema } from '../../../schemas/authSchemas';
 import { loginUser } from '../../../api/authApi';
+import useAuth from '../../../hooks/useAuth';
 
 export default function LoginForm({ onSwitch }) {
   const [showPw, setShowPw] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -17,9 +21,10 @@ export default function LoginForm({ onSwitch }) {
 
   const onSubmit = async (values) => {
     try {
-      await loginUser(values);
-      toast.success('Welcome back! Redirecting…');
-      // TODO: store token / redirect to dashboard
+      const res = await loginUser(values);
+      login(res.data.token, res.data.user);
+      toast.success(`Welcome back, ${res.data.user.name}! 🎉`);
+      navigate('/dashboard');
     } catch (err) {
       toast.error(err.message);
     }
@@ -34,17 +39,21 @@ export default function LoginForm({ onSwitch }) {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="field">
-          <label>Email Address</label>
+          <label>Email or Mobile Number</label>
           <div className="fw">
             <input
-              type="email"
-              placeholder="you@example.com"
-              className={errors.email ? 'err' : ''}
-              {...register('email')}
+              type="text"
+              placeholder="Email or 10-digit mobile"
+              className={errors.identifier ? 'err' : ''}
+              {...register('identifier')}
             />
-            <Mail size={16} className="fi" />
+            <User size={16} className="fi" />
           </div>
-          {errors.email && <div className="ferr" style={{ display: 'block' }}>{errors.email.message}</div>}
+          {errors.identifier && (
+            <div className="ferr" style={{ display: 'block' }}>
+              {errors.identifier.message}
+            </div>
+          )}
         </div>
 
         <div className="field">
@@ -60,7 +69,11 @@ export default function LoginForm({ onSwitch }) {
               {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
             </span>
           </div>
-          {errors.password && <div className="ferr" style={{ display: 'block' }}>{errors.password.message}</div>}
+          {errors.password && (
+            <div className="ferr" style={{ display: 'block' }}>
+              {errors.password.message}
+            </div>
+          )}
         </div>
 
         <div className="forgot-row">
@@ -70,18 +83,14 @@ export default function LoginForm({ onSwitch }) {
         </div>
 
         <button className="btn-submit" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <Loader2 size={18} className="spin" />
-          ) : (
-            <span className="btn-text">Sign In to EarnHub</span>
-          )}
+          {isSubmitting
+            ? <Loader2 size={18} className="spin" />
+            : <span className="btn-text">Sign In to EarnHub</span>}
         </button>
 
         <div className="switch-row">
           Don't have an account?{' '}
-          <span className="switch-link" onClick={onSwitch}>
-            Sign up free →
-          </span>
+          <span className="switch-link" onClick={onSwitch}>Sign up free →</span>
         </div>
       </form>
     </div>

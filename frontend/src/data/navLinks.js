@@ -1,18 +1,27 @@
 export const navLinks = [
   {
-    label: "How it Works",
-    href: "#how-it-works",
+    id: 1,
+    label: "Home",
+    path: "#home",
   },
   {
-    label: "Task Types",
-    href: "#task-types",
+    id: 2,
+    label: "How It Works",
+    path: "#process",
   },
   {
-    label: "Payouts",
-    href: "#payouts",
+    id: 3,
+    label: "Features",
+    path: "#features",
   },
   {
-    label: "Reviews",
-    href: "#reviews",
+    id: 4,
+    label: "Testimonials",
+    path: "#testimonials",
+  },
+  {
+    id: 5,
+    label: "FAQ",
+    path: "#faq",
   },
 ];
