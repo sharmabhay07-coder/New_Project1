@@ -41,7 +41,7 @@ function Navbar() {
       <ul className="nav-links">
         {navLinks.map((link) => (
           <li key={link.label}>
-            <a href={link.href}>
+            <a href={link.path}>
               {link.label}
             </a>
           </li>
