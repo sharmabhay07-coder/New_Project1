@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const taskSubmissionRoutes = require("./routes/taskSubmissionRoutes");
+const videoRoutes = require("./routes/videoRoutes");
 const withdrawalRoutes = require("./routes/withdrawalRoutes");
 const { notFound, errorHandler, } = require("./middleware/errorMiddleware");
 
@@ -39,6 +40,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.use("/api/submissions", taskSubmissionRoutes);
+
+app.use("/api/videos", videoRoutes);
 
 app.use("/api/withdrawals", withdrawalRoutes);
 
