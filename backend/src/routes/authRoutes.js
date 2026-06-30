@@ -35,7 +35,6 @@ router.post("/login",
 
 router.get("/me",
     protect,
-    authorizeRoles(ROLES.ADMIN),
     getMe);
 
 module.exports = router;
