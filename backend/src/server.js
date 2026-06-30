@@ -1,5 +1,7 @@
-const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -8,8 +10,7 @@ const taskSubmissionRoutes = require("./routes/taskSubmissionRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const withdrawalRoutes = require("./routes/withdrawalRoutes");
 const { notFound, errorHandler, } = require("./middleware/errorMiddleware");
-
-dotenv.config();
+const { verifyEmailTransport } = require("./services/emailService");
 
 if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI is missing in .env");
@@ -57,4 +58,10 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+
+    verifyEmailTransport().catch(() => {
+        console.error(
+            "[EMAIL] OTP emails are unavailable. Check SMTP_* and EMAIL_FROM values in backend/.env"
+        );
+    });
 });

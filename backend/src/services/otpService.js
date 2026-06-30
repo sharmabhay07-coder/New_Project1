@@ -1,4 +1,7 @@
 const Otp = require("../models/Otp");
+const bcrypt = require("bcryptjs");
+const { sendOtpEmail } = require("./emailService");
+
 const generateOtp = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -11,6 +14,7 @@ const saveOtp = async (userId) => {
     });
 
     const otp = generateOtp();
+    const hashedOtp = await bcrypt.hash(otp, 10);
 
     const expiresAt = new Date(
         Date.now() + 5 * 60 * 1000
@@ -18,21 +22,30 @@ const saveOtp = async (userId) => {
 
     const otpRecord = await Otp.create({
         user: userId,
-        otp,
+        otp: hashedOtp,
         expiresAt,
     });
 
-    return otpRecord;
+    return { otp, otpRecord };
 };
 
-const sendOtp = async (userId) => {
-    const otpRecord = await saveOtp(userId);
+const sendOtp = async (user) => {
+    const { otp, otpRecord } = await saveOtp(user._id);
 
-    console.log("=================================");
-    console.log("OTP:", otpRecord.otp);
-    console.log("=================================");
+    try {
+        const delivery = await sendOtpEmail({
+            to: user.email,
+            name: user.name,
+            otp,
+            expiresInMinutes: 5,
+        });
 
-    return otpRecord;
+        return { otpRecord, delivery };
+    } catch (error) {
+        // Do not leave an unusable OTP or force the user to wait before retrying.
+        await Otp.deleteOne({ _id: otpRecord._id });
+        throw error;
+    }
 };
 
 module.exports = {

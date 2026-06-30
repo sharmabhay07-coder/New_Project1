@@ -192,6 +192,12 @@
     color: #10b981;
 }
 
+.fw .password-toggle {
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
 .ferr {
     font-size: 11px;
     color: #ef4444;
@@ -304,6 +310,11 @@
     display: block;
     width: 100%;
     margin-bottom: 11px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
     user-select: none;
 }
@@ -337,12 +348,14 @@
 }
 
 .ref-toggle-title {
+    display: block;
     font-size: 13px;
     font-weight: 700;
     color: #1a1a1a;
 }
 
 .ref-toggle-sub {
+    display: block;
     font-size: 11px;
     color: #10b981;
     font-weight: 500;
@@ -395,13 +408,18 @@
     cursor: pointer;
 }
 
-.terms-row a {
+.terms-row .terms-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
     color: #10b981;
     text-decoration: none;
     font-weight: 600;
 }
 
-.terms-row a:hover {
+.terms-row .terms-link:hover {
     color: #059669;
 }
 
@@ -469,6 +487,10 @@
 }
 
 .switch-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
     color: #10b981;
     font-weight: 700;
     cursor: pointer;
@@ -608,6 +630,10 @@
 }
 
 .otp-resend {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
     color: #10b981;
     font-weight: 700;
     cursor: pointer;
@@ -615,4 +641,9 @@
 
 .otp-resend:hover {
     color: #059669;
+}
+
+.otp-resend:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
 }
