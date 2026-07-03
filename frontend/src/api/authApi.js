@@ -24,11 +24,19 @@ async function request(path, body) {
 export const registerUser = ({ name, email, password, mobileNumber, referralCode }) =>
   request('/auth/register', { name, email, mobileNumber, password, referralCode });
 
-export const sendOtp = ({ userId }) =>
-  request('/auth/send-otp', { userId });
+export const sendOtp = ({ registrationId, email }) => {
+  const body = {};
+  if (registrationId) body.registrationId = registrationId;
+  if (email) body.email = email;
+  return request('/auth/send-otp', body);
+};
 
-export const verifyOtp = ({ userId, otp }) =>
-  request('/auth/verify-otp', { userId, otp });
+export const verifyOtp = ({ registrationId, email, otp }) => {
+  const body = { otp };
+  if (registrationId) body.registrationId = registrationId;
+  if (email) body.email = email;
+  return request('/auth/verify-otp', body);
+};
 
 export const loginUser = ({ identifier, password }) =>
   request('/auth/login', { identifier, password });

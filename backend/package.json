@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "email:check": "node src/scripts/checkEmail.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.3",
+    "nodemailer": "^9.0.3",
     "nodemon": "^3.1.14"
   }
 }

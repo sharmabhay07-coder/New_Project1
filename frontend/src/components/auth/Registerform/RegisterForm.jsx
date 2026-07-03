@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User, Mail, Eye, EyeOff, Ticket, ChevronRight, Loader2, ShieldCheck } from 'lucide-react';
+import { User, Mail, Eye, EyeOff, Ticket, ChevronRight, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { registerSchema } from '../../../schemas/authSchemas';
-import { registerUser, sendOtp, verifyOtp, loginUser } from '../../../api/authApi';
+import { registerUser, sendOtp, verifyOtp } from '../../../api/authApi';
 import useAuth from '../../../hooks/useAuth';
 
 function getStrength(pw) {
@@ -22,43 +22,49 @@ function getStrength(pw) {
 export default function RegisterForm({ onSwitch }) {
   const [showPw, setShowPw] = useState(false);
   const [showRef, setShowRef] = useState(false);
-  const [step, setStep] = useState('form');   // 'form' | 'otp'
-  const [userId, setUserId] = useState(null);
+  const [step, setStep] = useState('form');
+  const [registrationId, setRegistrationId] = useState(null);
   const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
   const [otpValue, setOtpValue] = useState('');
   const [countdown, setCountdown] = useState(0);
+  const [expiresInMinutes, setExpiresInMinutes] = useState(5);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [showEmailRecovery, setShowEmailRecovery] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [recoveringOtp, setRecoveringOtp] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(registerSchema), defaultValues: { terms: false } });
 
-  const pwValue = watch('password');
-  const termsValue = watch('terms');
+  const pwValue = useWatch({ control, name: 'password' });
+  const termsValue = useWatch({ control, name: 'terms' });
   const strength = getStrength(pwValue);
 
   // ── 30s resend countdown ──
-  const startCountdown = () => {
-    setCountdown(30);
-    const id = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) { clearInterval(id); return 0; }
-        return prev - 1;
-      });
-    }, 1000);
+  useEffect(() => {
+    if (countdown <= 0) return undefined;
+
+    const id = setTimeout(() => setCountdown((value) => value - 1), 1000);
+    return () => clearTimeout(id);
+  }, [countdown]);
+
+  const applyOtpPolicy = (response) => {
+    const resendSeconds = response?.data?.resendAfterSeconds;
+    const expirySeconds = response?.data?.expiresInSeconds;
+    setCountdown(Number.isInteger(resendSeconds) ? resendSeconds : 30);
+    setExpiresInMinutes(Number.isInteger(expirySeconds) ? Math.ceil(expirySeconds / 60) : 5);
   };
 
   // ── Step 1: Register → then send OTP ──
   const onSubmit = async (values) => {
     try {
-      // 1. Create account
       const regRes = await registerUser({
         name: values.name,
         email: values.email,
@@ -67,44 +73,52 @@ export default function RegisterForm({ onSwitch }) {
         referralCode: values.referralCode,
       });
 
-      const newUserId = regRes.data.user.id;
-      setUserId(newUserId);
-      setUserEmail(values.email);
-      setUserPassword(values.password);
-
-      // 2. Send OTP immediately
-      setSendingOtp(true);
-      await sendOtp({ userId: newUserId });
-      setSendingOtp(false);
-
-      startCountdown();
+      setRegistrationId(regRes.data.registration.id);
+      setUserEmail(regRes.data.registration.email);
+      applyOtpPolicy(regRes);
       setStep('otp');
-      toast.success('Account created! OTP sent to your mobile 📱');
-      toast('⚠️ Check your backend terminal for OTP (SMS not active yet)', {
-        duration: 6000,
-        icon: '🖥️',
-      });
+      toast.success('OTP sent to your email');
     } catch (err) {
-      setSendingOtp(false);
       toast.error(err.message);
     }
   };
 
-  // ── Resend OTP ──
+  // ── Resend OTP (supports registrationId or email) ──
   const handleResend = async () => {
+    if (sendingOtp) return;
+
     try {
       setSendingOtp(true);
-      await sendOtp({ userId });
-      setSendingOtp(false);
-      startCountdown();
-      toast.success('OTP resent! Check backend terminal');
+      const params = registrationId ? { registrationId } : { email: userEmail };
+      const otpResponse = await sendOtp(params);
+      applyOtpPolicy(otpResponse);
+      toast.success('A new OTP was sent to your email');
     } catch (err) {
-      setSendingOtp(false);
       toast.error(err.message);
+    } finally {
+      setSendingOtp(false);
     }
   };
 
-  // ── Step 2: Verify OTP → auto login ──
+  // ── Recover registration via email ──
+  const handleEmailRecovery = async () => {
+    if (!recoveryEmail || recoveringOtp) return;
+    try {
+      setRecoveringOtp(true);
+      const otpResponse = await sendOtp({ email: recoveryEmail });
+      setUserEmail(recoveryEmail);
+      setRegistrationId(null);
+      setShowEmailRecovery(false);
+      applyOtpPolicy(otpResponse);
+      toast.success('OTP sent to your email');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setRecoveringOtp(false);
+    }
+  };
+
+  // ── Step 2: Verify OTP → auto login (supports registrationId or email) ──
   const handleVerify = async () => {
     if (otpValue.length < 6) {
       toast.error('Enter the 6-digit OTP');
@@ -113,19 +127,13 @@ export default function RegisterForm({ onSwitch }) {
     try {
       setVerifying(true);
 
-      console.log('Sending verify-otp with:', { userId, otp: otpValue });
-      console.log('userId type:', typeof userId, '| otp type:', typeof otpValue);
-      // 3. Verify OTP
-      await verifyOtp({ userId, otp: otpValue });
+      const params = registrationId
+        ? { registrationId, otp: otpValue }
+        : { email: userEmail, otp: otpValue };
 
-      // 4. Auto login
-      const loginRes = await loginUser({
-        identifier: userEmail,
-        password: userPassword,
-      });
-
-      login(loginRes.data.token, loginRes.data.user);
-      toast.success(`Welcome to EarnHub, ${loginRes.data.user.name}! 🎉`);
+      const verifyRes = await verifyOtp(params);
+      login(verifyRes.data.token, verifyRes.data.user);
+      toast.success(`Welcome to EarnHub, ${verifyRes.data.user.name}! 🎉`);
       navigate('/dashboard');
     } catch (err) {
       setVerifying(false);
@@ -139,20 +147,23 @@ export default function RegisterForm({ onSwitch }) {
   if (step === 'otp') {
     return (
       <div className="form-panel active">
-        <div className="otp-screen">
-          <div className="otp-screen-icon">📱</div>
-          <div className="otp-screen-title">Verify your mobile</div>
+        <form className="otp-screen" onSubmit={(event) => { event.preventDefault(); handleVerify(); }}>
+          <div className="otp-screen-icon"><Mail size={32} aria-hidden="true" /></div>
+          <div className="otp-screen-title">Verify your email</div>
           <div className="otp-screen-sub">
-            We sent a 6-digit OTP to your registered mobile number.
+            We sent a 6-digit OTP to {userEmail || 'your registered email address'}.
             <br />
-            <span style={{ color: '#f59e0b', fontSize: 12 }}>
-              ⚠️ SMS not active yet — check backend terminal for OTP
+            <span style={{ color: '#6b7280', fontSize: 12 }}>
+              It expires in {expiresInMinutes} minutes. Check your spam or junk folder if needed.
             </span>
           </div>
 
           <div className="otp-big-input-wrap">
             <input
               type="tel"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              aria-label="Six-digit verification code"
               className="otp-big-input"
               placeholder="Enter 6-digit OTP"
               maxLength={6}
@@ -165,15 +176,15 @@ export default function RegisterForm({ onSwitch }) {
           <div className="otp-timer">
             {countdown > 0
               ? `Resend OTP in ${countdown}s`
-              : <span className="otp-resend" onClick={handleResend}>
+              : <button type="button" className="otp-resend" onClick={handleResend} disabled={sendingOtp}>
                 {sendingOtp ? 'Sending...' : 'Resend OTP'}
-              </span>
+              </button>
             }
           </div>
 
           <button
             className="btn-submit"
-            onClick={handleVerify}
+            type="submit"
             disabled={verifying || otpValue.length < 6}
             style={{ marginTop: 8 }}
           >
@@ -182,22 +193,66 @@ export default function RegisterForm({ onSwitch }) {
               : <span className="btn-text">Verify & Start Earning →</span>}
           </button>
 
-          <div className="switch-row" style={{ marginTop: 14 }}>
-            <span
-              className="switch-link"
-              onClick={() => { setStep('form'); setOtpValue(''); }}
+          {!showEmailRecovery ? (
+            <button
+              type="button"
+              className="otp-recovery-trigger"
+              onClick={() => setShowEmailRecovery(true)}
             >
-              ← Go back
-            </span>
+              Lost access to this session? Recover via email →
+            </button>
+          ) : (
+            <div className="otp-recovery-form">
+              <div style={{ fontSize: 13, color: '#999', marginBottom: 8 }}>
+                Enter the email you used to register. We'll send a fresh OTP.
+              </div>
+              <div className="fw" style={{ marginBottom: 10 }}>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={recoveryEmail}
+                  onChange={(e) => setRecoveryEmail(e.target.value)}
+                  autoFocus
+                />
+                <Mail size={16} className="fi" />
+              </div>
+              <button
+                type="button"
+                className="btn-submit"
+                onClick={handleEmailRecovery}
+                disabled={recoveringOtp || !recoveryEmail}
+                style={{ padding: '10px', fontSize: 13 }}
+              >
+                {recoveringOtp
+                  ? <Loader2 size={16} className="spin" />
+                  : 'Send OTP to this email'}
+              </button>
+              <button
+                type="button"
+                className="switch-link"
+                onClick={() => setShowEmailRecovery(false)}
+                style={{ display: 'block', marginTop: 8, fontSize: 12 }}
+              >
+                ← Cancel
+              </button>
+            </div>
+          )}
+
+          <div className="switch-row" style={{ marginTop: 14 }}>
+            <button
+              type="button"
+              className="switch-link"
+              onClick={onSwitch}
+            >
+              ← Back to sign in
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     );
   }
 
-  // ════════════════════════════════════
   // STEP 1 — Registration Form
-  // ════════════════════════════════════
   return (
     <div className="form-panel active">
       <div className="right-head">
@@ -261,9 +316,14 @@ export default function RegisterForm({ onSwitch }) {
               className={errors.password ? 'err' : ''}
               {...register('password')}
             />
-            <span className="fi click" onClick={() => setShowPw((v) => !v)}>
+            <button
+              type="button"
+              className="fi click password-toggle"
+              onClick={() => setShowPw((v) => !v)}
+              aria-label={showPw ? 'Hide password' : 'Show password'}
+            >
               {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
-            </span>
+            </button>
           </div>
           {errors.password && <div className="ferr" style={{ display: 'block' }}>{errors.password.message}</div>}
 
@@ -281,27 +341,32 @@ export default function RegisterForm({ onSwitch }) {
           )}
         </div>
 
-        <div className="ref-toggle" onClick={() => setShowRef((v) => !v)}>
-          <div className="ref-toggle-inner">
-            <div className="ref-toggle-left">
-              <div className="ref-icon">🎟️</div>
-              <div>
-                <div className="ref-toggle-title">Have a referral code?</div>
-                <div className="ref-toggle-sub">Get bonus rewards on signup</div>
-              </div>
-            </div>
+        <button
+          type="button"
+          className="ref-toggle"
+          onClick={() => setShowRef((v) => !v)}
+          aria-expanded={showRef}
+        >
+          <span className="ref-toggle-inner">
+            <span className="ref-toggle-left">
+              <span className="ref-icon">🎟️</span>
+              <span>
+                <span className="ref-toggle-title">Have a referral code?</span>
+                <span className="ref-toggle-sub">Connect your account to your referrer</span>
+              </span>
+            </span>
             <ChevronRight size={16} className="ref-arr"
               style={{ transform: showRef ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s ease', color: '#10b981' }}
             />
-          </div>
-        </div>
+          </span>
+        </button>
 
         {showRef && (
           <div className="ref-field" style={{ display: 'block', marginBottom: 11 }}>
             <div className="fw">
               <input
                 type="text"
-                placeholder="e.g. REF-XXXXXX"
+                placeholder="e.g. REF-A1B2C3"
                 style={{ textTransform: 'uppercase', letterSpacing: '1px' }}
                 {...register('referralCode')}
                 onInput={(e) => { e.target.value = e.target.value.toUpperCase(); }}
@@ -315,8 +380,20 @@ export default function RegisterForm({ onSwitch }) {
           <input type="checkbox" id="terms" {...register('terms')} />
           <label htmlFor="terms">
             I agree to EarnHub's{' '}
-            <a onClick={() => toast('📄 Opening Terms...')}>Terms of Service</a> and{' '}
-            <a onClick={() => toast('🔒 Opening Privacy Policy...')}>Privacy Policy</a>
+            <button
+              type="button"
+              className="terms-link"
+              onClick={(event) => { event.preventDefault(); toast('📄 Opening Terms...'); }}
+            >
+              Terms of Service
+            </button> and{' '}
+            <button
+              type="button"
+              className="terms-link"
+              onClick={(event) => { event.preventDefault(); toast('🔒 Opening Privacy Policy...'); }}
+            >
+              Privacy Policy
+            </button>
           </label>
         </div>
         {errors.terms && <div className="ferr" style={{ display: 'block' }}>{errors.terms.message}</div>}
@@ -334,7 +411,7 @@ export default function RegisterForm({ onSwitch }) {
 
         <div className="switch-row">
           Already have an account?{' '}
-          <span className="switch-link" onClick={onSwitch}>Sign in →</span>
+          <button type="button" className="switch-link" onClick={onSwitch}>Sign in →</button>
         </div>
       </form>
     </div>

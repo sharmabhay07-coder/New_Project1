@@ -1,42 +1,34 @@
-const Otp = require("../models/Otp");
-const generateOtp = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-};
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const { sendOtpEmail } = require("./emailService");
+const getOtpConfig = require("../config/otp");
 
-const saveOtp = async (userId) => {
+const generateOtp = () => crypto.randomInt(100000, 1000000).toString();
 
-    await Otp.deleteMany({
-        user: userId,
-        isUsed: false,
-    });
-
+const createOtpCredentials = async () => {
+    const { expiryMinutes } = getOtpConfig();
     const otp = generateOtp();
+    const otpHash = await bcrypt.hash(otp, 10);
+    const otpExpiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
 
-    const expiresAt = new Date(
-        Date.now() + 5 * 60 * 1000
-    );
-
-    const otpRecord = await Otp.create({
-        user: userId,
-        otp,
-        expiresAt,
-    });
-
-    return otpRecord;
+    return { otp, otpHash, otpExpiresAt };
 };
 
-const sendOtp = async (userId) => {
-    const otpRecord = await saveOtp(userId);
+const deliverRegistrationOtp = async ({ registrationId, email, name, otp }) => {
+    const { expiryMinutes } = getOtpConfig();
+    const delivery = await sendOtpEmail({
+        to: email,
+        name,
+        otp,
+        expiresInMinutes: expiryMinutes,
+    });
 
-    console.log("=================================");
-    console.log("OTP:", otpRecord.otp);
-    console.log("=================================");
-
-    return otpRecord;
+    console.info(`[OTP] Delivery accepted registrationId=${registrationId}`);
+    return delivery;
 };
 
 module.exports = {
     generateOtp,
-    saveOtp,
-    sendOtp,
+    createOtpCredentials,
+    deliverRegistrationOtp,
 };
