@@ -1,0 +1,165 @@
+.vg-wrap {
+  max-width: 1550px;
+  width: calc(100% - 40px);
+
+  margin: 30px auto;
+  padding: 40px;
+
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  box-sizing: border-box;
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.vg-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 32px;
+}
+
+.vg-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.vg-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* ===========================
+   Grid
+=========================== */
+
+.vg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+.vg-grid .video-card {
+  width: 100%;
+  transition: all .35s ease;
+}
+
+.vg-grid .video-card:hover {
+  transform: translateY(-8px);
+}
+
+/* ===========================
+   Load More
+=========================== */
+
+.vg-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.vg-more-btn {
+  padding: 14px 36px;
+
+  border: 1px solid #10b981;
+  border-radius: 999px;
+
+  background: #fff;
+  color: #10b981;
+
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: all .3s ease;
+}
+
+.vg-more-btn:hover {
+  background: #10b981;
+  color: #fff;
+
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16,185,129,.25);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 1400px) {
+
+  .vg-wrap {
+    width: calc(100% - 32px);
+    padding: 32px;
+  }
+
+}
+
+@media (max-width: 1200px) {
+
+  .vg-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+@media (max-width: 992px) {
+
+  .vg-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .vg-wrap {
+    width: calc(100% - 24px);
+    padding: 24px;
+  }
+
+  .vg-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .vg-title {
+    font-size: 24px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .vg-wrap {
+    width: calc(100% - 20px);
+    padding: 20px;
+  }
+
+  .vg-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .vg-title {
+    font-size: 22px;
+  }
+
+  .vg-count {
+    font-size: 13px;
+  }
+
+  .vg-more-btn {
+    width: 100%;
+  }
+
+}

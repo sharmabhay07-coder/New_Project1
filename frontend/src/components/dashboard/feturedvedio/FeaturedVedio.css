@@ -1,0 +1,419 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap");
+
+/* ===================================
+   FEATURED VIDEO
+=================================== */
+
+.featured {
+  position: relative;
+  width: 100%;
+  max-width: 1550px;
+  height: 500px;
+
+  margin: 30px auto;
+  padding: 40px;
+
+  border-radius: 28px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-sizing: border-box;
+
+  transition: all 0.5s ease-in-out;
+}
+
+.featured-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    rgba(5, 8, 16, .96) 0%,
+    rgba(5, 8, 16, .75) 45%,
+    rgba(5, 8, 16, .15) 100%
+  );
+}
+
+.featured-content {
+  position: relative;
+  z-index: 2;
+
+  width: 58%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ===================================
+   BADGE
+=================================== */
+
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  width: fit-content;
+
+  padding: 8px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,.08);
+
+  backdrop-filter: blur(10px);
+
+  color: #fff;
+
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.featured-badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00d084;
+}
+
+/* ===================================
+   TITLE
+=================================== */
+
+.featured-title {
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  font-family: "Montserrat", sans-serif;
+  font-size: 68px;
+  font-weight: 900;
+  line-height: .95;
+
+  text-transform: uppercase;
+  letter-spacing: -2px;
+
+  color: #fff;
+}
+
+.featured-title-accent {
+  margin-top: 6px;
+  color: #00d084;
+}
+
+/* ===================================
+   META
+=================================== */
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+
+  color: #E5E7EB;
+}
+
+.featured-quality {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 42px;
+  height: 24px;
+
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 6px;
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  background: transparent;
+}
+
+/* ===================================
+   DESCRIPTION
+=================================== */
+
+.featured-desc {
+  max-width: 640px;
+
+  margin: 0;
+
+  font-family: Inter, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1.8;
+
+  color: rgba(255,255,255,.82);
+}
+
+/* ===================================
+   TAGS
+=================================== */
+
+.featured-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.featured-tag {
+  background: transparent;
+  padding: 0;
+
+  color: #D1D5DB;
+
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.featured-tag::after {
+  content: "|";
+  margin: 0 12px;
+  color: #6B7280;
+}
+
+.featured-tag:last-child::after {
+  display: none;
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.featured-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 10px;
+}
+
+.featured-btn-watch,
+.featured-btn-earn {
+  padding: 14px 30px;
+
+  border-radius: 999px;
+
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .3s;
+}
+
+.featured-btn-watch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+
+  background: #00d084;
+  color: #fff;
+}
+
+.featured-btn-watch:hover {
+  transform: translateY(-2px);
+}
+
+.featured-btn-add {
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255,255,255,.2);
+
+  background: rgba(255,255,255,.08);
+
+  color: #fff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  transition: .3s;
+}
+
+.featured-btn-add:hover {
+  background: #00d084;
+}
+
+.featured-btn-earn {
+  border: 1px solid #00d084;
+
+  background: transparent;
+
+  color: #00d084;
+}
+
+.featured-btn-earn:hover {
+  background: #00d084;
+  color: #fff;
+}
+
+/* ===================================
+   RIGHT BLOCK — Thumbnails + Progress Bar
+=================================== */
+
+.featured-right-block {
+  position: absolute;
+
+  right: 40px;
+  bottom: 35px;
+
+  z-index: 5;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featured-thumbs {
+  display: flex;
+  gap: 14px;
+}
+
+.featured-thumb {
+  width: 95px;
+  height: 65px;
+
+  border-radius: 14px;
+
+  object-fit: cover;
+
+  cursor: pointer;
+
+  transition: .35s ease;
+}
+
+.featured-thumb:hover {
+  transform: scale(1.08);
+}
+
+.featured-thumb.active {
+  border: 3px solid #00d084;
+
+  transform: scale(1.08);
+
+  box-shadow: 0 0 20px rgba(0,208,132,.45);
+}
+
+/* ===================================
+   PROGRESS BAR
+=================================== */
+
+.featured-progress-row {
+  display: flex;
+  gap: 6px;
+}
+
+.featured-progress-track {
+  flex: 1;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.featured-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: #00d084;
+  width: 0%;
+}
+
+.featured-progress-fill.filled {
+  width: 100%;
+}
+
+.featured-progress-fill.running {
+  animation: progressFill linear forwards;
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media (max-width:992px){
+
+.featured{
+height:auto;
+min-height:720px;
+padding:28px;
+}
+
+.featured-content{
+width:100%;
+}
+
+.featured-title{
+font-size:48px;
+}
+
+.featured-desc{
+font-size:17px;
+}
+
+.featured-right-block{
+position:relative;
+right:0;
+bottom:0;
+margin-top:30px;
+}
+
+.featured-thumbs{
+flex-wrap:wrap;
+}
+
+.featured-actions{
+flex-wrap:wrap;
+}
+
+}
+
+@media (max-width:576px){
+
+.featured{
+padding:20px;
+}
+
+.featured-title{
+font-size:34px;
+}
+
+.featured-meta{
+flex-wrap:wrap;
+}
+
+.featured-desc{
+font-size:15px;
+}
+
+}

@@ -1,16 +1,20 @@
-// import { Outlet } from 'react-router-dom';
-// import Sidebar from '../../pages/dashboard/Sidebar/Sidebar';
-// import Topbar from '../../pages/dashboard/Topbar/Topbar';
-// import './DashboardLayout.css';
+import { Outlet } from "react-router-dom";
+import "./DashboardLayout.css";
+import Topbar from "../../components/dashboard/topbar/Topbar";
+// import Sidebar from "../../components/dashboard/sidebar/Sidebar";
 
-// export default function DashboardLayout() {
-//   return (
-//     <div className="dashboard-shell">
-//       <Sidebar />
-//       <main className="dashboard-main">
-//         <Topbar />
-//         <Outlet />
-//       </main>
-//     </div>
-//   );
-// }
+export default function DashboardLayout() {
+  return (
+    <div className="dashboard-shell">
+      {/* <Sidebar /> */}
+
+      <div className="dashboard-main">
+        <Topbar />
+
+        <main className="dashboard-content">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
