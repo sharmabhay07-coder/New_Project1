@@ -3,10 +3,10 @@ import './AuthHero.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Gamepad2, ClipboardList, Smartphone, Clapperboard, Link2, Wallet } from 'lucide-react';
 
-import slideTasks from '../../../../assets/images/image1.jpg';
-import slidePayouts from '../../../../assets/images/image2.jpg';
-import slideReferrals from '../../../../assets/images/image3.jpg';
-import slideReviews from '../../../../assets/images/image4.jpg';
+import slideTasks from     '../../../assets/images/image1.jpg';
+import slidePayouts from   '../../../assets/images/image2.jpg';
+import slideReferrals from '../../../assets/images/image3.jpg';
+import slideReviews from   '../../../assets/images/image4.jpg';
 
 const SLIDES = [
     {

@@ -1,0 +1,400 @@
+.dash-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 32px;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid transparent;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+/* Scrolled state — dark navy gradient, like home navbar */
+.dash-nav.scrolled {
+  background: linear-gradient(90deg, #0d1b2a 0%, #14233a 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Logo */
+.dash-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #111827;
+  font-size: 19px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-logo {
+  color: #ffffff;
+}
+
+.dash-nav-logo strong {
+  color: #10b981;
+}
+
+.dash-nav-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* Search */
+.dash-nav-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dash-nav-search-icon {
+  position: absolute;
+  left: 11px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-search-icon {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dash-nav-search input {
+  padding: 8px 14px 8px 34px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  width: 200px;
+  transition: all 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-search input {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.dash-nav-search input::placeholder {
+  color: #9ca3af;
+}
+
+.dash-nav.scrolled .dash-nav-search input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.dash-nav-search input:focus {
+  border-color: #10b981;
+  background: #ffffff;
+  width: 240px;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.10);
+}
+
+.dash-nav.scrolled .dash-nav-search input:focus {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Nav Links */
+.dash-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.dash-nav-link {
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-link {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dash-nav-link:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.dash-nav.scrolled .dash-nav-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dash-nav-link.active {
+  background: rgba(16, 185, 129, 0.10);
+  color: #10b981;
+  font-weight: 700;
+}
+
+.dash-nav.scrolled .dash-nav-link.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+/* Right section */
+.dash-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Balance pill — stays green in both states */
+.dash-nav-balance {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.10);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10b981;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dash-nav-balance-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+}
+
+/* Bell */
+.dash-nav-bell {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-bell {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dash-nav-bell:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.dash-nav.scrolled .dash-nav-bell:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dash-nav-bell-dot {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 1.5px solid #ffffff;
+  transition: border-color 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-bell-dot {
+  border-color: #0d1b2a;
+}
+
+/* User / Avatar */
+.dash-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+.dash-nav-user:hover {
+  background: #f3f4f6;
+}
+
+.dash-nav.scrolled .dash-nav-user:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dash-nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #3b82f6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-nav-username {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-username {
+  color: #fff;
+}
+
+.dash-nav-chevron {
+  color: #9ca3af;
+  transition: all 0.3s ease;
+}
+
+.dash-nav.scrolled .dash-nav-chevron {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dash-nav-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* User trigger wrapper — avatar + name + chevron, clickable */
+.dash-nav-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Dropdown — stays consistent dark, since it pops over content either way */
+.dash-nav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 231px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  z-index: 200;
+}
+
+.dash-nav-dropdown-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 4px;
+}
+
+.dash-nav-dropdown-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #3b82f6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-nav-dropdown-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.dash-nav-dropdown-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.dash-nav-dropdown-email {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.dash-nav-dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 6px 0;
+}
+
+.dash-nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4b5563;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+}
+
+.dash-nav-dropdown-item:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.dash-nav-dropdown-item.logout:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .dash-nav {
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .dash-nav-links { display: none; }
+  .dash-nav-search input { width: 140px; }
+  .dash-nav-username { display: none; }
+}
