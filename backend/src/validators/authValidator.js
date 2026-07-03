@@ -2,10 +2,15 @@ const { body } = require("express-validator");
 
 const registerValidation = [
     body("name")
+        .trim()
         .notEmpty()
-        .withMessage("Name is required"),
+        .withMessage("Name is required")
+        .isLength({ max: 100 })
+        .withMessage("Name must be 100 characters or fewer"),
 
     body("email")
+        .trim()
+        .toLowerCase()
         .isEmail()
         .withMessage("Valid email is required"),
 
@@ -38,16 +43,41 @@ const loginValidation = [
 ];
 
 const sendOtpValidation = [
-    body("userId")
+    body("registrationId")
+        .optional()
         .isMongoId()
-        .withMessage("Valid user ID is required"),
+        .withMessage("Valid registration ID is required"),
+    body("email")
+        .optional()
+        .trim()
+        .toLowerCase()
+        .isEmail()
+        .withMessage("Valid email is required"),
+    body().custom((_, { req }) => {
+        if (!req.body.registrationId && !req.body.email) {
+            throw new Error("Registration ID or email is required");
+        }
+        return true;
+    }),
 ];
 
 const verifyOtpValidation = [
-    body("userId")
+    body("registrationId")
+        .optional()
         .isMongoId()
-        .withMessage("Valid user ID is required"),
-
+        .withMessage("Valid registration ID is required"),
+    body("email")
+        .optional()
+        .trim()
+        .toLowerCase()
+        .isEmail()
+        .withMessage("Valid email is required"),
+    body().custom((_, { req }) => {
+        if (!req.body.registrationId && !req.body.email) {
+            throw new Error("Registration ID or email is required");
+        }
+        return true;
+    }),
     body("otp")
         .matches(/^\d{6}$/)
         .withMessage("OTP must be 6 digits"),

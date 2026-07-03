@@ -1,55 +1,34 @@
-const Otp = require("../models/Otp");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const { sendOtpEmail } = require("./emailService");
+const getOtpConfig = require("../config/otp");
 
-const generateOtp = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-};
+const generateOtp = () => crypto.randomInt(100000, 1000000).toString();
 
-const saveOtp = async (userId) => {
-
-    await Otp.deleteMany({
-        user: userId,
-        isUsed: false,
-    });
-
+const createOtpCredentials = async () => {
+    const { expiryMinutes } = getOtpConfig();
     const otp = generateOtp();
-    const hashedOtp = await bcrypt.hash(otp, 10);
+    const otpHash = await bcrypt.hash(otp, 10);
+    const otpExpiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
 
-    const expiresAt = new Date(
-        Date.now() + 5 * 60 * 1000
-    );
-
-    const otpRecord = await Otp.create({
-        user: userId,
-        otp: hashedOtp,
-        expiresAt,
-    });
-
-    return { otp, otpRecord };
+    return { otp, otpHash, otpExpiresAt };
 };
 
-const sendOtp = async (user) => {
-    const { otp, otpRecord } = await saveOtp(user._id);
+const deliverRegistrationOtp = async ({ registrationId, email, name, otp }) => {
+    const { expiryMinutes } = getOtpConfig();
+    const delivery = await sendOtpEmail({
+        to: email,
+        name,
+        otp,
+        expiresInMinutes: expiryMinutes,
+    });
 
-    try {
-        const delivery = await sendOtpEmail({
-            to: user.email,
-            name: user.name,
-            otp,
-            expiresInMinutes: 5,
-        });
-
-        return { otpRecord, delivery };
-    } catch (error) {
-        // Do not leave an unusable OTP or force the user to wait before retrying.
-        await Otp.deleteOne({ _id: otpRecord._id });
-        throw error;
-    }
+    console.info(`[OTP] Delivery accepted registrationId=${registrationId}`);
+    return delivery;
 };
 
 module.exports = {
     generateOtp,
-    saveOtp,
-    sendOtp,
+    createOtpCredentials,
+    deliverRegistrationOtp,
 };

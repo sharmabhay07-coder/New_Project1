@@ -22,13 +22,17 @@ function getStrength(pw) {
 export default function RegisterForm({ onSwitch }) {
   const [showPw, setShowPw] = useState(false);
   const [showRef, setShowRef] = useState(false);
-  const [step, setStep] = useState('form');   // 'form' | 'otp'
-  const [userId, setUserId] = useState(null);
+  const [step, setStep] = useState('form');
+  const [registrationId, setRegistrationId] = useState(null);
   const [userEmail, setUserEmail] = useState('');
   const [otpValue, setOtpValue] = useState('');
   const [countdown, setCountdown] = useState(0);
+  const [expiresInMinutes, setExpiresInMinutes] = useState(5);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [showEmailRecovery, setShowEmailRecovery] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [recoveringOtp, setRecoveringOtp] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -51,12 +55,16 @@ export default function RegisterForm({ onSwitch }) {
     return () => clearTimeout(id);
   }, [countdown]);
 
-  const startCountdown = () => setCountdown(30);
+  const applyOtpPolicy = (response) => {
+    const resendSeconds = response?.data?.resendAfterSeconds;
+    const expirySeconds = response?.data?.expiresInSeconds;
+    setCountdown(Number.isInteger(resendSeconds) ? resendSeconds : 30);
+    setExpiresInMinutes(Number.isInteger(expirySeconds) ? Math.ceil(expirySeconds / 60) : 5);
+  };
 
   // ── Step 1: Register → then send OTP ──
   const onSubmit = async (values) => {
     try {
-      // 1. Create account
       const regRes = await registerUser({
         name: values.name,
         email: values.email,
@@ -65,36 +73,25 @@ export default function RegisterForm({ onSwitch }) {
         referralCode: values.referralCode,
       });
 
-      const newUserId = regRes.data.user.id;
-      setUserId(newUserId);
-      setUserEmail(regRes.data.user.email);
+      setRegistrationId(regRes.data.registration.id);
+      setUserEmail(regRes.data.registration.email);
+      applyOtpPolicy(regRes);
       setStep('otp');
-      toast.success('Account created!');
-
-      // 2. Send OTP immediately
-      try {
-        setSendingOtp(true);
-        await sendOtp({ userId: newUserId });
-        startCountdown();
-        toast.success('OTP sent to your email');
-      } catch (err) {
-        toast.error(`Account created, but OTP could not be sent: ${err.message}`);
-      } finally {
-        setSendingOtp(false);
-      }
+      toast.success('OTP sent to your email');
     } catch (err) {
       toast.error(err.message);
     }
   };
 
-  // ── Resend OTP ──
+  // ── Resend OTP (supports registrationId or email) ──
   const handleResend = async () => {
-    if (sendingOtp || !userId) return;
+    if (sendingOtp) return;
 
     try {
       setSendingOtp(true);
-      await sendOtp({ userId });
-      startCountdown();
+      const params = registrationId ? { registrationId } : { email: userEmail };
+      const otpResponse = await sendOtp(params);
+      applyOtpPolicy(otpResponse);
       toast.success('A new OTP was sent to your email');
     } catch (err) {
       toast.error(err.message);
@@ -103,7 +100,25 @@ export default function RegisterForm({ onSwitch }) {
     }
   };
 
-  // ── Step 2: Verify OTP → auto login ──
+  // ── Recover registration via email ──
+  const handleEmailRecovery = async () => {
+    if (!recoveryEmail || recoveringOtp) return;
+    try {
+      setRecoveringOtp(true);
+      const otpResponse = await sendOtp({ email: recoveryEmail });
+      setUserEmail(recoveryEmail);
+      setRegistrationId(null);
+      setShowEmailRecovery(false);
+      applyOtpPolicy(otpResponse);
+      toast.success('OTP sent to your email');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setRecoveringOtp(false);
+    }
+  };
+
+  // ── Step 2: Verify OTP → auto login (supports registrationId or email) ──
   const handleVerify = async () => {
     if (otpValue.length < 6) {
       toast.error('Enter the 6-digit OTP');
@@ -112,7 +127,11 @@ export default function RegisterForm({ onSwitch }) {
     try {
       setVerifying(true);
 
-      const verifyRes = await verifyOtp({ userId, otp: otpValue });
+      const params = registrationId
+        ? { registrationId, otp: otpValue }
+        : { email: userEmail, otp: otpValue };
+
+      const verifyRes = await verifyOtp(params);
       login(verifyRes.data.token, verifyRes.data.user);
       toast.success(`Welcome to EarnHub, ${verifyRes.data.user.name}! 🎉`);
       navigate('/dashboard');
@@ -135,7 +154,7 @@ export default function RegisterForm({ onSwitch }) {
             We sent a 6-digit OTP to {userEmail || 'your registered email address'}.
             <br />
             <span style={{ color: '#6b7280', fontSize: 12 }}>
-              It expires in 5 minutes. Check your spam or junk folder if needed.
+              It expires in {expiresInMinutes} minutes. Check your spam or junk folder if needed.
             </span>
           </div>
 
@@ -155,12 +174,12 @@ export default function RegisterForm({ onSwitch }) {
           </div>
 
           <div className="otp-timer">
-            {/* {countdown > 0
+            {countdown > 0
               ? `Resend OTP in ${countdown}s`
               : <button type="button" className="otp-resend" onClick={handleResend} disabled={sendingOtp}>
                 {sendingOtp ? 'Sending...' : 'Resend OTP'}
               </button>
-            } */}
+            }
           </div>
 
           <button
@@ -173,6 +192,51 @@ export default function RegisterForm({ onSwitch }) {
               ? <Loader2 size={18} className="spin" />
               : <span className="btn-text">Verify & Start Earning →</span>}
           </button>
+
+          {!showEmailRecovery ? (
+            <button
+              type="button"
+              className="otp-recovery-trigger"
+              onClick={() => setShowEmailRecovery(true)}
+            >
+              Lost access to this session? Recover via email →
+            </button>
+          ) : (
+            <div className="otp-recovery-form">
+              <div style={{ fontSize: 13, color: '#999', marginBottom: 8 }}>
+                Enter the email you used to register. We'll send a fresh OTP.
+              </div>
+              <div className="fw" style={{ marginBottom: 10 }}>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={recoveryEmail}
+                  onChange={(e) => setRecoveryEmail(e.target.value)}
+                  autoFocus
+                />
+                <Mail size={16} className="fi" />
+              </div>
+              <button
+                type="button"
+                className="btn-submit"
+                onClick={handleEmailRecovery}
+                disabled={recoveringOtp || !recoveryEmail}
+                style={{ padding: '10px', fontSize: 13 }}
+              >
+                {recoveringOtp
+                  ? <Loader2 size={16} className="spin" />
+                  : 'Send OTP to this email'}
+              </button>
+              <button
+                type="button"
+                className="switch-link"
+                onClick={() => setShowEmailRecovery(false)}
+                style={{ display: 'block', marginTop: 8, fontSize: 12 }}
+              >
+                ← Cancel
+              </button>
+            </div>
+          )}
 
           <div className="switch-row" style={{ marginTop: 14 }}>
             <button
@@ -188,9 +252,7 @@ export default function RegisterForm({ onSwitch }) {
     );
   }
 
-  // ════════════════════════════════════
   // STEP 1 — Registration Form
-  // ════════════════════════════════════
   return (
     <div className="form-panel active">
       <div className="right-head">
