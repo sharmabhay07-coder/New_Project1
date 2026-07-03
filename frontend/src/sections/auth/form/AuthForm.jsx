@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import LoginForm from '../../../../components/auth/LoginForm/LoginForm';
-import RegisterForm from '../../../../components/auth/Registerform/RegisterForm';
+import LoginForm from '../../../components/auth/LoginForm/LoginForm';
+import RegisterForm from '../../../components/auth/Registerform/RegisterForm';
 import './AuthForm.css';
 
 export default function AuthForm() {
