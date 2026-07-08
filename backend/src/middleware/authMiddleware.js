@@ -21,8 +21,17 @@ const protect = async (req, res, next) => {
             throw new Error("Not authorized, no token");
         }
     } catch (error) {
-        res.status(401);
-        throw new Error("Token failed");
+        if (error.name === "TokenExpiredError") {
+            res.status(401);
+            throw new Error("Token expired");
+        }
+        if (error.name === "JsonWebTokenError") {
+            res.status(401);
+            throw new Error("Invalid token");
+        }
+        // For database or other unexpected errors
+        res.status(500);
+        throw new Error("Server error: Could not authenticate user");
     }
 };
 

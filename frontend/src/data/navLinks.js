@@ -47,12 +47,6 @@ export const navLinks = [
     },
   },
   {
-    id: 4,
-    label: "Testimonials",
-    path: "#testimonials",
-    megaMenu: null,
-  },
-  {
     id: 5,
     label: "FAQ",
     path: "#faq",

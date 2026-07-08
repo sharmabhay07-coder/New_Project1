@@ -4,7 +4,7 @@ const validate = require("../middleware/validationMiddleware");
 const { registerValidation, loginValidation, sendOtpValidation, verifyOtpValidation } = require("../validators/authValidator");
 const { registerUser, sendOtpController, verifyOtpController, loginUser, getMe } = require("../controllers/authController");
 const authorizeRoles = require("../middleware/roleMiddleware");
-const ROLES = require("../constants/roles");
+const ROLES = require("../constants/Roles");
 
 const router = express.Router();
 

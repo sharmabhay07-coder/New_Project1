@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
+const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -26,10 +27,8 @@ const app = express();
 
 app.use(express.json());
 
-const cors = require('cors');
-
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     credentials: true,
 }));
 

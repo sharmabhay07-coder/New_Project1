@@ -7,7 +7,7 @@ const {
 
 const protect = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
-const ROLES = require("../constants/roles");
+const ROLES = require("../constants/Roles");
 
 const router = express.Router();
 

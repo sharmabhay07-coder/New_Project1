@@ -5,13 +5,18 @@ const { submitTask, reviewSubmission, getAllSubmissions, } = require("../control
 const protect = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
 
-const ROLES = require("../constants/roles");
+const ROLES = require("../constants/Roles");
 
 const router = express.Router();
+
+const validate = require("../middleware/validationMiddleware");
+const { submitTaskValidation } = require("../validators/taskValidator");
 
 router.post(
     "/",
     protect,
+    submitTaskValidation,
+    validate,
     submitTask
 );
 

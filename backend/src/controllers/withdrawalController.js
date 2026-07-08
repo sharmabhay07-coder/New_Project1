@@ -1,5 +1,5 @@
 const asyncHandler = require("../utils/asyncHandler");
-const Withdrawal = require("../models/withdrawal");
+const Withdrawal = require("../models/Withdrawal");
 const createWithdrawalRequest = asyncHandler(async (req, res) => {
 
     const {
@@ -24,6 +24,9 @@ const createWithdrawalRequest = asyncHandler(async (req, res) => {
         withdrawalMethod,
         accountDetails,
     });
+
+    req.user.balance -= amount;
+    await req.user.save();
 
     res.status(201).json({
         success: true,
