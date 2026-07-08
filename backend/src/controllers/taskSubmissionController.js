@@ -72,11 +72,23 @@ const reviewSubmission = asyncHandler(async (req, res) => {
     submission.reviewedBy = req.user._id;
 
     if (status === SUBMISSION_STATUS.APPROVED) {
-        submission.user.balance += submission.task.reward;
-        await submission.user.save();
+        // Perform both save operations as part of a transaction
+        const session = await TaskSubmission.startSession();
+        session.startTransaction();
+        try {
+            submission.user.balance += submission.task.reward;
+            await submission.user.save({ session });
+            await submission.save({ session });
+            await session.commitTransaction();
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            throw error;
+        }
+        session.endSession();
+    } else {
+        await submission.save();
     }
-
-    await submission.save();
 
     res.status(200).json({
         success: true,

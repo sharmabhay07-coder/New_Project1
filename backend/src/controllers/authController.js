@@ -102,31 +102,41 @@ const registerUser = asyncHandler(async (req, res) => {
     const now = new Date();
     const expiresAt = new Date(now.getTime() + pendingRegistrationTtlMinutes * 60 * 1000);
 
-    // A fresh attempt supersedes abandoned pending attempts for either identifier.
-    await PendingRegistration.deleteMany({
-        $or: [{ email: normalizedEmail }, { mobileNumber }],
-    });
-
+    const session = await PendingRegistration.startSession();
+    session.startTransaction();
     let pendingRegistration;
     try {
-        pendingRegistration = await PendingRegistration.create({
-            name,
-            email: normalizedEmail,
-            mobileNumber,
-            passwordHash,
-            referredBy: referrer?._id || null,
-            otpHash,
-            otpExpiresAt,
-            otpLastSentAt: now,
-            expiresAt,
-        });
+        // A fresh attempt supersedes abandoned pending attempts for either identifier.
+        await PendingRegistration.deleteMany({
+            $or: [{ email: normalizedEmail }, { mobileNumber }],
+        }, { session });
+
+        pendingRegistration = await PendingRegistration.create([
+            {
+                name,
+                email: normalizedEmail,
+                mobileNumber,
+                passwordHash,
+                referredBy: referrer?._id || null,
+                otpHash,
+                otpExpiresAt,
+                otpLastSentAt: now,
+                expiresAt,
+            },
+        ], { session });
+        pendingRegistration = pendingRegistration[0]; // Access the created document
+
+        await session.commitTransaction();
     } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
         if (error.code === 11000) {
             res.status(409);
             throw new Error("A registration is already in progress. Please try again");
         }
         throw error;
     }
+    session.endSession();
 
     console.info(
         `[OTP] Generated registrationId=${pendingRegistration._id} expiresAt=${otpExpiresAt.toISOString()}`
@@ -403,21 +413,30 @@ const verifyOtpController = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
     const { identifier, password } = req.body;
     const normalizedIdentifier = identifier.trim();
-    const normalizedEmail = normalizedIdentifier.toLowerCase();
     const isEmail = normalizedIdentifier.includes("@");
 
-    const user = await User.findOne({
-        $or: [
-            { email: normalizedEmail },
-            ...(isEmail ? [] : [{ mobileNumber: normalizedIdentifier }]),
-        ],
-    });
+    let user;
+    if (isEmail) {
+        const normalizedEmail = normalizedIdentifier.toLowerCase();
+        user = await User.findOne({ email: normalizedEmail });
+    } else {
+        // Attempt to find by mobile number first
+        user = await User.findOne({ mobileNumber: normalizedIdentifier });
+
+        // If not found by mobile number, and it *could* be an email, try email
+        // This handles cases where a mobile number might coincidentally contain '@' (though unlikely)
+        // or if the user erroneously enters an email in the phone field.
+        if (!user && normalizedIdentifier.includes("@")) {
+            const normalizedEmail = normalizedIdentifier.toLowerCase();
+            user = await User.findOne({ email: normalizedEmail });
+        }
+    }
 
     if (!user) {
-        // Check if there's an unverified pending registration for this email
+        // If no user found, check for pending registrations if identifier is an email
         if (isEmail) {
             const pendingExists = await PendingRegistration.exists({
-                email: normalizedEmail,
+                email: normalizedIdentifier.toLowerCase(), // Use normalized email here
                 expiresAt: { $gt: new Date() },
             });
 

@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler");
 const Video = require("../models/Video");
+const ROLES = require("../constants/Roles");
 
 const createVideo = asyncHandler(async (req, res) => {
 
@@ -22,7 +23,7 @@ const createVideo = asyncHandler(async (req, res) => {
         uploadedBy: req.user._id,
 
         // Admin uploads go live immediately
-        status: req.user.role === "admin"
+        status: req.user.role === ROLES.ADMIN
             ? "approved"
             : "pending",
     });
