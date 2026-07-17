@@ -19,6 +19,7 @@ const buildAuthResponse = (user) => ({
         mobileNumber: user.mobileNumber,
         role: user.role,
         isVerified: user.isVerified,
+        balance: user.balance,
     },
 });
 

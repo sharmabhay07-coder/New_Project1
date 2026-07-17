@@ -1,16 +1,19 @@
 const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
-async function request(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
+async function request(path, body = null, method = 'POST') {
+  const options = {
+    method,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
+  };
 
+  if (body !== null) {
+    options.body = JSON.stringify(body);
+  }
+
+  const res = await fetch(`${API_BASE}${path}`, options);
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    // handles both { message: '...' } and { errors: [{ msg: '...' }] }
     const message =
       data?.message ||
       data?.errors?.[0]?.msg ||
@@ -40,3 +43,7 @@ export const verifyOtp = ({ registrationId, email, otp }) => {
 
 export const loginUser = ({ identifier, password }) =>
   request('/auth/login', { identifier, password });
+
+export const googleAuth = async () => {
+  throw new Error('Google sign-in is not available yet.');
+};
