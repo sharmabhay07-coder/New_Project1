@@ -1,60 +1,41 @@
 import { createBrowserRouter } from "react-router-dom";
 
-// Layouts
 import MainLayout from "../layouts/MainLayout";
 import BlankLayout from "../layouts/BlankLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 
-// Public Pages
 import Home from "../../pages/home/Home";
 import Auth from "../../pages/auth/Auth";
-
-// Dashboard Pages
 import Dashboard from "../../pages/dashboard/Dashboard";
-// import Activity from "../../pages/dashboard/activity/Activity";
-// import Stats from "../../pages/dashboard/stats/Stats";
-// import Tasks from "../../pages/dashboard/tasks/Tasks";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
-  // ==========================
-  // Public Layout
-  // ==========================
   {
     element: <MainLayout />,
     children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
+      { path: "/", element: <Home /> },
     ],
   },
-
-  // ==========================
-  // Auth Layout
-  // ==========================
   {
     element: <BlankLayout />,
     children: [
-      {
-        path: "/auth",
-        element: <Auth />,
-      },
+      { path: "/auth", element: <Auth /> },
     ],
   },
-  
-
-  // ==========================
-  // Dashboard Layout
-  // ==========================
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <Dashboard />,
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: "videos", element: <div style={{ padding: 24 }}>Videos coming soon.</div> },
+          { path: "wallet", element: <div style={{ padding: 24 }}>Wallet section coming soon.</div> },
+          { path: "referrals", element: <div style={{ padding: 24 }}>Referrals section coming soon.</div> },
+        ],
       },
-    ]
+    ],
   },
 ]);
 

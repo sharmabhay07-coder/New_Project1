@@ -22,7 +22,6 @@ const createVideo = asyncHandler(async (req, res) => {
         duration,
         uploadedBy: req.user._id,
 
-        // Admin uploads go live immediately
         status: req.user.role === ROLES.ADMIN
             ? "approved"
             : "pending",
