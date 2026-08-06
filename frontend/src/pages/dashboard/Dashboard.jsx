@@ -1,5 +1,5 @@
 import FeaturedVideo from "../../components/dashboard/feturedvedio/FeaturedVedio";
-import PaymentSection from "../../components/dashboard/Paymentsection/PaymentSection";
+import PaymentSection from "../../components/dashboard/paymentsection/PaymentSection";
 import PlansSection from "../../components/dashboard/plansection/PlansSection";
 import Stats from "../../components/dashboard/stats/Stats";
 import VideoShowcase from "../../components/dashboard/vedioshowcase/VideoShowcase";

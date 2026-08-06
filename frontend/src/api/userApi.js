@@ -1,7 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+import { API_BASE_URL } from './config';
 
 export const getDashboardSummary = async (token) => {
-    const res = await fetch(`${API_BASE}/users/dashboard`, {
+    const res = await fetch(`${API_BASE_URL}/users/dashboard`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

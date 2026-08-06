@@ -10,7 +10,10 @@ const ROLES = require("../constants/Roles");
 const router = express.Router();
 
 const validate = require("../middleware/validationMiddleware");
-const { submitTaskValidation } = require("../validators/taskValidator");
+const {
+    submitTaskValidation,
+    reviewSubmissionValidation,
+} = require("../validators/taskValidator");
 
 router.post(
     "/",
@@ -31,6 +34,8 @@ router.put(
     "/:id/review",
     protect,
     authorizeRoles(ROLES.ADMIN, ROLES.CLIENT),
+    reviewSubmissionValidation,
+    validate,
     reviewSubmission
 );
 

@@ -23,6 +23,7 @@ const taskSubmissionSchema = new mongoose.Schema(
         submissionNote: {
             type: String,
             default: "",
+            maxlength: 500,
         },
 
         status: {
@@ -40,6 +41,7 @@ const taskSubmissionSchema = new mongoose.Schema(
         reviewNote: {
             type: String,
             default: "",
+            maxlength: 500,
         },
     },
     {
