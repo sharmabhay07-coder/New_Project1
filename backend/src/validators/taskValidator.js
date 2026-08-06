@@ -1,4 +1,6 @@
 const { body, param } = require("express-validator");
+const TASK_TYPES = require("../constants/taskTypes");
+const SUBMISSION_STATUS = require("../constants/submissionStatus");
 
 const createTaskValidation = [
     body("title")
@@ -17,15 +19,17 @@ const createTaskValidation = [
         .trim()
         .notEmpty()
         .withMessage("Task type is required")
-        .isIn(["video", "social-media", "survey", "other"])
+        .isIn(Object.values(TASK_TYPES))
         .withMessage("Invalid task type"),
 
     body("reward")
-        .isFloat({ gt: 0 })
-        .withMessage("Reward must be a positive number"),
+        .isFloat({ min: 0 })
+        .withMessage("Reward must be zero or greater"),
 
     body("taskLink")
-        .optional({ values: "falsy" })
+        .trim()
+        .notEmpty()
+        .withMessage("Task link is required")
         .isURL()
         .withMessage("Task link must be a valid URL"),
 
@@ -51,7 +55,25 @@ const submitTaskValidation = [
         .withMessage("Submission note must be 500 characters or fewer"),
 ];
 
+const reviewSubmissionValidation = [
+    param("id")
+        .isMongoId()
+        .withMessage("Valid submission ID is required"),
+    body("status")
+        .trim()
+        .notEmpty()
+        .withMessage("Status is required")
+        .isIn(Object.values(SUBMISSION_STATUS))
+        .withMessage("Invalid submission status"),
+    body("reviewNote")
+        .optional({ values: "falsy" })
+        .trim()
+        .isLength({ max: 500 })
+        .withMessage("Review note must be 500 characters or fewer"),
+];
+
 module.exports = {
     createTaskValidation,
     submitTaskValidation,
+    reviewSubmissionValidation,
 };

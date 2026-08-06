@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from './config';
 
 async function request(path, body = null, method = 'POST') {
   const options = {
@@ -10,7 +10,7 @@ async function request(path, body = null, method = 'POST') {
     options.body = JSON.stringify(body);
   }
 
-  const res = await fetch(`${API_BASE}${path}`, options);
+  const res = await fetch(`${API_BASE_URL}${path}`, options);
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {

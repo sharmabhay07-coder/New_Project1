@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import "./Process.css";
+import "./process.css";
 
 const steps = [
   {

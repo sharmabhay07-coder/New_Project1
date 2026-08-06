@@ -1,49 +1,40 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+import { fileURLToPath, URL } from 'node:url'
 
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    react(),
-  ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        secure: false,
+const isLocalhostUrl = (value) => {
+  try {
+    const { hostname } = new URL(value)
+    return hostname === 'localhost'
+      || hostname === '127.0.0.1'
+      || hostname.startsWith('127.')
+      || hostname === '[::1]'
+  } catch {
+    return false
+  }
+}
+
+export default defineConfig(({ command, mode }) => {
+  const envDir = fileURLToPath(new URL('.', import.meta.url))
+  const env = loadEnv(mode, envDir, '')
+  const apiUrl = env.VITE_API_URL
+
+  if (command === 'build') {
+    if (!apiUrl) {
+      throw new Error('VITE_API_URL is required for production builds')
+    }
+
+    if (isLocalhostUrl(apiUrl)) {
+      throw new Error('VITE_API_URL must not point to localhost in production builds')
+    }
+  }
+
+  return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
-  },
-  build: {
-    rolldownOptions: {
-      output: {
-        codeSplitting: true,
-        manualChunks(id) {
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router-dom')) {
-            return 'vendor-react'
-          }
-          if (id.includes('node_modules/framer-motion') || id.includes('node_modules/motion')) {
-            return 'vendor-motion'
-          }
-          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3') || id.includes('node_modules/victory')) {
-            return 'vendor-charts'
-          }
-          if (id.includes('node_modules/lucide-react')) {
-            return 'vendor-icons'
-          }
-        },
-      },
-    },
-    chunkSizeWarningLimit: 600,
-    cssMinify: true,
-    sourcemap: false,
-  },
+  }
 })

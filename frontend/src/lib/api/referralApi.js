@@ -1,7 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from './config';
 
-export const getReferrals = async (token) => {
-    const res = await fetch(`${API_BASE}/users/dashboard`, {
+export const getDashboardSummary = async (token) => {
+    const res = await fetch(`${API_BASE_URL}/users/dashboard`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

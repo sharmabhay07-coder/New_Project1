@@ -1,5 +1,8 @@
 const asyncHandler = require("../utils/asyncHandler");
-const Withdrawal = require("../models/Withdrawal");
+const mongoose = require("mongoose");
+const User = require("../models/User");
+const Withdrawal = require("../models/withdrawal");
+
 const createWithdrawalRequest = asyncHandler(async (req, res) => {
 
     const {
@@ -18,15 +21,46 @@ const createWithdrawalRequest = asyncHandler(async (req, res) => {
         throw new Error("Insufficient balance");
     }
 
-    const withdrawal = await Withdrawal.create({
-        user: req.user._id,
-        amount,
-        withdrawalMethod,
-        accountDetails,
-    });
+    const session = await mongoose.startSession();
+    let withdrawal;
 
-    req.user.balance -= amount;
-    await req.user.save();
+    try {
+        await session.withTransaction(async () => {
+            const updatedUser = await User.findOneAndUpdate(
+                {
+                    _id: req.user._id,
+                    balance: { $gte: amount },
+                },
+                {
+                    $inc: { balance: -amount },
+                },
+                {
+                    new: true,
+                    session,
+                }
+            );
+
+            if (!updatedUser) {
+                res.status(400);
+                throw new Error("Insufficient balance");
+            }
+
+            const [createdWithdrawal] = await Withdrawal.create(
+                [{
+                    user: req.user._id,
+                    amount,
+                    withdrawalMethod,
+                    accountDetails,
+                }],
+                { session }
+            );
+
+            withdrawal = createdWithdrawal;
+            req.user.balance = updatedUser.balance;
+        });
+    } finally {
+        session.endSession();
+    }
 
     res.status(201).json({
         success: true,
