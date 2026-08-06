@@ -5,7 +5,7 @@ import { User, Eye, EyeOff, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { loginSchema } from '../../../schemas/authSchemas';
-import { loginUser } from '../../../api/authApi';
+import { loginUser } from '../../../lib/api/authApi';
 import useAuth from '../../../hooks/useAuth';
 
 export default function LoginForm({ onSwitch }) {

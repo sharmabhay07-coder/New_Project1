@@ -5,7 +5,7 @@ import { User, Mail, Eye, EyeOff, Ticket, ChevronRight, Loader2 } from 'lucide-r
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { registerSchema } from '../../../schemas/authSchemas';
-import { registerUser, sendOtp, verifyOtp } from '../../../api/authApi';
+import { registerUser, sendOtp, verifyOtp } from '../../../lib/api/authApi';
 import useAuth from '../../../hooks/useAuth';
 
 function getStrength(pw) {
