@@ -1,8 +1,0 @@
-.fade-up {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.scale-hover:hover {
-  transform: scale(1.03);
-}

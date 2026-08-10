@@ -53,3 +53,39 @@ export const getMySubmissions = async (token) => {
 
     return data;
 };
+
+export const getLeaderboard = async (token) => {
+    const res = await fetch(`${API_BASE}/leaderboard`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to load leaderboard');
+    }
+
+    return data;
+};
+
+export const getMe = async (token) => {
+    const res = await fetch(`${API_BASE}/auth/me`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to load user profile');
+    }
+
+    return data;
+};

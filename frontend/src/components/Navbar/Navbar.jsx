@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Navbar.css";
-import { navLinks } from "../../data/navLinks";
+import { navLinks } from "../../constants/navLinks";
 
 const drawerLinkVariants = {
   hidden: { opacity: 0, x: 30 },
