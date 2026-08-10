@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate } from 'framer-motion'
+import './animated-counter.css'
 
 export function AnimatedCounter({
   value,

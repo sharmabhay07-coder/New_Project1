@@ -1,102 +1,90 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Target, Clock, CheckCircle, XCircle, ExternalLink, Loader2 } from 'lucide-react'
+import { Target, Clock, CheckCircle, ExternalLink, Loader2 } from 'lucide-react'
 import { getTasks } from '@/lib/api/taskApi'
-
-const TYPE_COLOR = {
-  youtube: 'bg-destructive/10 text-destructive',
-  instagram: 'bg-pink-500/10 text-pink-600',
-  twitter: 'bg-sky-500/10 text-sky-600',
-  survey: 'bg-warning/10 text-warning',
-  app: 'bg-accent/10 text-accent',
-}
+import useAuth from '@/hooks/useAuth'
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState({})
+  const { token } = useAuth()
 
   useEffect(() => {
-    const token = localStorage.getItem('earnhub_token')
     if (!token) { setLoading(false); return }
     getTasks(token)
       .then(res => setTasks(res.data?.tasks || []))
       .catch(() => setTasks([]))
       .finally(() => setLoading(false))
-  }, [])
+  }, [token])
 
   const handleStart = (taskId, taskLink) => {
     if (taskLink) window.open(taskLink, '_blank')
     setSubmitting(s => ({ ...s, [taskId]: 'started' }))
   }
 
-  const mockTasks = [
-    { _id: 'm1', title: 'Watch this YouTube video', description: 'Watch the full video and earn your reward.', taskType: 'youtube', reward: 2.5, taskLink: 'https://youtube.com' },
-    { _id: 'm2', title: 'Follow us on Instagram', description: 'Follow our Instagram page to earn.', taskType: 'instagram', reward: 1.0, taskLink: '' },
-    { _id: 'm3', title: 'Complete a quick survey', description: 'Answer 5 questions about your experience.', taskType: 'survey', reward: 3.0, taskLink: '' },
-    { _id: 'm4', title: 'Download our partner app', description: 'Install and open the app to get rewarded.', taskType: 'app', reward: 5.0, taskLink: '' },
-  ]
-
-  const displayTasks = tasks.length > 0 ? tasks : mockTasks
-
   return (
-    <div className="mx-auto max-w-4xl flex flex-col gap-6">
+    <div className="dash-page">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Tasks</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Complete tasks to earn extra rewards on top of videos.</p>
+        <h1 className="dash-text-2xl dash-font-bold dash-text-foreground">Tasks</h1>
+        <p className="dash-mt-1 dash-text-sm dash-text-muted-foreground">Complete tasks to earn extra rewards on top of videos.</p>
       </div>
 
-      {/* Summary bar */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="dash-grid dash-grid-cols-1 dash-gap-4">
         {[
-          { label: 'Available', value: displayTasks.length, icon: Target, color: 'text-primary' },
-          { label: 'In Progress', value: Object.keys(submitting).length, icon: Clock, color: 'text-warning' },
-          { label: 'Completed', value: 0, icon: CheckCircle, color: 'text-success' },
+          { label: 'Available', value: tasks.length, icon: Target, color: 'dash-text-primary' },
+          { label: 'In Progress', value: Object.keys(submitting).length, icon: Clock, color: 'dash-text-warning' },
+          { label: 'Completed', value: 0, icon: CheckCircle, color: 'dash-text-success' },
         ].map(s => (
-          <div key={s.label} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-            <s.icon className={`size-4 ${s.color}`} />
-            <p className="mt-1 text-xl font-bold text-foreground">{s.value}</p>
-            <p className="text-xs text-muted-foreground">{s.label}</p>
+          <div key={s.label} className="dash-card dash-p-6 dash-shadow-soft">
+            <s.icon className={'dash-size-4 ' + s.color} />
+            <p className="dash-mt-1 dash-text-xl dash-font-bold dash-text-foreground">{s.value}</p>
+            <p className="dash-text-xs dash-text-muted-foreground">{s.label}</p>
           </div>
         ))}
       </div>
 
-      {/* Task list */}
       {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="size-8 animate-spin text-primary" />
+        <div className="dash-flex dash-items-center dash-justify-center dash-py-16">
+          <Loader2 className="dash-size-8 dash-animate-spin dash-text-primary" />
+        </div>
+      ) : tasks.length === 0 ? (
+        <div className="dash-card dash-p-5 dash-text-center">
+          <p className="dash-text-muted-foreground">No tasks available yet</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {displayTasks.map((task, i) => (
+        <div className="dash-flex dash-flex-col dash-gap-3">
+          {tasks.map((task, i) => (
             <motion.div
               key={task._id}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="flex items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-soft transition-shadow hover:shadow-soft-lg"
+              className="dash-card dash-p-6 dash-shadow-soft dash-transition-shadow dash-hover:shadow-soft-lg"
             >
-              <div className={`shrink-0 rounded-xl px-2.5 py-1 text-xs font-bold uppercase ${TYPE_COLOR[task.taskType] || 'bg-muted text-muted-foreground'}`}>
-                {task.taskType || 'Task'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground line-clamp-1">{task.title}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground line-clamp-2">{task.description}</p>
-              </div>
-              <div className="flex shrink-0 flex-col items-end gap-2">
-                <span className="text-sm font-bold text-primary">+${task.reward?.toFixed(2)}</span>
-                {submitting[task._id] === 'started' ? (
-                  <span className="flex items-center gap-1 rounded-lg bg-warning/10 px-3 py-1.5 text-xs font-medium text-warning">
-                    <Clock className="size-3" /> In Progress
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => handleStart(task._id, task.taskLink)}
-                    className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground transition-transform hover:scale-105 active:scale-95"
-                  >
-                    Start {task.taskLink && <ExternalLink className="size-3" />}
-                  </button>
-                )}
+              <div className="dash-flex dash-items-start dash-gap-4">
+                <div className="dash-shrink-0 dash-rounded-xl dash-bg-primary/10 dash-px-2.5 dash-py-1 dash-text-xs dash-font-bold dash-uppercase dash-text-primary">
+                  {task.taskType || 'Task'}
+                </div>
+                <div className="dash-min-w-0 dash-flex-1">
+                  <p className="dash-font-semibold dash-text-foreground">{task.title}</p>
+                  <p className="dash-mt-0.5 dash-text-sm dash-text-muted-foreground">{task.description}</p>
+                </div>
+                <div className="dash-flex dash-shrink-0 dash-flex-col dash-items-end dash-gap-2">
+                  <span className="dash-text-sm dash-font-bold dash-text-primary">+₹{task.reward?.toFixed(2)}</span>
+                  {submitting[task._id] === 'started' ? (
+                    <span className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg dash-bg-warning/10 dash-px-3 dash-py-1.5 dash-text-xs dash-font-medium dash-text-warning">
+                      <Clock className="dash-size-3" /> In Progress
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => handleStart(task._id, task.taskLink)}
+                      className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg dash-bg-primary dash-px-3 dash-py-1.5 dash-text-xs dash-font-bold dash-text-primary-foreground dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
+                    >
+                      Start {task.taskLink && <ExternalLink className="dash-size-3" />}
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}

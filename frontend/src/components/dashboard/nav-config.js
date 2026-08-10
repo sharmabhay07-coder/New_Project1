@@ -12,12 +12,11 @@ import {
   Settings,
   LifeBuoy,
   TrendingUp,
-  type LucideIcon,
 } from 'lucide-react'
 
 export type NavItem = {
   label: string
-  icon: LucideIcon
+  icon: Function
   href: string
   badge?: string
   active?: boolean
