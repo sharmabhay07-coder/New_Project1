@@ -1,7 +1,7 @@
-import Hero from '../../sections/home/hero/Hero';
-import Features from '../../sections/home/features/Features';
-import CTA from '../../sections/home/CTA/CTA';
-import Process from '../../sections/home/process/Process';
+import Hero from './Hero';
+import Features from './Features';
+import CTA from './CTA';
+import Process from './Process';
 
 export default function Home() {
     return (

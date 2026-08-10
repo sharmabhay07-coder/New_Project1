@@ -1,0 +1,63 @@
+/* eslint-disable react-refresh/only-export-components */
+import { createBrowserRouter } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import MainLayout from "../layouts/MainLayout";
+import BlankLayout from "../layouts/BlankLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
+
+// Eagerly load Home and Auth (entry pages)
+import Home from "../pages/home/Home";
+import Auth from "../pages/auth/Auth";
+
+// Lazy-load all dashboard pages — only fetched when user navigates there
+const Dashboard      = lazy(() => import("../pages/dashboard/Dashboard"));
+const VideosPage     = lazy(() => import("../pages/dashboard/videos/VideosPage"));
+const WalletPage     = lazy(() => import("../pages/dashboard/wallet/WalletPage"));
+const ReferralsPage  = lazy(() => import("../pages/dashboard/referrals/ReferralsPage"));
+const TasksPage      = lazy(() => import("../pages/dashboard/tasks/TasksPage"));
+const LeaderboardPage = lazy(() => import("../pages/dashboard/LeaderboardPage"));
+const SettingsPage   = lazy(() => import("../pages/dashboard/SettingsPage"));
+
+// Minimal skeleton shown while a lazy page loads
+function PageLoader() {
+  return (
+    <div className="dash-flex dash-h-64 dash-items-center dash-justify-center">
+      <div className="dash-size-8 dash-animate-spin dash-rounded-full dash-border-4 dash-border-border dash-border-t-primary" />
+    </div>
+  );
+}
+
+function SuspenseWrapper({ children }) {
+  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
+}
+
+const router = createBrowserRouter([
+  {
+    element: <MainLayout />,
+    children: [
+      { path: "/", element: <Home /> },
+    ],
+  },
+  {
+    element: <BlankLayout />,
+    children: [
+      { path: "/auth", element: <Auth /> },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      { index: true,          element: <SuspenseWrapper><Dashboard /></SuspenseWrapper> },
+      { path: "videos",       element: <SuspenseWrapper><VideosPage /></SuspenseWrapper> },
+      { path: "wallet",       element: <SuspenseWrapper><WalletPage /></SuspenseWrapper> },
+      { path: "referrals",    element: <SuspenseWrapper><ReferralsPage /></SuspenseWrapper> },
+      { path: "tasks",        element: <SuspenseWrapper><TasksPage /></SuspenseWrapper> },
+      { path: "leaderboard",  element: <SuspenseWrapper><LeaderboardPage /></SuspenseWrapper> },
+      { path: "settings",     element: <SuspenseWrapper><SettingsPage /></SuspenseWrapper> },
+      { path: "support",      element: <SuspenseWrapper><SettingsPage /></SuspenseWrapper> },
+    ],
+  },
+]);
+
+export default router;

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { VideoCard } from './video-card'
+import './video-rail.css'
 
 export function VideoRail({
   title,
@@ -10,18 +11,18 @@ export function VideoRail({
 }) {
   return (
     <section>
-      <div className="mb-4 flex items-end justify-between gap-4">
+      <div className="dash-section-header">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+          <h2 className="dash-section-title">{title}</h2>
+          {subtitle && <p className="dash-section-subtitle">{subtitle}</p>}
         </div>
-        <button className="flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80">
-          View all <ChevronRight className="size-4" />
+        <button className="dash-section-action">
+          View all <ChevronRight className="dash-size-4" />
         </button>
       </div>
 
       {grid ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="dash-video-rail-grid">
           {videos.map((video, i) => (
             <motion.div
               key={video.id}
@@ -35,12 +36,12 @@ export function VideoRail({
           ))}
         </div>
       ) : (
-        <div className="-mx-1 flex snap-x gap-4 overflow-x-auto px-1 pb-2 scrollbar-hide">
+        <div className="dash-video-rail-scroll">
           {videos.map((video) => (
             <VideoCard
               key={video.id}
               video={video}
-              className="w-[280px] shrink-0 snap-start sm:w-[320px]"
+              className="dash-video-rail-scroll-item"
             />
           ))}
         </div>

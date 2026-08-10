@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import AuthHero from '../../sections/auth/hero/AuthHero';
-import AuthForm from '../../sections/auth/form/AuthForm';
+import AuthHero from './AuthHero';
+import AuthForm from './AuthForm';
 import './Auth.css';
 
 const EARNINGS = [

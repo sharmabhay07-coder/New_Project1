@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const TaskSubmission = require("../models/TaskSubmission");
 const Task = require("../models/Task");
+const User = require("../models/User");
 const SUBMISSION_STATUS = require("../constants/submissionStatus");
 
 const getMySubmissions = asyncHandler(async (req, res) => {
@@ -52,6 +53,10 @@ const getDashboardSummary = asyncHandler(async (req, res) => {
         status: SUBMISSION_STATUS.PENDING,
     });
 
+    const referredUsers = await User.countDocuments({
+        referredBy: req.user._id,
+    });
+
     res.status(200).json({
         success: true,
         message: "Dashboard summary fetched successfully",
@@ -60,6 +65,10 @@ const getDashboardSummary = asyncHandler(async (req, res) => {
             totalEarnings,
             completedTasks,
             pendingTasks,
+            name: req.user.name,
+            email: req.user.email,
+            referralCode: req.user.referralCode || '',
+            referredUsers,
         },
     });
 

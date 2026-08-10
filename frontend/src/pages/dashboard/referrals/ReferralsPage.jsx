@@ -2,28 +2,31 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Copy, CheckCircle, Gift, TrendingUp, Link2 } from 'lucide-react'
 import { getDashboardSummary } from '@/lib/api/userApi'
-import { referral as mockReferral } from '@/lib/mock-data'
+import useAuth from '@/hooks/useAuth'
 
 export default function ReferralsPage() {
   const [summary, setSummary] = useState(null)
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(true)
+  const { token } = useAuth()
 
   useEffect(() => {
-    const token = localStorage.getItem('earnhub_token')
     if (!token) { setLoading(false); return }
     getDashboardSummary(token)
       .then(res => setSummary(res.data))
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [])
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+  }, [token])
 
-  const referralCode = summary?.referralCode || mockReferral.code
-  const referralLink = `earnhub.app/r/${referralCode}`
-  const invited = summary?.referredUsers || mockReferral.invited
+  const referralCode = summary?.referralCode || ''
+  const referralLink = referralCode ? `earnhub.app/r/${referralCode}` : ''
+  const invited = summary?.referredUsers || 0
   const target = 10
+  const bonusEarned = invited * 5
 
   const copy = () => {
+    if (!referralLink) return
     navigator.clipboard.writeText(referralLink)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -31,104 +34,70 @@ export default function ReferralsPage() {
 
   const progress = Math.min((invited / target) * 100, 100)
 
-  const steps = [
-    { step: '1', title: 'Share your link', desc: 'Send your unique referral link to friends' },
-    { step: '2', title: 'Friend signs up', desc: 'They create an EarnHub account using your link' },
-    { step: '3', title: 'Earn rewards', desc: 'Get $5 bonus for every friend who joins' },
-  ]
-
   return (
-    <div className="mx-auto max-w-3xl flex flex-col gap-6">
+    <div className="dash-page">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Referrals</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Invite friends and earn $5 for every signup.</p>
+        <h1 className="dash-text-2xl dash-font-bold dash-text-foreground">Referrals</h1>
+        <p className="dash-mt-1 dash-text-sm dash-text-muted-foreground">Invite friends and earn ₹5 for every signup.</p>
       </div>
 
-      {/* Hero card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-accent to-primary p-8 text-white shadow-soft-primary">
-        <div className="absolute -right-6 -top-6 size-36 rounded-full bg-white/10" />
-        <div className="absolute -bottom-8 right-24 size-20 rounded-full bg-white/10" />
-        <Gift className="size-10 mb-3 text-white/80" />
-        <h2 className="text-2xl font-bold">Earn $5 per Referral</h2>
-        <p className="mt-1 text-sm text-white/80">Invite {target - invited > 0 ? target - invited : 0} more friends to unlock a <strong>$5 bonus</strong>!</p>
+      <div className="dash-relative dash-overflow-hidden dash-rounded-3xl dash-bg-gradient-to-br dash-from-accent dash-to-primary dash-p-8 dash-text-white dash-shadow-soft-primary">
+        <div className="dash-absolute dash--right-6 dash--top-6 dash-size-36 dash-rounded-full dash-bg-white/10" />
+        <Gift className="dash-size-10 dash-mb-3 dash-text-white/80" />
+        <h2 className="dash-text-2xl dash-font-bold">Earn ₹5 per Referral</h2>
+        <p className="dash-mt-1 dash-text-sm dash-text-white/80">Invite {Math.max(0, target - invited)} more friends to unlock your next bonus!</p>
       </div>
 
-      {/* Referral link */}
-      <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Your Referral Link</p>
-        <div className="flex items-center gap-3">
-          <div className="flex flex-1 items-center gap-2 rounded-xl border border-border bg-secondary px-4 py-3">
-            <Link2 className="size-4 shrink-0 text-muted-foreground" />
-            <span className="flex-1 truncate text-sm font-medium text-foreground">{referralLink}</span>
+      <div className="dash-rounded-2xl dash-border dash-border-border dash-bg-card dash-p-5 dash-shadow-soft">
+        <p className="dash-mb-2 dash-text-xs dash-font-semibold dash-uppercase dash-tracking-widest dash-text-muted-foreground">Your Referral Link</p>
+        <div className="dash-flex dash-items-center dash-gap-3">
+          <div className="dash-flex dash-flex-1 dash-items-center dash-gap-2 dash-rounded-xl dash-border dash-border-border dash-bg-secondary dash-px-4 dash-py-3">
+            <Link2 className="dash-size-4 dash-shrink-0 dash-text-muted-foreground" />
+            <span className="dash-flex-1 dash-truncate dash-font-mono dash-text-sm dash-text-foreground">{referralLink || 'Loading...'}</span>
           </div>
           <button
             onClick={copy}
-            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-soft-primary transition-transform hover:scale-105 active:scale-95"
+            disabled={!referralLink}
+            className="dash-flex dash-items-center dash-gap-1.5 dash-rounded-xl dash-bg-primary dash-px-4 dash-py-3 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
           >
-            {copied ? <CheckCircle className="size-4" /> : <Copy className="size-4" />}
+            {copied ? <CheckCircle className="dash-size-4" /> : <Copy className="dash-size-4" />}
             {copied ? 'Copied!' : 'Copy'}
           </button>
         </div>
       </div>
 
-      {/* Progress */}
-      <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Users className="size-4 text-primary" />
-            <span className="text-sm font-semibold text-foreground">Invited Friends</span>
+      <div className="dash-rounded-2xl dash-border dash-border-border dash-bg-card dash-p-5 dash-shadow-soft">
+        <div className="dash-flex dash-items-center dash-justify-between dash-mb-3">
+          <div className="dash-flex dash-items-center dash-gap-2">
+            <Users className="dash-size-4 dash-text-primary" />
+            <span className="dash-text-sm dash-font-semibold dash-text-foreground">Invited Friends</span>
           </div>
-          <span className="text-sm font-bold tabular-nums text-foreground">{loading ? '—' : invited}/{target}</span>
+          <span className="dash-text-sm dash-font-bold dash-tabular-nums dash-text-foreground">{loading ? '—' : invited}/{target}</span>
         </div>
-        <div className="h-2.5 w-full rounded-full bg-secondary overflow-hidden">
+        <div className="dash-h-2.5 dash-w-full dash-overflow-hidden dash-rounded-full dash-bg-secondary">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="h-full rounded-full bg-primary"
+            className="dash-h-full dash-rounded-full dash-bg-primary"
           />
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          {target - invited > 0 ? `Invite ${target - invited} more to unlock your next $5 bonus` : '🎉 Bonus unlocked!'}
+        <p className="dash-mt-2 dash-text-xs dash-text-muted-foreground">
+          {target - invited > 0 ? `Invite ${target - invited} more to unlock your next bonus` : 'Bonus unlocked!'}
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="dash-grid dash-grid-cols-1 dash-gap-4">
         {[
-          { label: 'Total Invited', value: loading ? '—' : invited, icon: Users, color: 'text-primary' },
-          { label: 'Bonus Earned', value: loading ? '—' : `$${(Math.floor(invited / 2) * 5).toFixed(2)}`, icon: TrendingUp, color: 'text-success' },
+          { label: 'Total Invited', value: loading ? '—' : invited, icon: Users, color: 'dash-text-primary' },
+          { label: 'Bonus Earned', value: loading ? '—' : `₹${bonusEarned.toFixed(2)}`, icon: TrendingUp, color: 'dash-text-success' },
         ].map(s => (
-          <div key={s.label} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-            <s.icon className={`size-5 ${s.color}`} />
-            <p className="mt-2 text-2xl font-bold tabular-nums text-foreground">{s.value}</p>
-            <p className="text-xs text-muted-foreground">{s.label}</p>
+          <div key={s.label} className="dash-card dash-p-5 dash-shadow-soft">
+            <s.icon className={'dash-size-5 ' + s.color} />
+            <p className="dash-mt-2 dash-text-2xl dash-font-bold dash-tabular-nums dash-text-foreground">{s.value}</p>
+            <p className="dash-text-xs dash-text-muted-foreground">{s.label}</p>
           </div>
         ))}
-      </div>
-
-      {/* How it works */}
-      <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-        <h3 className="mb-4 text-sm font-bold text-foreground">How It Works</h3>
-        <div className="flex flex-col gap-4">
-          {steps.map((s, i) => (
-            <motion.div
-              key={s.step}
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-start gap-4"
-            >
-              <div className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                {s.step}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">{s.title}</p>
-                <p className="text-xs text-muted-foreground">{s.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </div>
   )

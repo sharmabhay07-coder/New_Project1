@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Mail, Eye, EyeOff, Ticket, ChevronRight, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { registerSchema } from '../../../schemas/authSchemas';
+import { registerSchema } from '../../../utils/schemas';
 import { registerUser, sendOtp, verifyOtp } from '../../../lib/api/authApi';
 import useAuth from '../../../hooks/useAuth';
 
