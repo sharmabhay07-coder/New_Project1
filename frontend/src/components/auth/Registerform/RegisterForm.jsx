@@ -134,7 +134,7 @@ export default function RegisterForm({ onSwitch }) {
       const verifyRes = await verifyOtp(params);
       login(verifyRes.data.token, verifyRes.data.user);
       toast.success(`Welcome to EarnHub, ${verifyRes.data.user.name}! 🎉`);
-      navigate('/dashboard');
+      navigate('/selection');
     } catch (err) {
       setVerifying(false);
       toast.error(err.message);
