@@ -414,59 +414,49 @@ const verifyOtpController = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
     const { identifier, password } = req.body;
     const normalizedIdentifier = identifier.trim();
-    const isEmail = normalizedIdentifier.includes("@");
+    const isEmail = normalizedIdentifier.includes('@');
 
-    let user;
-    if (isEmail) {
-        const normalizedEmail = normalizedIdentifier.toLowerCase();
-        user = await User.findOne({ email: normalizedEmail });
-    } else {
-        // Attempt to find by mobile number first
-        user = await User.findOne({ mobileNumber: normalizedIdentifier });
+    const userQuery = isEmail
+        ? { email: normalizedIdentifier.toLowerCase() }
+        : { mobileNumber: normalizedIdentifier };
 
-        // If not found by mobile number, and it *could* be an email, try email
-        // This handles cases where a mobile number might coincidentally contain '@' (though unlikely)
-        // or if the user erroneously enters an email in the phone field.
-        if (!user && normalizedIdentifier.includes("@")) {
-            const normalizedEmail = normalizedIdentifier.toLowerCase();
-            user = await User.findOne({ email: normalizedEmail });
-        }
-    }
+    const user = await User.findOne(userQuery);
 
     if (!user) {
-        // If no user found, check for pending registrations if identifier is an email
-        if (isEmail) {
-            const pendingExists = await PendingRegistration.exists({
-                email: normalizedIdentifier.toLowerCase(), // Use normalized email here
-                expiresAt: { $gt: new Date() },
-            });
+        const pendingQuery = isEmail
+            ? { email: normalizedIdentifier.toLowerCase() }
+            : { mobileNumber: normalizedIdentifier };
 
-            if (pendingExists) {
-                res.status(403);
-                throw new Error(
-                    "You have a pending registration. Please check your email for the verification OTP or sign up again if it expired"
-                );
-            }
+        const pendingExists = await PendingRegistration.exists({
+            ...pendingQuery,
+            expiresAt: { $gt: new Date() },
+        });
+
+        if (pendingExists) {
+            res.status(403);
+            throw new Error(
+                'You have a pending registration. Please check your email for the verification OTP or sign up again if it expired'
+            );
         }
 
         res.status(404);
-        throw new Error("User not found");
+        throw new Error('User not found');
     }
 
     if (!user.isVerified) {
         res.status(403);
-        throw new Error("Please verify your account before logging in");
+        throw new Error('Please verify your account before logging in');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
         res.status(401);
-        throw new Error("Invalid credentials");
+        throw new Error('Invalid credentials');
     }
 
     res.status(200).json({
         success: true,
-        message: "Login successful",
+        message: 'Login successful',
         data: buildAuthResponse(user),
     });
 });
