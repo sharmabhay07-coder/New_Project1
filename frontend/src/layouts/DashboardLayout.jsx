@@ -14,24 +14,24 @@ const navSections = [
   {
     title: 'Earn',
     items: [
-      { label: 'Dashboard',    icon: LayoutDashboard, href: '/dashboard' },
-      { label: 'Watch Videos', icon: PlaySquare,       href: '/dashboard/videos', badge: 'New' },
-      { label: 'Tasks',        icon: Target,           href: '/dashboard/tasks' },
-      { label: 'Leaderboard',  icon: Trophy,           href: '/dashboard/leaderboard' },
+      { label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+      { label: 'Watch Videos', icon: PlaySquare, href: '/dashboard/videos', badge: 'New' },
+      { label: 'Tasks', icon: Target, href: '/dashboard/tasks' },
+      { label: 'Leaderboard', icon: Trophy, href: '/dashboard/leaderboard' },
     ],
   },
   {
     title: 'Money',
     items: [
-      { label: 'Wallet',    icon: Wallet, href: '/dashboard/wallet' },
-      { label: 'Referrals', icon: Users,  href: '/dashboard/referrals' },
+      { label: 'Wallet', icon: Wallet, href: '/dashboard/wallet' },
+      { label: 'Referrals', icon: Users, href: '/dashboard/referrals' },
     ],
   },
   {
     title: 'Account',
     items: [
-      { label: 'Settings', icon: Settings,  href: '/dashboard/settings' },
-      { label: 'Support',  icon: LifeBuoy,  href: '/dashboard/support' },
+      { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
+      { label: 'Support', icon: LifeBuoy, href: '/dashboard/support' },
     ],
   },
 ]
@@ -124,7 +124,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate()
   const { logout, user } = useAuth()
   const userName = user?.name || 'User'
-  const initials  = userName.slice(0, 2).toUpperCase()
+  const initials = userName.slice(0, 2).toUpperCase()
 
   const userRef = useRef(null)
   const notifRef = useRef(null)
@@ -219,7 +219,22 @@ export default function DashboardLayout() {
               >
                 <Menu size={18} />
               </button>
+              <div className="dash-sidebar-logo" style={{ height: 'auto', border: 'none', padding: 0 }}>
+                <div className="dash-logo-icon">
+                  <Zap size={18} strokeWidth={2.5} />
+                </div>
+                <span className="dash-logo-text">EarnHub</span>
+              </div>
             </div>
+
+            <nav className="dash-header-nav">
+              <NavLink to="/dashboard" end>EarnNow</NavLink>
+              <NavLink to="/dashboard/plans">Plans</NavLink>
+              <NavLink to="/dashboard/b2b">B2B</NavLink>
+              <NavLink to="/dashboard/videos">Videos</NavLink>
+              <NavLink to="/dashboard/tasks">Tasks</NavLink>
+              <NavLink to="/dashboard/referrals">Referral</NavLink>
+            </nav>
 
             <div className="dash-flex dash-items-center dash-gap-2 dash-md:gap-3">
               <div className="dash-hidden dash-items-center dash-gap-2 dash-rounded-xl dash-border dash-border-border dash-bg-card dash-px-3 dash-py-2 dash-sm:flex">
