@@ -1,24 +1,24 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import MainLayout from '../layouts/MainLayout';
-import BlankLayout from '../layouts/BlankLayout';
+import MainLayout from '../../layouts/MainLayout';
+import BlankLayout from '../../layouts/BlankLayout';
 import ProtectedRoute from './ProtectedRoute';
-import DashboardLayout from '../layouts/DashboardLayout';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 // Eagerly load Home and Auth (entry pages)
-import Home from '../pages/home/Home';
-import Auth from '../pages/auth/Auth';
+import Home from '../../pages/home/Home';
+import Auth from '../../pages/auth/Auth';
 
 // Lazy-load all other pages
-const SelectionPage = lazy(() => import('../pages/selection/SelectionPage'));
-const PlansPage = lazy(() => import('../pages/plans/PlansPage'));
-const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
-const VideosPage = lazy(() => import('../pages/dashboard/videos/VideosPage'));
-const WalletPage = lazy(() => import('../pages/dashboard/wallet/WalletPage'));
-const ReferralsPage = lazy(() => import('../pages/dashboard/referrals/ReferralsPage'));
-const TasksPage = lazy(() => import('../pages/dashboard/tasks/TasksPage'));
-const LeaderboardPage = lazy(() => import('../pages/dashboard/LeaderboardPage'));
-const SettingsPage = lazy(() => import('../pages/dashboard/SettingsPage'));
+const SelectionPage = lazy(() => import('../../pages/selection/SelectionPage'));
+const PlansPage = lazy(() => import('../../pages/plans/PlansPage'));
+const Dashboard = lazy(() => import('../../pages/dashboard/Dashboard'));
+const VideosPage = lazy(() => import('../../pages/dashboard/videos/VideosPage'));
+const WalletPage = lazy(() => import('../../pages/dashboard/wallet/WalletPage'));
+const ReferralsPage = lazy(() => import('../../pages/dashboard/referrals/ReferralsPage'));
+const TasksPage = lazy(() => import('../../pages/dashboard/tasks/TasksPage'));
+const LeaderboardPage = lazy(() => import('../../pages/dashboard/LeaderboardPage'));
+const SettingsPage = lazy(() => import('../../pages/dashboard/SettingsPage'));
 
 // Minimal skeleton shown while a lazy page loads
 function PageLoader() {
