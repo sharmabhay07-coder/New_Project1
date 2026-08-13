@@ -24,7 +24,7 @@ export default function LoginForm({ onSwitch }) {
       const res = await loginUser(values);
       login(res.data.token, res.data.user);
       toast.success(`Welcome back, ${res.data.user.name}! 🎉`);
-      navigate('/dashboard');
+      navigate('/selection');
     } catch (err) {
       toast.error(err.message);
     }
