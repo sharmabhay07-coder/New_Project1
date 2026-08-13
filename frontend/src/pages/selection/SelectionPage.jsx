@@ -43,7 +43,7 @@ const options = [
     title: "Promote Business",
     description:
       "Increase views, subscribers, engagement, and grow your brand.",
-    path: "/plans",
+    path: "/dashboard/plans",
     cta: "View Plans",
   },
 ];

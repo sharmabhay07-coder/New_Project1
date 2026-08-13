@@ -57,17 +57,11 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/plans',
-        element: <MainLayout />,
-        children: [
-          { index: true, element: <SuspenseWrapper><PlansPage /></SuspenseWrapper> },
-        ],
-      },
-      {
         path: '/dashboard',
         element: <DashboardLayout />,
         children: [
           { index: true,        element: <SuspenseWrapper><Dashboard /></SuspenseWrapper> },
+          { path: 'plans',        element: <SuspenseWrapper><PlansPage /></SuspenseWrapper> },
           { path: 'videos',       element: <SuspenseWrapper><VideosPage /></SuspenseWrapper> },
           { path: 'wallet',       element: <SuspenseWrapper><WalletPage /></SuspenseWrapper> },
           { path: 'referrals',    element: <SuspenseWrapper><ReferralsPage /></SuspenseWrapper> },
