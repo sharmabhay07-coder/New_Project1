@@ -7,6 +7,7 @@ import {
   Target, Settings, LifeBuoy, Sun, Moon, LogOut, User, Coins,
 } from 'lucide-react'
 import useAuth from '../hooks/useAuth'
+import LogoutConfirmModal from '../components/dashboard/LogoutConfirmModal'
 import './DashboardLayout.css'
 
 const navSections = [
@@ -119,6 +120,7 @@ export default function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userOpen, setUserOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
   const navigate = useNavigate()
   const { logout, user } = useAuth()
   const userName = user?.name || 'User'
@@ -154,9 +156,16 @@ export default function DashboardLayout() {
     }
   }
 
-  const handleLogout = () => {
-    logout()
+  // opens the confirmation popup instead of logging out immediately
+  const requestLogout = () => {
     setUserOpen(false)
+    setLogoutModalOpen(true)
+  }
+
+  // runs only after the user confirms in the popup
+  const confirmLogout = () => {
+    logout()
+    setLogoutModalOpen(false)
     navigate('/auth')
   }
 
@@ -299,7 +308,7 @@ export default function DashboardLayout() {
                       <Settings size={14} /> Settings
                     </button>
                     <div className="dash-dropdown-divider" />
-                    <button onClick={handleLogout} className="dash-dropdown-item-btn dash-dropdown-item-danger">
+                    <button onClick={requestLogout} className="dash-dropdown-item-btn dash-dropdown-item-danger">
                       <LogOut size={14} /> Logout
                     </button>
                   </motion.div>
@@ -313,6 +322,12 @@ export default function DashboardLayout() {
           <Outlet />
         </main>
       </div>
+
+      <LogoutConfirmModal
+        isOpen={logoutModalOpen}
+        onConfirm={confirmLogout}
+        onCancel={() => setLogoutModalOpen(false)}
+      />
     </div>
   )
 }
