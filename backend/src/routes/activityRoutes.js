@@ -1,0 +1,9 @@
+const express = require("express");
+const router = express.Router();
+const { getRecentActivity } = require("../controllers/activityController");
+const protect = require("../middleware/authMiddleware");
+
+// @route   GET /api/activity
+router.get("/", protect, getRecentActivity);
+
+module.exports = router;
