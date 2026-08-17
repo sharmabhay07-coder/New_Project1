@@ -1,38 +1,254 @@
-/* ── Welcome Banner ───────────────────────────────────────── */
 .dash-welcome-banner {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  background-color: var(--card-bg);
+
+  border-radius: 1.75rem;
+  padding: 3rem;
+
+  background: hsl(var(--dash-card));
+
+  border: 1px solid hsl(var(--dash-border));
+
+  box-shadow:
+    0 20px 40px -25px rgba(0, 0, 0, 0.12);
 }
+
 .dash-welcome-banner-gradient {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent 50%, rgba(20,184,166,0.05));
+
+  opacity: 0.12;
+
+  background:
+    radial-gradient(circle at top left,
+      hsl(var(--dash-primary)),
+      transparent 35%),
+    radial-gradient(circle at bottom right,
+      hsl(var(--dash-primary)),
+      transparent 35%);
 }
+
 .dash-welcome-banner-content {
   position: relative;
-  padding: 24px;
-}
-.dash-welcome-banner-text {
+
   display: flex;
   flex-direction: column;
-  gap: 14px;
+
+  gap: 2rem;
 }
+
 .dash-welcome-banner-title {
-  font-size: 28px;
-  font-weight: 400;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  font-size: 2.5rem;
+  font-weight: 800;
+
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+
+  margin-bottom: 0.5rem;
 }
+
 .dash-welcome-banner-desc {
-  color: var(--muted-fg);
-  line-height: 1.6;
+  font-size: 1rem;
+
+  color: hsl(var(--dash-muted-foreground));
+
+  max-width: 55ch;
 }
-.dash-welcome-banner-actions {
+
+.stats-container {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit,
+      minmax(240px, 1fr));
+
+  gap: 1.5rem;
+}
+
+/* ==========================
+   STAT CARDS
+========================== */
+
+.stat-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 170px;
+
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: column;
+
+  gap: 1rem;
+
+  padding: 1.5rem;
+
+  border-radius: 1.25rem;
+
+  background: hsl(var(--dash-background) / 0.75);
+
+  border: 1px solid hsl(var(--dash-border));
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+
+  box-shadow:
+    0 10px 25px -15px rgba(0, 0, 0, 0.15);
+}
+
+/* Animated Top Accent Line */
+
+.stat-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 0;
+  height: 4px;
+
+  transition: width 0.4s ease;
+}
+
+.stat-card:hover::before {
+  width: 100%;
+}
+
+/* ==========================
+   CARD VARIANTS
+========================== */
+
+.balance-card::before {
+  background: #10b981;
+}
+
+.earnings-card::before {
+  background: #3b82f6;
+}
+
+.today-card::before {
+  background: #8b5cf6;
+}
+
+/* ==========================
+   HOVER STATES
+========================== */
+
+.balance-card:hover {
+  transform: translateY(-10px);
+
+  border-color: #10b981;
+
+  box-shadow:
+    0 20px 40px rgba(16, 185, 129, 0.18);
+}
+
+.earnings-card:hover {
+  transform: translateY(-10px);
+
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 20px 40px rgba(59, 130, 246, 0.18);
+}
+
+.today-card:hover {
+  transform: translateY(-10px);
+
+  border-color: #8b5cf6;
+
+  box-shadow:
+    0 20px 40px rgba(139, 92, 246, 0.18);
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+
+  gap: 0.9rem;
+}
+
+/* ==========================
+   ICONS
+========================== */
+
+.stat-card-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 1rem;
+
+  transition: transform 0.35s ease;
+}
+
+.balance-card .stat-card-icon {
+  background: #e8fff5;
+  color: #10b981;
+}
+
+.earnings-card .stat-card-icon {
+  background: #eaf2ff;
+  color: #3b82f6;
+}
+
+.today-card .stat-card-icon {
+  background: #f4ebff;
+  color: #8b5cf6;
+}
+
+.stat-card:hover .stat-card-icon {
+  transform: scale(1.12) rotate(8deg);
+}
+
+/* ==========================
+   TEXT
+========================== */
+
+.stat-card-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  color: hsl(var(--dash-muted-foreground));
+}
+
+.stat-card-value {
+  margin-top: 0.5rem;
+
+  font-size: 2.3rem;
+  font-weight: 800;
+
+  line-height: 1.1;
+  letter-spacing: -1px;
+
+  color: hsl(var(--dash-foreground));
+}
+
+.stat-card-currency {
+  font-size: 1rem;
+  font-weight: 600;
+
+  color: hsl(var(--dash-muted-foreground));
+
+  margin-right: 0.25rem;
+}
+
+.stat-card-footer {
+  margin-top: auto;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  color: hsl(var(--dash-primary));
 }

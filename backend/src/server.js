@@ -10,13 +10,13 @@ const taskRoutes = require("./routes/taskRoutes");
 const taskSubmissionRoutes = require("./routes/taskSubmissionRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const withdrawalRoutes = require("./routes/withdrawalRoutes");
+const activityRoutes = require("./routes/activityRoutes");
 const { notFound, errorHandler, } = require("./middleware/errorMiddleware");
 const { verifyEmailTransport } = require("./services/emailService");
 
 if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI is missing in .env");
 }
-
 if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is missing in .env");
 }
@@ -44,6 +44,8 @@ app.use("/api/submissions", taskSubmissionRoutes);
 app.use("/api/videos", videoRoutes);
 
 app.use("/api/withdrawals", withdrawalRoutes);
+
+app.use("/api/activity", activityRoutes);
 
 app.get("/", (req, res) => {
     res.send("Backend Server Running");
