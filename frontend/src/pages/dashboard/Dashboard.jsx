@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react'
 import { WelcomeBanner } from '@/components/dashboard/welcome-banner'
-import { StatCards } from '@/components/dashboard/stat-cards'
-import { QuickActions } from '@/components/dashboard/quick-actions'
-import { VideoRail } from '@/components/dashboard/video-rail'
+import QuickActions from '@/components/dashboard/quick-actions';
+import RecentActivity from '@/components/dashboard/recent-activity';
 import { getDashboardSummary } from '@/lib/api/userApi'
-import { getVideos } from '@/lib/api/videoApi'
 import useAuth from '@/hooks/useAuth'
 import '../../styles/dashboard.css'
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState(null)
-  const [videos, setVideos] = useState([])
   const [loading, setLoading] = useState(true)
   const { token, refreshUser, user } = useAuth()
 
@@ -22,23 +19,8 @@ export default function DashboardPage() {
       }
 
       try {
-        const [summaryRes, videosRes] = await Promise.all([
-          getDashboardSummary(token),
-          getVideos(token),
-        ])
-
+        const summaryRes = await getDashboardSummary(token);
         setSummary(summaryRes.data)
-
-        const mappedVideos = videosRes.data?.videos?.map((v) => ({
-          id: v._id,
-          title: v.title,
-          creator: v.uploadedBy?.name || 'Admin',
-          thumbnail: v.thumbnail || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=640&auto=format&fit=crop',
-          reward: v.reward || 0,
-          duration: `${Math.floor((v.duration || 0) / 60)}:${((v.duration || 0) % 60).toString().padStart(2, '0')}`,
-          durationSeconds: v.duration || 0,
-        })) || []
-        setVideos(mappedVideos)
       } catch (error) {
         console.error('Failed to fetch dashboard data', error)
       } finally {
@@ -70,20 +52,11 @@ export default function DashboardPage() {
 
   return (
     <div className="dash-page dash-space-y-6">
-      <WelcomeBanner name={summary?.name} />
-
-      <StatCards summary={summary} />
-
-      {videos.length > 0 && (
-        <VideoRail
-          title="Available Videos"
-          subtitle="Watch videos and earn rewards"
-          videos={videos}
-          grid
-        />
-      )}
+      <WelcomeBanner name={summary?.name} summary={summary} />
 
       <QuickActions />
+
+      <RecentActivity />
     </div>
   )
 }
