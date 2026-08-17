@@ -1,0 +1,321 @@
+/* =========================================
+   FEATURES PAGE
+========================================= */
+
+.feat-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 60px 24px 90px;
+  background: var(--background, #ffffff);
+  color: var(--fg, #0f172a);
+  overflow: hidden;
+}
+
+.feat-page::before {
+  content: "";
+  position: absolute;
+  top: -160px;
+  left: 50%;
+  width: 1000px;
+  height: 640px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--primary, #00a878) 8%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.feat-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.feat-hero {
+  max-width: 700px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+
+.feat-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 999px;
+  background: var(--card-bg, #ffffff);
+  color: var(--primary, #00a878);
+
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.feat-hero-title {
+  margin: 0 0 18px;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  color: var(--fg, #0f172a);
+}
+
+.feat-hero-title span {
+  background: linear-gradient(
+    100deg,
+    var(--primary, #00a878),
+    color-mix(in srgb, var(--primary, #00a878) 55%, #22d3ee 45%)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.feat-hero-description {
+  max-width: 520px;
+  margin: 0 auto 28px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted-fg, #64748b);
+}
+
+.feat-hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 24px;
+  border-radius: 11px;
+
+  background: linear-gradient(
+    135deg,
+    var(--primary, #00a878),
+    color-mix(in srgb, var(--primary, #00a878) 80%, black 12%)
+  );
+  color: var(--primary-fg, #ffffff);
+  text-decoration: none;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary, #00a878) 32%, transparent);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feat-hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--primary, #00a878) 40%, transparent);
+}
+
+.feat-hero-btn:focus-visible,
+.feat-cta-btn:focus-visible {
+  outline: 2px solid var(--primary, #00a878);
+  outline-offset: 3px;
+}
+
+
+/* =========================================
+   FEATURE GRID
+========================================= */
+
+.feat-grid {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 90px;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.feat-card {
+  --accent: #00a878;
+
+  position: relative;
+  overflow: hidden;
+  padding: 26px 22px;
+
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 18px;
+  background: var(--card-bg, #ffffff);
+
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 0 0 3px 3px;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feat-card:hover::before {
+  width: 100%;
+}
+
+.feat-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 20px 44px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.feat-card-icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feat-card:hover .feat-card-icon {
+  transform: scale(1.12) rotate(8deg);
+}
+
+.feat-card h3 {
+  margin: 0 0 9px;
+  font-size: 0.98rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: var(--fg, #0f172a);
+}
+
+.feat-card p {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--muted-fg, #64748b);
+}
+
+
+/* =========================================
+   CTA
+========================================= */
+
+.feat-cta {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 44px 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+
+  border-radius: 22px;
+  border: 1px solid var(--border, #e2e8f0);
+
+  background:
+    radial-gradient(
+      circle at 0% 100%,
+      color-mix(in srgb, var(--primary, #00a878) 12%, transparent) 0%,
+      transparent 60%
+    ),
+    var(--secondary, #f8fafc);
+}
+
+.feat-cta h2 {
+  margin: 0 0 9px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--fg, #0f172a);
+}
+
+.feat-cta p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted-fg, #64748b);
+}
+
+.feat-cta-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 22px;
+  border-radius: 11px;
+
+  background: linear-gradient(
+    135deg,
+    var(--primary, #00a878),
+    color-mix(in srgb, var(--primary, #00a878) 80%, black 12%)
+  );
+  color: var(--primary-fg, #ffffff);
+  text-decoration: none;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary, #00a878) 32%, transparent);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 950px) {
+  .feat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .feat-page {
+    padding: 40px 16px 60px;
+  }
+
+  .feat-hero-title {
+    font-size: 2.1rem;
+  }
+
+  .feat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feat-cta {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 24px;
+  }
+
+  .feat-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-card,
+  .feat-hero-btn,
+  .feat-cta-btn,
+  .feat-card-icon {
+    transition: none !important;
+  }
+}

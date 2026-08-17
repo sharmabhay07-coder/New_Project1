@@ -1,0 +1,36 @@
+.plans-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.plans-page-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.plans-page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+.plans-page-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted-fg);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .plans-page { padding: 24px 16px 48px; }
+  .plans-page-title { font-size: 1.5rem; }
+}
