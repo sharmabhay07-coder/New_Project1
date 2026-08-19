@@ -39,10 +39,6 @@ const VideosPage = lazy(() =>
   import('../../pages/dashboard/videos/VideosPage')
 )
 
-const VideoWatchPage = lazy(() =>
-  import('../../pages/dashboard/videos/VideoWatchPage')
-)
-
 const WalletPage = lazy(() =>
   import('../../pages/dashboard/wallet/WalletPage')
 )
@@ -186,16 +182,6 @@ const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <VideosPage />
-              </SuspenseWrapper>
-            ),
-          },
-
-          // Watch Single Video
-          {
-            path: 'videos/:id',
-            element: (
-              <SuspenseWrapper>
-                <VideoWatchPage />
               </SuspenseWrapper>
             ),
           },
