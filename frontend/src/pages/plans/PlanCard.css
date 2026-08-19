@@ -1,101 +1,270 @@
+/* =========================
+   PLANS GRID
+========================= */
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+/* =========================
+   PLAN CARD
+========================= */
+
 .plan-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 300px;
+
+  padding: 24px 22px;
+
   background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 24px 22px;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
+
 .plan-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-soft-lg);
 }
+
 .plan-card--popular {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary);
 }
 
+/* =========================
+   CONTENT
+========================= */
+
+.plan-card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+/* =========================
+   BADGE
+========================= */
+
 .plan-card-badge {
   position: absolute;
   top: -12px;
   left: 22px;
+
   display: inline-flex;
   align-items: center;
   gap: 4px;
+
+  padding: 4px 10px;
+
   background-color: var(--primary);
   color: var(--primary-fg);
+
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 10px;
+  line-height: 1.4;
+
   border-radius: 999px;
+
+  z-index: 2;
 }
 
+/* =========================
+   PLAN NAME
+========================= */
+
 .plan-card-name {
+  margin: 6px 0 4px;
+
+  color: var(--fg);
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--fg);
-  margin: 6px 0 4px;
+  line-height: 1.3;
 }
+
+/* =========================
+   QUANTITY
+========================= */
+
 .plan-card-quantity {
-  font-size: 0.85rem;
-  color: var(--muted-fg);
   margin: 0 0 16px;
+
+  color: var(--muted-fg);
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
+
+/* =========================
+   PRICE
+========================= */
 
 .plan-card-price {
   display: flex;
   align-items: baseline;
-  gap: 2px;
-  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  margin: 0 0 18px;
 }
+
 .plan-card-price-currency {
-  font-size: 1.1rem;
-  font-weight: 700;
   color: var(--fg);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
+
 .plan-card-price-amount {
+  color: var(--fg);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--fg);
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
+.plan-card-price-period {
+  color: var(--muted-fg);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* =========================
+   FEATURES
+========================= */
+
 .plan-card-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 22px;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 10px;
-  flex: 1;
+
+  margin: 0 0 22px;
+  padding: 0;
+
+  list-style: none;
 }
+
 .plan-card-features li {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 0.85rem;
+
   color: var(--fg);
+  font-size: 0.85rem;
   line-height: 1.4;
 }
+
+.plan-card-features li span {
+  min-width: 0;
+}
+
 .plan-card-check {
-  color: var(--primary);
   flex-shrink: 0;
   margin-top: 2px;
+
+  color: var(--primary);
 }
+
+/* =========================
+   BUTTON
+========================= */
 
 .plan-card-btn {
   width: 100%;
+
   padding: 11px;
+
   border-radius: 10px;
-  background-color: var(--primary);
-  color: var(--primary-fg);
+
   font-size: 0.9rem;
   font-weight: 700;
-  border: none;
+  line-height: 1.3;
+
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.12s;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.12s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
-.plan-card-btn:hover { opacity: 0.9; }
-.plan-card-btn:active { transform: scale(0.98); }
+
+.plan-card-btn:hover {
+  opacity: 0.9;
+}
+
+.plan-card-btn:active {
+  transform: scale(0.98);
+}
+
+.plan-card-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Popular button */
+
+.plan-card-btn--primary {
+  background-color: var(--primary);
+  color: var(--primary-fg);
+  border: 1px solid var(--primary);
+}
+
+/* Normal button */
+
+.plan-card-btn--outline {
+  background-color: var(--card-bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+.plan-card-btn--outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1024px) {
+  .plans-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .plan-card {
+    min-height: auto;
+    padding: 22px 18px;
+  }
+
+  .plan-card-badge {
+    left: 18px;
+  }
+}

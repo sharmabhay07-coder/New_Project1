@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Copy, CheckCircle, Gift, TrendingUp, Link2 } from 'lucide-react'
+import { Users, Copy, CheckCircle, Gift, TrendingUp, Link2, ShieldCheck } from 'lucide-react'
 import { getDashboardSummary } from '@/lib/api/userApi'
 import useAuth from '@/hooks/useAuth'
 
@@ -98,6 +98,20 @@ export default function ReferralsPage() {
             <p className="dash-text-xs dash-text-muted-foreground">{s.label}</p>
           </div>
         ))}
+      </div>
+
+      <div className="dash-rounded-2xl dash-border dash-border-border dash-bg-card dash-p-5 dash-shadow-soft">
+        <div className="dash-flex dash-items-center dash-gap-2 dash-mb-3">
+          <ShieldCheck className="dash-size-4 dash-text-primary" />
+          <span className="dash-text-sm dash-font-semibold dash-text-foreground">Terms &amp; Conditions</span>
+        </div>
+        <ul className="dash-flex dash-flex-col dash-gap-2 dash-text-xs dash-text-muted-foreground dash-list-disc dash-pl-4">
+          <li>Referral bonus is credited only after the referred user signs up and completes their first task or video.</li>
+          <li>Self-referrals or multiple accounts from the same device or IP are not eligible for rewards.</li>
+          <li>EarnHub reserves the right to withhold or reverse referral earnings in case of fraudulent activity.</li>
+          <li>Referral reward amount and milestone bonuses may change at any time without prior notice.</li>
+          <li>Withdrawal of referral earnings follows the same rules as your regular wallet balance.</li>
+        </ul>
       </div>
     </div>
   )

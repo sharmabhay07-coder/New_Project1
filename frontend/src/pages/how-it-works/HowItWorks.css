@@ -79,6 +79,7 @@
   max-width: 1180px;
   min-height: 560px;
   margin: 0 auto;
+
   display: grid;
   grid-template-columns: minmax(0, 1fr) 560px;
   align-items: center;
@@ -93,12 +94,16 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+
   padding: 8px 14px;
   margin-bottom: 20px;
+
   border: 1px solid var(--border-color);
   border-radius: 999px;
+
   background: var(--card);
   color: var(--muted);
+
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -107,15 +112,21 @@
   width: 8px;
   height: 8px;
   flex-shrink: 0;
+
   border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 0 4px
+
+  box-shadow:
+    0 0 0 4px
     color-mix(in srgb, var(--green) 12%, transparent);
 }
 
 .how-hero-title {
+  min-height: 1.05em;
   margin: 0 0 18px;
+
   color: var(--text);
+
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.05;
   letter-spacing: -0.045em;
@@ -138,9 +149,12 @@
   align-items: center;
   justify-content: center;
   gap: 9px;
+
   border-radius: 10px;
+
   background: var(--green);
   color: var(--primary-fg, #fff);
+
   text-decoration: none;
   font-weight: 700;
 }
@@ -156,8 +170,10 @@
 
 .how-hero-visual {
   position: relative;
+
   width: 560px;
   height: 560px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,21 +181,27 @@
 
 .how-flow-glow {
   position: absolute;
+
   width: 380px;
   height: 380px;
+
   border-radius: 50%;
+
   background: radial-gradient(
     circle,
     color-mix(in srgb, var(--green) 12%, transparent),
     transparent 70%
   );
+
   filter: blur(3px);
 }
 
 .how-flow-svg {
   position: absolute;
+
   width: 430px;
   height: 430px;
+
   transform: rotate(-90deg);
 }
 
@@ -200,8 +222,10 @@
   stroke-width: 5;
   stroke-linecap: round;
   stroke-dasharray: 1068;
+
   filter: drop-shadow(
-    0 0 7px color-mix(in srgb, var(--green) 40%, transparent)
+    0 0 7px
+    color-mix(in srgb, var(--green) 40%, transparent)
   );
 }
 
@@ -219,26 +243,43 @@
 .how-hero-main-card {
   position: absolute;
   z-index: 5;
+
   width: 290px;
   min-height: 145px;
+
   padding: 20px;
+
   display: flex;
   align-items: center;
   gap: 15px;
+
   border: 1px solid var(--border-color);
   border-radius: 20px;
+
   background: var(--card);
-  box-shadow: 0 25px 65px rgba(15, 23, 42, 0.12);
+
+  box-shadow:
+    0 25px 65px
+    rgba(15, 23, 42, 0.12);
 }
 
 .how-hero-main-icon {
   width: 56px;
   height: 56px;
   flex-shrink: 0;
+
   display: grid;
   place-items: center;
+
   border-radius: 15px;
-  background: color-mix(in srgb, var(--green) 12%, transparent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--green) 12%,
+      transparent
+    );
+
   color: var(--green);
 }
 
@@ -251,7 +292,9 @@
 .how-hero-main-card p {
   max-width: 160px;
   margin: 0;
+
   color: var(--muted);
+
   font-size: 0.76rem;
   line-height: 1.45;
 }
@@ -263,25 +306,36 @@
 .how-flow-step {
   position: absolute;
   z-index: 6;
+
   width: 185px;
   min-height: 82px;
+
   padding: 12px;
+
   display: flex;
   align-items: center;
   gap: 10px;
+
   border: 1px solid var(--border-color);
   border-radius: 14px;
+
   background: var(--card);
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+
+  box-shadow:
+    0 15px 35px
+    rgba(15, 23, 42, 0.08);
 }
 
 .how-flow-step-icon {
   width: 40px;
   height: 40px;
   flex-shrink: 0;
+
   display: grid;
   place-items: center;
+
   border-radius: 12px;
+
   background: #f1f5f9;
   color: #64748b;
 }
@@ -293,28 +347,37 @@
 .how-flow-step span {
   display: block;
   margin-bottom: 2px;
+
   color: #94a3b8;
+
   font-size: 0.68rem;
   font-weight: 800;
 }
 
 .how-flow-step strong {
   display: block;
+
   color: var(--text);
+
   font-size: 0.76rem;
   white-space: nowrap;
 }
 
 .how-flow-step small {
   width: fit-content;
+
   margin-top: 5px;
   padding: 3px 7px;
+
   display: flex;
   align-items: center;
   gap: 3px;
+
   border-radius: 999px;
+
   background: #e9f9f2;
   color: var(--green);
+
   font-size: 0.6rem;
   font-weight: 700;
   white-space: nowrap;
@@ -322,7 +385,10 @@
 
 .how-flow-step.current {
   border-color: #3b82f6;
-  box-shadow: 0 18px 45px rgba(59, 130, 246, 0.18);
+
+  box-shadow:
+    0 18px 45px
+    rgba(59, 130, 246, 0.18);
 }
 
 .how-flow-step.current .how-flow-step-icon {
@@ -339,7 +405,13 @@
 }
 
 .how-flow-step.completed .how-flow-step-icon {
-  background: color-mix(in srgb, var(--green) 14%, transparent);
+  background:
+    color-mix(
+      in srgb,
+      var(--green) 14%,
+      transparent
+    );
+
   color: var(--green);
 }
 
@@ -386,24 +458,38 @@
 .how-flow-status {
   position: absolute;
   z-index: 8;
+
   bottom: -35px;
   left: 50%;
+
   min-width: 300px;
+
   padding: 9px 14px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
+
   transform: translateX(-50%);
-  border: 1px solid color-mix(
-    in srgb,
-    var(--green) 20%,
-    var(--border-color)
-  );
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--green) 20%,
+      var(--border-color)
+    );
+
   border-radius: 999px;
+
   background: var(--card);
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+
+  box-shadow:
+    0 10px 25px
+    rgba(15, 23, 42, 0.07);
+
   color: var(--muted);
+
   font-size: 0.7rem;
   white-space: nowrap;
 }
@@ -412,10 +498,19 @@
   width: 21px;
   height: 21px;
   flex-shrink: 0;
+
   display: grid;
   place-items: center;
+
   border-radius: 50%;
-  background: color-mix(in srgb, var(--green) 14%, transparent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--green) 14%,
+      transparent
+    );
+
   color: var(--green);
 }
 
@@ -427,6 +522,7 @@
 .how-benefits-section {
   width: 100%;
   max-width: 1180px;
+
   margin: 40px auto 100px;
 }
 
@@ -441,8 +537,10 @@
 .how-benefit-card {
   position: relative;
   overflow: hidden;
+
   border: 1px solid var(--border-color);
   border-radius: 18px;
+
   background: var(--card);
 }
 
@@ -457,11 +555,14 @@
 .how-step-card::before,
 .how-benefit-card::before {
   content: '';
+
   position: absolute;
   top: 0;
   left: 0;
+
   width: 0;
   height: 3px;
+
   transition: width 0.4s ease;
 }
 
@@ -494,11 +595,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-bottom: 22px;
 }
 
 .how-step-number {
   color: var(--green);
+
   font-size: 0.78rem;
   font-weight: 800;
 }
@@ -507,8 +610,16 @@
 .how-benefit-icon {
   display: grid;
   place-items: center;
+
   border-radius: 13px;
-  background: color-mix(in srgb, var(--green) 11%, transparent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--green) 11%,
+      transparent
+    );
+
   color: var(--green);
 }
 
@@ -542,18 +653,27 @@
 .how-earning-section {
   width: 100%;
   max-width: 1180px;
+
   margin: 0 auto 100px;
   padding: 60px;
+
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 70px;
+
   border-radius: 24px;
-  background: color-mix(
-    in srgb,
-    var(--soft) 85%,
-    var(--green) 15%
-  );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--soft) 85%,
+      var(--green) 15%
+    );
+}
+
+.how-earning-content {
+  will-change: transform, opacity;
 }
 
 .how-earning-content h2 {
@@ -574,17 +694,23 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
+  will-change: transform, opacity;
 }
 
 .how-earning-points span {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
+
   display: grid;
   place-items: center;
+
   border-radius: 50%;
+
   background: var(--green);
   color: #fff;
+
   font-size: 0.7rem;
   font-weight: 800;
 }
@@ -600,10 +726,18 @@
 
 .how-dashboard-preview {
   padding: 25px;
+
   border: 1px solid var(--border-color);
   border-radius: 20px;
+
   background: var(--card);
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.09);
+
+  box-shadow:
+    0 25px 60px
+    rgba(15, 23, 42, 0.09);
+
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
 .how-preview-header {
@@ -615,8 +749,11 @@
 .how-preview-header small,
 .how-preview-stats small {
   display: block;
+
   margin-bottom: 5px;
+
   color: var(--muted);
+
   font-size: 0.72rem;
 }
 
@@ -627,16 +764,27 @@
 .how-preview-icon {
   width: 45px;
   height: 45px;
+
   display: grid;
   place-items: center;
+
   border-radius: 12px;
-  background: color-mix(in srgb, var(--green) 12%, transparent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--green) 12%,
+      transparent
+    );
+
   color: var(--green);
 }
 
 .how-preview-line {
   height: 1px;
+
   margin: 22px 0;
+
   background: var(--border-color);
 }
 
@@ -652,7 +800,9 @@
 
 .how-preview-chart {
   height: 130px;
+
   margin-top: 25px;
+
   display: flex;
   align-items: flex-end;
   gap: 12px;
@@ -661,12 +811,22 @@
 .how-preview-chart span {
   flex: 1;
   min-height: 20px;
+
   border-radius: 6px 6px 2px 2px;
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--green) 20%, transparent),
-    var(--green)
-  );
+
+  background:
+    linear-gradient(
+      to top,
+      color-mix(
+        in srgb,
+        var(--green) 20%,
+        transparent
+      ),
+      var(--green)
+    );
+
+  transform-origin: bottom;
+  will-change: height, opacity;
 }
 
 /* =========================
@@ -676,14 +836,18 @@
 .how-cta {
   width: 100%;
   max-width: 1180px;
+
   margin: 0 auto;
   padding: 42px 45px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 30px;
+
   border: 1px solid var(--border-color);
   border-radius: 20px;
+
   background: var(--soft);
 }
 
@@ -699,7 +863,9 @@
 
 .how-cta-btn {
   flex-shrink: 0;
+
   padding: 12px 20px;
+
   font-size: 0.85rem;
 }
 
@@ -758,7 +924,9 @@
   .how-hero-content {
     width: 100%;
     max-width: 600px;
+
     margin: 0 auto;
+
     text-align: center;
   }
 
@@ -767,6 +935,7 @@
   }
 
   .how-hero-title {
+    min-height: 2.1em;
     font-size: clamp(2rem, 9vw, 2.6rem);
   }
 
@@ -779,13 +948,16 @@
     margin: 0 auto;
   }
 
-  /* IMPORTANT MOBILE FLOW */
+  /* FLOW */
 
   .how-hero-visual {
     width: min(100%, 360px);
     height: 410px;
+
     margin: 0 auto;
+
     transform: none;
+
     overflow: visible;
   }
 
@@ -797,21 +969,29 @@
   .how-flow-svg {
     width: 300px;
     height: 300px;
+
     inset: 55px auto auto 50%;
-    transform: translateX(-50%) rotate(-90deg);
+
+    transform:
+      translateX(-50%)
+      rotate(-90deg);
   }
 
   .how-hero-main-card {
     width: 190px;
     min-height: 92px;
+
     padding: 13px;
+
     gap: 10px;
+
     border-radius: 15px;
   }
 
   .how-hero-main-icon {
     width: 42px;
     height: 42px;
+
     border-radius: 11px;
   }
 
@@ -824,19 +1004,23 @@
     font-size: 0.62rem;
   }
 
-  /* STEP CARDS */
+  /* FLOW STEP CARDS */
 
   .how-flow-step {
     width: 135px;
     min-height: 62px;
+
     padding: 8px;
+
     gap: 7px;
+
     border-radius: 11px;
   }
 
   .how-flow-step-icon {
     width: 31px;
     height: 31px;
+
     border-radius: 9px;
   }
 
@@ -850,18 +1034,17 @@
 
   .how-flow-step small {
     margin-top: 3px;
+
     padding: 2px 5px;
+
     font-size: 0.48rem;
   }
 
-  /*
-    All cards stay INSIDE the 360px visual.
-    Circle center = 180px.
-  */
-
   .how-flow-step-1 {
     top: 25px;
+
     left: 50%;
+
     transform: translateX(-50%);
   }
 
@@ -872,7 +1055,9 @@
 
   .how-flow-step-3 {
     bottom: 25px;
+
     left: 50%;
+
     transform: translateX(-50%);
   }
 
@@ -883,9 +1068,13 @@
 
   .how-flow-status {
     bottom: -5px;
+
     min-width: 0;
+
     width: min(290px, 90%);
+
     padding: 7px 10px;
+
     font-size: 0.58rem;
   }
 
@@ -893,6 +1082,8 @@
     width: 18px;
     height: 18px;
   }
+
+  /* SECTIONS */
 
   .how-steps-section,
   .how-benefits-section {
@@ -904,9 +1095,13 @@
     grid-template-columns: 1fr;
   }
 
+  /* EARNING */
+
   .how-earning-section {
     grid-template-columns: 1fr;
+
     padding: 30px 20px;
+
     gap: 35px;
   }
 
@@ -914,9 +1109,12 @@
     padding: 18px;
   }
 
+  /* CTA */
+
   .how-cta {
     flex-direction: column;
     align-items: flex-start;
+
     padding: 30px 24px;
   }
 
@@ -943,6 +1141,7 @@
   .how-flow-svg {
     width: 270px;
     height: 270px;
+
     top: 60px;
   }
 
@@ -967,5 +1166,20 @@
 
   .how-preview-stats {
     gap: 8px;
+  }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .how-page *,
+  .how-page *::before,
+  .how-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

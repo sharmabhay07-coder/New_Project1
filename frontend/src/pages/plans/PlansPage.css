@@ -1,3 +1,7 @@
+/* =========================
+   PLANS PAGE
+========================= */
+
 .plans-page {
   width: 100%;
   max-width: 1180px;
@@ -5,32 +9,99 @@
   padding: 40px 24px 64px;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 .plans-page-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
+
 .plans-page-title {
+  margin: 0 0 10px;
+  color: var(--fg);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--fg);
   letter-spacing: -0.02em;
-  margin: 0 0 10px;
 }
+
 .plans-page-subtitle {
-  font-size: 0.95rem;
-  color: var(--muted-fg);
   max-width: 480px;
   margin: 0 auto;
+  color: var(--muted-fg);
+  font-size: 0.95rem;
   line-height: 1.5;
 }
 
+/* =========================
+   PLANS GRID
+========================= */
+
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
 
+/* 7th card centered */
+.plans-grid .plan-card:last-child {
+  grid-column: 2;
+}
+
+/* =========================
+   SELECTED PLAN
+========================= */
+
+.plans-selected {
+  margin: 28px 0 0;
+  color: var(--muted-fg);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+  .plans-page {
+    padding: 32px 20px 56px;
+  }
+
+  .plans-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .plans-grid .plan-card:last-child {
+    grid-column: auto;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
 @media (max-width: 640px) {
-  .plans-page { padding: 24px 16px 48px; }
-  .plans-page-title { font-size: 1.5rem; }
+  .plans-page {
+    padding: 24px 16px 48px;
+  }
+
+  .plans-page-header {
+    margin-bottom: 32px;
+  }
+
+  .plans-page-title {
+    font-size: 1.5rem;
+  }
+
+  .plans-page-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 }
