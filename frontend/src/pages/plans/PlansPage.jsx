@@ -1,39 +1,44 @@
 import { useState } from 'react'
-import { categories, plans } from './plansData'
-import CategoryTabs from './CategoryTabs'
 import PlanCard from './PlanCard'
-import './PlansPage.css'
+import { plansData } from './plansData'
 
 export default function PlansPage() {
-  const [activeCategory, setActiveCategory] = useState(categories[0].id)
+  const [selectedPlan, setSelectedPlan] = useState(null)
 
-  const filteredPlans = plans.filter((plan) => plan.categoryId === activeCategory)
+  const handleChoose = (plan) => {
+    setSelectedPlan(plan)
 
-  const handleSelectPlan = (plan) => {
-    // TODO: wire this to your checkout / payment flow
-    console.log('Selected plan:', plan)
+    // TODO: hook this into your actual checkout/payment flow
+    console.log('Selected plan:', plan.id)
   }
 
   return (
     <div className="plans-page">
       <div className="plans-page-header">
-        <h1 className="plans-page-title">Grow Your Business</h1>
+        <h1 className="plans-page-title">Upgrade your plan</h1>
+
         <p className="plans-page-subtitle">
-          Choose a plan to boost your video views, subscribers, reviews, and website traffic.
+          Unlock faster earnings, instant withdrawals, and more.
         </p>
       </div>
 
-      <CategoryTabs
-        categories={categories}
-        active={activeCategory}
-        onChange={setActiveCategory}
-      />
-
       <div className="plans-grid">
-        {filteredPlans.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} onSelect={handleSelectPlan} />
+        {plansData.map((plan, index) => (
+          <PlanCard
+            key={plan.id}
+            plan={plan}
+            index={index}
+            onChoose={handleChoose}
+          />
         ))}
       </div>
+
+      {selectedPlan && (
+        <p className="plans-selected">
+          You selected <strong>{selectedPlan.name}</strong> — checkout
+          integration pending.
+        </p>
+      )}
     </div>
   )
 }

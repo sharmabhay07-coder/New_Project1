@@ -1,0 +1,106 @@
+.mini-profile-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.mini-profile-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mini-profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #0f766e);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.mini-profile-info h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+  text-transform: capitalize;
+}
+
+.mini-profile-info span {
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+}
+
+.mini-profile-earning {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-subtle, #f0fdf4);
+  border: 1px solid var(--border-subtle, #d1fae5);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.mini-profile-earning-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #10b981;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mini-profile-earning-label {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-secondary, #64748b);
+}
+
+.mini-profile-earning-value {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.mini-profile-dashboard-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #10b981;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mini-profile-dashboard-btn:hover {
+  background: #0f9c73;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .mini-profile-card {
+    position: static;
+  }
+}
