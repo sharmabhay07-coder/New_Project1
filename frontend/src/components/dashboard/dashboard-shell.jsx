@@ -161,7 +161,7 @@ export function DashboardShell({ children, userName, initials, balance }) {
               <input
                 type="search"
                 placeholder="Search videos, categories, creators..."
-                className="dash-h-10 dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-card dash-pl-9 dash-pr-4 dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-focus:border-primary/50 dash-focus:outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
+                className="dash-h-10 dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-card dash-pl-9 dash-pr-4 dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-focus:border-primary/50 dash-outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
               />
             </div>
 

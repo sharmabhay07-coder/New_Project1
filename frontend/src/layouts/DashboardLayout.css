@@ -44,29 +44,30 @@
 
 /* ── Dashboard Logo ─────────────────────────────────────── */
 
-.dash-dashboard-logo {
+.dash-sidebar-logo{
   display: flex;
   align-items: center;
   cursor: pointer;
   transition: transform 0.25s ease;
 }
 
-.dash-dashboard-logo:hover {
+.dash-sidebar-logo:hover {
   transform: scale(1.04);
 }
 
-.dash-dashboard-logo-text {
+.dash-logo-text {
   margin: 0;
   padding: 0;
   font-size: 28px;
   font-weight: 800;
   line-height: 1;
-  color: #0f172a;
+  color: var(--fg);
+  white-space: nowrap;
   transition: 0.3s ease;
 }
 
-.dash-dashboard-logo-text span {
-  color: #10b981;
+.dash-logo-text span {
+  color: var(--primary);
 }
 
 

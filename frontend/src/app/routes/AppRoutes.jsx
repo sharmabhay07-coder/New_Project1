@@ -59,6 +59,10 @@ const SettingsPage = lazy(() =>
   import('../../pages/dashboard/SettingsPage')
 )
 
+const ProfilePage = lazy(() =>
+  import('../../pages/dashboard/ProfilePage')
+)
+
 // Page loader
 function PageLoader() {
   return (
@@ -227,6 +231,15 @@ const router = createBrowserRouter([
             element: (
               <SuspenseWrapper>
                 <SettingsPage />
+              </SuspenseWrapper>
+            ),
+          },
+
+          {
+            path: 'profile',
+            element: (
+              <SuspenseWrapper>
+                <ProfilePage />
               </SuspenseWrapper>
             ),
           },

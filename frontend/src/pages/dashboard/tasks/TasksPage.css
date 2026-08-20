@@ -1,0 +1,19 @@
+.tasks-badge-primary {
+    background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+}
+
+.tasks-loading-wrap {
+    padding: 64px 0;
+}
+
+.tasks-empty-state {
+    text-align: center;
+}
+
+.tasks-card {
+    transition: box-shadow 0.2s ease;
+}
+
+.tasks-card:hover {
+    box-shadow: var(--shadow-soft-lg);
+}

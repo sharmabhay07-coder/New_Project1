@@ -61,7 +61,7 @@ export function WelcomeBanner({ name, summary }) {
       <div className="dash-welcome-banner-gradient" />
 
       <div className="dash-welcome-banner-content">
-        <div className="dash-welcome-banner-text">
+        <div>
           <h1 className="dash-welcome-banner-title">
             {greeting()},{' '}
             <span className="dash-text-primary">

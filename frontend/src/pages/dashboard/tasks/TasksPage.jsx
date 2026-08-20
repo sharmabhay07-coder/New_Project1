@@ -5,6 +5,7 @@ import { getTasks } from '@/lib/api/taskApi'
 import useAuth from '@/hooks/useAuth'
 import DashboardMiniProfile from '@/components/dashboard/dashboard-mini-profile'
 import PlansPromoPanel from '@/components/dashboard/plans-promo-panel'
+import './TasksPage.css'
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([])
@@ -27,12 +28,8 @@ export default function TasksPage() {
 
   return (
     <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '260px 1fr 280px',
-        gap: '20px',
-        alignItems: 'start',
-      }}
+      className="dash-grid dash-items-start dash-gap-4"
+      style={{ gridTemplateColumns: '260px 1fr 280px' }}
     >
       <DashboardMiniProfile />
 
@@ -57,11 +54,11 @@ export default function TasksPage() {
         </div>
 
         {loading ? (
-          <div className="dash-flex dash-items-center dash-justify-center dash-py-16">
+          <div className="dash-flex dash-items-center dash-justify-center tasks-loading-wrap">
             <Loader2 className="dash-size-8 dash-animate-spin dash-text-primary" />
           </div>
         ) : tasks.length === 0 ? (
-          <div className="dash-card dash-p-5 dash-text-center">
+          <div className="dash-card dash-p-5 tasks-empty-state">
             <p className="dash-text-muted-foreground">No tasks available yet</p>
           </div>
         ) : (
@@ -72,10 +69,10 @@ export default function TasksPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="dash-card dash-p-6 dash-shadow-soft dash-transition-shadow dash-hover:shadow-soft-lg"
+                className="dash-card dash-p-6 dash-shadow-soft tasks-card"
               >
                 <div className="dash-flex dash-items-start dash-gap-4">
-                  <div className="dash-shrink-0 dash-rounded-xl dash-bg-primary/10 dash-px-2.5 dash-py-1 dash-text-xs dash-font-bold dash-uppercase dash-text-primary">
+                  <div className="dash-shrink-0 dash-rounded-xl tasks-badge-primary dash-px-3 dash-py-1 dash-text-xs dash-font-bold dash-uppercase dash-text-primary">
                     {task.taskType || 'Task'}
                   </div>
                   <div className="dash-min-w-0 dash-flex-1">
