@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { WelcomeBanner } from '@/components/dashboard/welcome-banner'
-import QuickActions from '@/components/dashboard/quick-actions';
-import RecentActivity from '@/components/dashboard/recent-activity';
+import { WelcomeBanner } from "./components/welcome-banner";
+import QuickActions from './components/quick-actions';
+import RecentActivity from './components/recent-activity';
 import { getDashboardSummary } from '@/lib/api/userApi'
 import useAuth from '@/hooks/useAuth'
 import '../../styles/dashboard.css'

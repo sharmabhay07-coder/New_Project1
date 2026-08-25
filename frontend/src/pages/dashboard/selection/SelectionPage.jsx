@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { FaArrowRight, FaBullhorn } from "react-icons/fa";
 import { IoWalletOutline } from "react-icons/io5";
 
-import "./../auth/Auth.css";
+import "./../../auth/Auth";
 import "./SelectionPage.css";
 
 const container = {

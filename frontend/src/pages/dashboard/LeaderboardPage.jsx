@@ -5,9 +5,9 @@ import { getLeaderboard } from '@/lib/api/userApi'
 import useAuth from '@/hooks/useAuth'
 
 const RANK_STYLE = {
-  1: { icon: Crown, color: 'dash-text-chart-4', bg: 'dash-bg-chart-4/10' },
+  1: { icon: Crown, color: 'dash-text-chart-4', bg: 'dash-bg-warning/10' },
   2: { icon: Medal, color: 'dash-text-muted-foreground', bg: 'dash-bg-muted' },
-  3: { icon: Medal, color: 'dash-text-chart-5', bg: 'dash-bg-chart-5/10' },
+  3: { icon: Medal, color: 'dash-text-chart-5', bg: 'dash-bg-chart-5/12' },
 }
 
 export default function LeaderboardPage() {
@@ -19,7 +19,7 @@ export default function LeaderboardPage() {
     if (!token) { setLoading(false); return }
     getLeaderboard(token)
       .then(res => setLeaderboard(res.data?.leaderboard || []))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false))
   }, [token])
 
@@ -29,7 +29,7 @@ export default function LeaderboardPage() {
     return (
       <div className="dash-page">
         <div className="dash-card dash-p-5">
-          <div className="dash-flex dash-items-center dash-justify-center dash-py-8">
+          <div className="dash-flex dash-items-center dash-justify-center" style={{ padding: '32px 0' }}>
             <div className="dash-size-8 dash-animate-spin dash-rounded-full dash-border-4 dash-border-border dash-border-t-primary" />
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function LeaderboardPage() {
       </div>
 
       {leaderboard.length === 0 ? (
-        <div className="dash-card dash-p-5 dash-text-center">
+        <div className="dash-empty-state">
           <p className="dash-text-muted-foreground">No leaderboard data available yet.</p>
         </div>
       ) : (
@@ -61,12 +61,12 @@ export default function LeaderboardPage() {
                   transition={{ delay: i * 0.1 }}
                   className="dash-flex dash-flex-col dash-items-center dash-gap-2"
                 >
-                  <div className="dash-grid dash-size-12 dash-place-items-center dash-rounded-2xl dash-bg-primary/10 dash-text-lg dash-font-bold dash-text-primary">
+                  <div className="dash-grid dash-size-12 dash-place-items-center dash-rounded-2xl dash-bg-secondary dash-text-lg dash-font-bold dash-text-primary">
                     {row.initials}
                   </div>
                   <p className="dash-text-xs dash-font-semibold dash-text-foreground">{row.name}</p>
                   <p className="dash-text-xs dash-text-muted-foreground">₹{row.earned?.toFixed(2)}</p>
-                  <div className="dash-w-20 dash-rounded-t-2xl dash-bg-primary/30 dash-flex dash-items-start dash-justify-center dash-pt-2" style={{ height: '5rem' }}>
+                  <div className="dash-w-20 dash-rounded-2xl dash-bg-secondary dash-flex dash-items-start dash-justify-center dash-pt-2" style={{ height: '5rem' }}>
                     <span className="dash-text-xs dash-font-bold dash-text-primary">#{pos}</span>
                   </div>
                 </motion.div>
@@ -85,7 +85,7 @@ export default function LeaderboardPage() {
                   transition={{ delay: i * 0.06 }}
                   className={
                     'dash-flex dash-items-center dash-gap-4 dash-rounded-2xl dash-border dash-border-border dash-bg-card dash-p-4 dash-shadow-soft ' +
-                    (row.isMe ? 'dash-border-primary/30 dash-bg-primary/5' : '')
+                    (row.isMe ? 'dash-border-primary/30 dash-bg-secondary' : '')
                   }
                 >
                   <div className={'dash-grid dash-size-9 dash-shrink-0 dash-place-items-center dash-rounded-xl ' + (style ? style.bg : 'dash-bg-secondary')}>
@@ -100,7 +100,7 @@ export default function LeaderboardPage() {
                   </div>
                   <div className="dash-flex-1">
                     <p className="dash-text-sm dash-font-semibold dash-text-foreground">
-                      {row.name} {row.isMe && <span className="dash-ml-1.5 dash-rounded-full dash-bg-primary/10 dash-px-2 dash-py-0.5 dash-text-[10px] dash-font-bold dash-text-primary">You</span>}
+                      {row.name} {row.isMe && <span className="dash-ml-1.5 dash-badge dash-badge-primary">You</span>}
                     </p>
                   </div>
                   <p className="dash-text-sm dash-font-bold dash-tabular-nums dash-text-foreground">₹{row.earned?.toFixed(2)}</p>

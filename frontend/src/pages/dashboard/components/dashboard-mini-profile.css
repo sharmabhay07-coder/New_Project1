@@ -1,6 +1,6 @@
 .mini-profile-card {
-  background: var(--card-bg, #ffffff);
-  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -35,21 +35,21 @@
   margin: 0;
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary, #0f172a);
+  color: var(--fg);
   text-transform: capitalize;
 }
 
 .mini-profile-info span {
   font-size: 12px;
-  color: var(--text-secondary, #64748b);
+  color: var(--muted-fg);
 }
 
 .mini-profile-earning {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--bg-subtle, #f0fdf4);
-  border: 1px solid var(--border-subtle, #d1fae5);
+  background: var(--muted);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px 14px;
 }
@@ -69,14 +69,14 @@
 .mini-profile-earning-label {
   margin: 0;
   font-size: 11px;
-  color: var(--text-secondary, #64748b);
+  color: var(--muted-fg);
 }
 
 .mini-profile-earning-value {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--text-primary, #0f172a);
+  color: var(--fg);
 }
 
 .mini-profile-dashboard-btn {

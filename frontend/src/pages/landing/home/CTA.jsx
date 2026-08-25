@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import img from "../../assets/images/image4.jpg";
+import img from "../../../assets/images/image4.jpg";
 import "./CTA.css";
 
 const container = {

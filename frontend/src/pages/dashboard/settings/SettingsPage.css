@@ -1,0 +1,7 @@
+.settings-list-item {
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-list-item:hover {
+    color: var(--primary);
+}

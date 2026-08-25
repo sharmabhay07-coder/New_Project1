@@ -62,7 +62,7 @@ export default function WalletPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="dash-fixed dash-right-6 dash-top-20 dash-z-50 dash-flex dash-items-center dash-gap-2 dash-rounded-2xl dash-px-5 dash-py-3 dash-text-sm dash-font-semibold dash-shadow-soft-lg"
+            className="dash-fixed dash-right-6 dash-z-50 dash-flex dash-items-center dash-gap-2 dash-rounded-2xl dash-px-4 dash-py-3 dash-text-sm dash-font-semibold dash-shadow-soft-lg"
             style={{ background: toast.type === 'success' ? 'var(--success)' : 'var(--destructive)', color: toast.type === 'success' ? 'var(--success-fg)' : 'var(--destructive-fg)' }}
           >
             {toast.type === 'success' ? <CheckCircle className="dash-size-4" /> : <XCircle className="dash-size-4" />}
@@ -78,7 +78,7 @@ export default function WalletPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="dash-flex dash-items-center dash-gap-2 dash-rounded-xl dash-bg-primary dash-px-5 dash-py-2.5 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
+          className="dash-flex dash-items-center dash-gap-2 dash-rounded-xl dash-bg-primary dash-px-4 dash-py-2.5 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
         >
           <ArrowDownToLine className="dash-size-4" /> Withdraw
         </button>
@@ -86,7 +86,7 @@ export default function WalletPage() {
 
       <div className="dash-relative dash-overflow-hidden dash-rounded-3xl dash-bg-gradient-to-br dash-from-primary dash-to-accent dash-p-8 dash-text-white dash-shadow-soft-primary">
         <div className="dash-absolute dash--right-8 dash--top-8 dash-size-40 dash-rounded-full dash-bg-white/10" />
-        <div className="dash-absolute dash--bottom-10 dash-right-20 dash-size-24 dash-rounded-full dash-bg-white/10" />
+        <div className="dash-absolute dash--bottom-10 dash-right-20 dash-rounded-full dash-bg-white/10" />
         <p className="dash-text-sm dash-font-medium dash-text-white/80">Available Balance</p>
         <p className="dash-mt-2 dash-text-5xl dash-font-bold dash-tabular-nums">
           {loading ? '...' : `₹${bal.toFixed(2)}`}
@@ -134,9 +134,9 @@ export default function WalletPage() {
             >
               <h2 className="dash-text-lg dash-font-bold dash-text-foreground">Request Withdrawal</h2>
               <p className="dash-mt-0.5 dash-text-sm dash-text-muted-foreground">Available: <strong className="dash-text-foreground">₹{bal.toFixed(2)}</strong></p>
-              <form onSubmit={handleWithdraw} className="dash-mt-5 dash-flex dash-flex-col dash-gap-4">
+              <form onSubmit={handleWithdraw} className="dash-mt-4 dash-flex dash-flex-col dash-gap-4">
                 <div>
-                  <label className="dash-mb-1 dash-block dash-text-xs dash-font-semibold dash-text-muted-foreground">Amount (₹)</label>
+                  <label className="dash-mb-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">Amount (₹)</label>
                   <input
                     type="number"
                     min="10"
@@ -146,28 +146,28 @@ export default function WalletPage() {
                     value={form.amount}
                     onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
                     placeholder="Enter amount"
-                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-focus:border-primary/50 dash-focus:outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
+                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-focus:border-primary/50 dash-outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
                   />
                 </div>
                 <div>
-                  <label className="dash-mb-1 dash-block dash-text-xs dash-font-semibold dash-text-muted-foreground">Withdrawal Method</label>
+                  <label className="dash-mb-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">Withdrawal Method</label>
                   <select
                     value={form.withdrawalMethod}
                     onChange={e => setForm(f => ({ ...f, withdrawalMethod: e.target.value }))}
-                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-focus:border-primary/50 dash-focus:outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
+                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-focus:border-primary/50 dash-outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
                   >
                     {METHODS.map(m => <option key={m}>{m}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="dash-mb-1 dash-block dash-text-xs dash-font-semibold dash-text-muted-foreground">Account Details</label>
+                  <label className="dash-mb-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">Account Details</label>
                   <input
                     type="text"
                     required
                     value={form.accountDetails}
                     onChange={e => setForm(f => ({ ...f, accountDetails: e.target.value }))}
                     placeholder="UPI ID / Account number / Email"
-                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-focus:border-primary/50 dash-focus:outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
+                    className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-focus:border-primary/50 dash-outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
                   />
                 </div>
                 <div className="dash-flex dash-gap-3 dash-pt-1">

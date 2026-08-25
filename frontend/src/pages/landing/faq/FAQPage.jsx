@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
-import { faqCategories, faqs } from './faqData'
+import { faqCategories, faqs } from '@/lib/utils/faqData'
 import FAQItem from './FAQItem'
 import './FAQPage.css'
-import faqPerson from '../../assets/images/faq1.png'
+import faqPerson from '@/assets/images/faq1.png'
 
 export default function FAQPage() {
   const [activeCategory, setActiveCategory] = useState(

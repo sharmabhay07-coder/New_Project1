@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { User, Bell, Shield, LifeBuoy, ChevronRight, CheckCircle } from 'lucide-react'
 import useAuth from '@/hooks/useAuth'
+import './SettingsPage.css'
 
 const SECTIONS = [
   {
@@ -52,19 +53,19 @@ export default function SettingsPage() {
         </div>
         {SECTIONS[0].fields.map(f => (
           <div key={f.key}>
-            <label className="dash-mb-1 dash-block dash-text-xs dash-font-semibold dash-text-muted-foreground">{f.label}</label>
+            <label className="dash-mb-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">{f.label}</label>
             <input
               type={f.type}
               placeholder={f.placeholder}
               value={form[f.key]}
               onChange={e => setForm(v => ({ ...v, [f.key]: e.target.value }))}
-              className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-focus:border-primary/50 dash-focus:outline-none dash-focus:ring-2 dash-focus:ring-primary/20"
+              className="dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-background dash-px-4 dash-py-2.5 dash-text-sm dash-text-foreground dash-focus:border-primary/50 dash-focus:ring-2 dash-focus:ring-primary/20"
             />
           </div>
         ))}
         <button
           type="submit"
-          className="dash-flex dash-items-center dash-gap-2 dash-rounded-xl dash-bg-primary dash-px-5 dash-py-2.5 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
+          className="dash-flex dash-items-center dash-gap-2 dash-rounded-xl dash-bg-primary dash-px-4 dash-py-2.5 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
         >
           {saved ? <><CheckCircle className="dash-size-4" /> Saved!</> : 'Save Changes'}
         </button>
@@ -83,11 +84,11 @@ export default function SettingsPage() {
             </div>
             <button
               onClick={() => setToggles(v => ({ ...v, [t.key]: !v[t.key] }))}
-              className={'dash-relative dash-h-6 dash-w-11 dash-rounded-full dash-transition-colors ' + (toggles[t.key] ? 'dash-bg-primary' : 'dash-bg-border')}
+              className={'dash-relative dash-h-4 dash-w-11 dash-rounded-full dash-transition-colors ' + (toggles[t.key] ? 'dash-bg-primary' : 'dash-bg-border')}
             >
               <motion.span
                 layout
-                className="dash-absolute dash-top-0.5 dash-left-0.5 dash-size-5 dash-rounded-full dash-bg-white dash-shadow"
+                className="dash-absolute dash-size-5 dash-rounded-full dash-bg-white"
                 animate={{ x: toggles[t.key] ? 20 : 0 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               />
@@ -102,7 +103,7 @@ export default function SettingsPage() {
           <h2 className="dash-text-sm dash-font-bold dash-text-foreground">Security</h2>
         </div>
         {['Change Password', 'Two-Factor Authentication', 'Active Sessions'].map(item => (
-          <button key={item} className="dash-flex dash-w-full dash-items-center dash-justify-between dash-py-3 dash-border-b dash-border-border dash-last:border-0 dash-text-sm dash-text-foreground dash-hover:text-primary dash-transition-colors">
+          <button key={item} className="dash-flex dash-w-full dash-items-center dash-justify-between dash-py-3 settings-list-item dash-text-sm dash-text-foreground dash-transition-colors">
             {item}
             <ChevronRight className="dash-size-4 dash-text-muted-foreground" />
           </button>
@@ -115,7 +116,7 @@ export default function SettingsPage() {
           <h2 className="dash-text-sm dash-font-bold dash-text-foreground">Help &amp; Support</h2>
         </div>
         {['FAQs', 'Contact Support', 'Report a Bug', 'Terms &amp; Privacy'].map(item => (
-          <button key={item} className="dash-flex dash-w-full dash-items-center dash-justify-between dash-py-3 dash-border-b dash-border-border dash-last:border-0 dash-text-sm dash-text-foreground dash-hover:text-primary dash-transition-colors">
+          <button key={item} className="dash-flex dash-w-full dash-items-center dash-justify-between dash-py-3 settings-list-item dash-text-sm dash-text-foreground dash-transition-colors">
             {item}
             <ChevronRight className="dash-size-4 dash-text-muted-foreground" />
           </button>

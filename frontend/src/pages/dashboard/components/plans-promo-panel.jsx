@@ -43,7 +43,7 @@ export default function PlansPromoPanel() {
       <div className="plans-promo-list">
         {promoPlans.map((plan) => (
           <Link
-            to={`/plans?plan=${plan.id}`}
+            to={`/dashboard/plans?plan=${plan.id}`}
             key={plan.id}
             className="plans-promo-card"
           >

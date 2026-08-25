@@ -13,7 +13,7 @@ import {
   Coins,
 } from 'lucide-react'
 import useAuth from '../hooks/useAuth'
-import LogoutConfirmModal from '../components/dashboard/LogoutConfirmModal'
+import LogoutConfirmModal from '../pages/dashboard/components/LogoutConfirmModal'
 import './DashboardLayout.css'
 
 function ThemeToggle() {
@@ -127,7 +127,7 @@ export default function DashboardLayout() {
             <div className="dash-flex dash-items-center dash-gap-2">
 
               <div
-                className="dash-dashboard-logo"
+                className="dash-sidebar-logo"
                 onClick={() => window.location.reload()}
                 role="button"
                 tabIndex={0}
@@ -137,7 +137,7 @@ export default function DashboardLayout() {
                   }
                 }}
               >
-                <h1 className="dash-dashboard-logo-text">
+                <h1 className="dash-logo-text">
                   Earn <span>Hub</span>
                 </h1>
               </div>
@@ -191,8 +191,7 @@ export default function DashboardLayout() {
                   type="search"
                   name="search"
                   placeholder="Search videos, tasks…"
-                  className="dash-bg-transparent dash-border-none dash-text-sm dash-text-foreground dash-placeholder:text-muted-foreground dash-outline-none dash-w-full"
-                />
+                  className="dash-bg-transparent dash-border-none dash-text-sm dash-text-foreground dash-outline-none dash-w-full" />
 
               </div>
 
@@ -334,7 +333,7 @@ export default function DashboardLayout() {
 
                     <button
                       onClick={() => {
-                        navigate('/dashboard/settings')
+                        navigate('/dashboard/profile')
                         setUserOpen(false)
                       }}
                       className="dash-dropdown-item-btn"
