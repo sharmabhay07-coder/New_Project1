@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Hero.css";
 
-import video1 from "../../assets/videos/computer.mp4";
-import video2 from "../../assets/videos/mony.mp4";
-import video3 from "../../assets/videos/game.mp4";
+import video1 from "../../../assets/videos/computer.mp4";
+import video2 from "../../../assets/videos/mony.mp4";
+import video3 from "../../../assets/videos/game.mp4";
 
 // Mobile Background Image
-import heroMobile from "../../assets/images/backgroundimage1.jpg";
+import heroMobile from "../../../assets/images/backgroundimage1.jpg";
 const videos = [video1, video2, video3];
 
 function Hero() {

@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import { Target, Clock, CheckCircle, ExternalLink, Loader2 } from 'lucide-react'
 import { getTasks } from '@/lib/api/taskApi'
 import useAuth from '@/hooks/useAuth'
-import DashboardMiniProfile from '@/components/dashboard/dashboard-mini-profile'
-import PlansPromoPanel from '@/components/dashboard/plans-promo-panel'
+import DashboardMiniProfile from '@/pages/dashboard/components/dashboard-mini-profile'
+import PlansPromoPanel from '@/pages/dashboard/components/plans-promo-panel'
 import './TasksPage.css'
 
 export default function TasksPage() {

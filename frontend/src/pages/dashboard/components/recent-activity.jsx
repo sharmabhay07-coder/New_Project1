@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LuActivity } from 'react-icons/lu';
-import { getRecentActivity } from '../../lib/api/activityApi';
-import useAuth from '../../hooks/useAuth';
+import { getRecentActivity } from '../../../lib/api/activityApi';
+import useAuth from '../../../hooks/useAuth';
 import './recent-activity.css';
 import './skeleton.css';
 

@@ -13,7 +13,7 @@ import {
   Coins,
 } from 'lucide-react'
 import useAuth from '../hooks/useAuth'
-import LogoutConfirmModal from '../components/dashboard/LogoutConfirmModal'
+import LogoutConfirmModal from '../pages/dashboard/components/LogoutConfirmModal'
 import './DashboardLayout.css'
 
 function ThemeToggle() {

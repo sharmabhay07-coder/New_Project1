@@ -6,28 +6,28 @@ import ProtectedRoute from './ProtectedRoute'
 import DashboardLayout from '../../layouts/DashboardLayout'
 
 // Eagerly load Home and Auth
-import Home from '../../pages/home/Home'
+import Home from '../../pages/landing/home/Home'
 import Auth from '../../pages/auth/Auth'
 
 // Lazy-load public pages
 const HowItWorks = lazy(() =>
-  import('../../pages/how-it-works/HowItWorks')
+  import('../../pages/landing/how-it-works/HowItWorks')
 )
 
 const FAQPage = lazy(() =>
-  import('../../pages/faq/FAQPage')
+  import('../../pages/landing/faq/FAQPage')
 )
 
 const FeaturesPage = lazy(() =>
-  import('../../pages/features/FeaturesPage')
+  import('../../pages/landing/features/FeaturesPage')
 )
 
 const PlansPage = lazy(() =>
-  import('../../pages/plans/PlansPage')
+  import('../../pages/dashboard/plans/PlansPage')
 )
 
 const SelectionPage = lazy(() =>
-  import('../../pages/selection/SelectionPage')
+  import('../../pages/dashboard/selection/SelectionPage')
 )
 
 // Lazy-load dashboard pages
@@ -56,7 +56,7 @@ const LeaderboardPage = lazy(() =>
 )
 
 const SettingsPage = lazy(() =>
-  import('../../pages/dashboard/SettingsPage')
+  import('../../pages/dashboard/settings/SettingsPage')
 )
 
 const ProfilePage = lazy(() =>
