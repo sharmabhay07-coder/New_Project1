@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSchema } from '../../../lib/utils/schemas';
 import { loginUser } from '../../../lib/api/authApi';
 import useAuth from '../../../hooks/useAuth';
+import { ROLES } from '../../../constants/roles'; 
 
 export default function LoginForm({ onSwitch }) {
   const [showPw, setShowPw] = useState(false);
@@ -24,7 +25,12 @@ export default function LoginForm({ onSwitch }) {
       const res = await loginUser(values);
       login(res.data.token, res.data.user);
       toast.success(`Welcome back, ${res.data.user.name}! 🎉`);
-      navigate('/selection');
+
+      if (res.data.user.role === ROLES.ADMIN) {
+        navigate('/admin');
+      } else {
+        navigate('/selection');
+      }
     } catch (err) {
       toast.error(err.message);
     }

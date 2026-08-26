@@ -8,6 +8,8 @@ import DashboardLayout from '../../layouts/DashboardLayout'
 // Eagerly load Home and Auth
 import Home from '../../pages/landing/home/Home'
 import Auth from '../../pages/auth/Auth'
+import AdminRoute from '../../pages/admin/AdminRoute'
+import AdminLayout from '../../layouts/AdminLayout'
 
 // Lazy-load public pages
 const HowItWorks = lazy(() =>
@@ -20,6 +22,16 @@ const FAQPage = lazy(() =>
 
 const FeaturesPage = lazy(() =>
   import('../../pages/landing/features/FeaturesPage')
+)
+
+const AdminDashboard = lazy(() =>
+  import('../../pages/admin/AdminDashboard')
+)
+const AdminVideosPage = lazy(() =>
+  import('../../pages/admin/videos/AdminVideosPage')
+)
+const AdminUsersPage = lazy(() =>
+  import('../../pages/admin/users/AdminUsersPage')
 )
 
 const PlansPage = lazy(() =>
@@ -130,6 +142,50 @@ const router = createBrowserRouter([
       {
         path: '/auth',
         element: <Auth />,
+      },
+    ],
+  },
+
+  // =====================================================
+  // ADMIN 
+  // =====================================================
+
+  {
+    element: <AdminRoute />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            path: '/admin',
+            children: [
+              {
+                index: true,
+                element: (
+                  <SuspenseWrapper>
+                    <AdminDashboard />
+                  </SuspenseWrapper>
+                ),
+              },
+              {
+                path: 'videos',
+                element: (
+                  <SuspenseWrapper>
+                    <AdminVideosPage />
+                  </SuspenseWrapper>
+                ),
+              },
+              {
+                path: 'users',
+                element: (
+                  <SuspenseWrapper>
+                    <AdminUsersPage />
+                  </SuspenseWrapper>
+                ),
+              },
+            ],
+          },
+        ],
       },
     ],
   },
