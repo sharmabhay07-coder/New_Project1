@@ -17,3 +17,21 @@ export const getVideos = async (token) => {
 
     return data;
 };
+
+export const uploadVideo = async (formData, token) => {
+    const res = await fetch(`${API_BASE}/videos`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to upload video');
+    }
+
+    return data;
+};

@@ -3,6 +3,7 @@ dotenv.config();
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");                    // ← ADD THIS
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -32,6 +33,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));   // ← ADD THIS
 
 app.use("/api/auth", authRoutes);
 
