@@ -13,7 +13,7 @@ import useAuth from '@/hooks/useAuth'
 
 import DashboardMiniProfile from '../components/dashboard-mini-profile'
 import PlansPromoPanel from '../components/plans-promo-panel'
-import VideoUploadForm from '../components/video-upload-form'
+import VideoUploadForm from './video-upload-form'
 
 import './VideosPage.css'
 
