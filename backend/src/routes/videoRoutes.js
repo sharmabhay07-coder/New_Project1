@@ -6,7 +6,15 @@ const {
     getVideos,
 } = require("../controllers/videoController");
 
+const {
+    getAdminVideos,
+    approveVideo,
+    rejectVideo,
+} = require("../controllers/adminVideoController");
+
 const protect = require("../middleware/authMiddleware");
+const authorizeRoles = require("../middleware/roleMiddleware");
+const ROLES = require("../constants/Roles");
 
 const router = express.Router();
 
@@ -21,6 +29,28 @@ router.get(
     "/",
     protect,
     getVideos
+);
+
+// ADMIN ROUTES
+router.get(
+    "/admin/all",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    getAdminVideos
+);
+
+router.patch(
+    "/admin/:id/approve",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    approveVideo
+);
+
+router.patch(
+    "/admin/:id/reject",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    rejectVideo
 );
 
 module.exports = router;

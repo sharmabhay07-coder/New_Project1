@@ -32,8 +32,6 @@ const createVideo = asyncHandler(async (req, res) => {
         duration: durationInSeconds,
         uploadedBy: req.user._id,
 
-        // TEMP: auto-approve until admin panel is built
-        status: "approved",
     });
 
     res.status(201).json({

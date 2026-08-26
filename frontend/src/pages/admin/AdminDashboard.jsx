@@ -1,84 +1,173 @@
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'  
+import { NavLink } from 'react-router-dom'
 import { Clock, CheckCircle, XCircle, Users } from 'lucide-react'
 
-/**
- * DESIGN PASS ONLY — the stat numbers below are not wired to a real
- * endpoint yet (no admin stats API exists). loading state renders '—'
- * until that endpoint is built, rather than showing fake numbers as if
- * they were real.
- */
+import { getAdminVideos } from '@/lib/api/videoApi'
+import useAuth from '@/hooks/useAuth'
+
+const DASH = '\u2014'
+
+const emptyStats = {
+    pendingReview: 0,
+    approvedToday: 0,
+    rejectedToday: 0,
+    // TODO: needs GET /users/admin/count endpoint
+    totalUsers: null,
+}
+
+const isToday = (value) => {
+    if (!value) return false
+
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return false
+
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
+
+    const end = new Date(start)
+    end.setDate(end.getDate() + 1)
+
+    return date >= start && date < end
+}
+
+const adminNavLinkClass = ({ isActive }) =>
+    [
+        'dash-rounded-lg',
+        'dash-border',
+        'dash-px-3',
+        'dash-py-1.5',
+        'dash-text-sm',
+        'dash-font-semibold',
+        'dash-transition-colors',
+        isActive
+            ? 'dash-border-transparent dash-bg-primary dash-text-primary-foreground'
+            : 'dash-border-border dash-bg-transparent dash-text-muted-foreground dash-hover:bg-secondary dash-hover:text-foreground',
+    ].join(' ')
+
 export default function AdminDashboard() {
-    const [stats, setStats] = useState(null)
+    const [stats, setStats] = useState(emptyStats)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    const { token } = useAuth()
 
     useEffect(() => {
-        // TODO: replace with real call once an admin stats endpoint exists
-        // e.g. getAdminStats(token).then(res => setStats(res.data)).finally(() => setLoading(false))
-        setLoading(false)
-    }, [])
+        const loadStats = async () => {
+            if (!token) {
+                setStats(emptyStats)
+                setLoading(false)
+                return
+            }
 
-    const pending = stats?.pendingVideos
-    const approvedToday = stats?.approvedToday
-    const rejectedToday = stats?.rejectedToday
-    const totalUsers = stats?.totalUsers
+            setLoading(true)
+            setError('')
+
+            try {
+                const res = await getAdminVideos(token)
+                const videos = res.data?.videos || []
+
+                setStats({
+                    pendingReview: videos.filter(
+                        (video) =>
+                            video.status?.toLowerCase() === 'pending'
+                    ).length,
+                    approvedToday: videos.filter(
+                        (video) =>
+                            video.status?.toLowerCase() === 'approved' &&
+                            isToday(video.updatedAt)
+                    ).length,
+                    rejectedToday: videos.filter(
+                        (video) =>
+                            video.status?.toLowerCase() === 'rejected' &&
+                            isToday(video.updatedAt)
+                    ).length,
+                    // TODO: needs GET /users/admin/count endpoint
+                    totalUsers: null,
+                })
+            } catch (err) {
+                console.error('Failed to fetch admin dashboard stats:', err)
+                setStats(emptyStats)
+                setError(err.message || 'Failed to load admin stats')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadStats()
+    }, [token])
 
     return (
         <div className="dash-page dash-space-y-6">
-
-            <header className="dash-flex dash-h-16 dash-items-center dash-justify-between dash-px-4 dash-md:px-6 dash-w-full dash-bg-card dash-border dash-border-border dash-rounded-xl">
+            <header className="dash-flex dash-h-16 dash-items-center dash-justify-between dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-card dash-px-4 dash-md:px-6">
                 <div className="dash-flex dash-items-center dash-gap-2">
-                    <div className="dash-sidebar-logo">
-                        <h1 className="dash-logo-text">
-                            Earn <span>Hub</span>
-                        </h1>
-                    </div>
-                    <span className="dash-text-xs dash-font-semibold dash-text-muted-foreground dash-ml-1">
+                    <h1 className="dash-text-xl dash-font-bold dash-text-foreground">
+                        Earn Hub
+                    </h1>
+                    <span className="dash-ml-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">
                         Admin
                     </span>
                 </div>
 
-                {/* <nav className="dash-header-nav">
-                    <NavLink to="/admin" end>Dashboard</NavLink>
-                    <NavLink to="/admin/users">Users</NavLink>
-                    <NavLink to="/admin/videos">Videos</NavLink>
-                </nav> */}
+                <nav className="dash-flex dash-items-center dash-gap-2">
+                    <NavLink className={adminNavLinkClass} to="/admin" end>
+                        Dashboard
+                    </NavLink>
+                    <NavLink className={adminNavLinkClass} to="/admin/users">
+                        Users
+                    </NavLink>
+                    <NavLink className={adminNavLinkClass} to="/admin/videos">
+                        Videos
+                    </NavLink>
+                </nav>
             </header>
 
-            <div className="dash-grid dash-grid-cols-1 dash-sm:grid-cols-2 dash-lg:grid-cols-4 dash-gap-4">
+            {error ? (
+                <div className="dash-rounded-2xl dash-border dash-border-destructive dash-bg-background dash-p-4 dash-text-sm dash-text-destructive">
+                    {error}
+                </div>
+            ) : null}
+
+            <div className="dash-grid dash-grid-cols-1 dash-gap-4 dash-sm:grid-cols-2 dash-lg:grid-cols-4">
                 <div className="dash-card dash-p-6 dash-shadow-soft">
                     <Clock className="dash-size-5 dash-text-warning" />
                     <p className="dash-mt-2 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
-                        {loading ? '—' : pending ?? '—'}
+                        {loading ? DASH : stats.pendingReview}
                     </p>
-                    <p className="dash-text-xs dash-text-muted-foreground">Pending review</p>
+                    <p className="dash-text-xs dash-text-muted-foreground">
+                        Pending review
+                    </p>
                 </div>
 
                 <div className="dash-card dash-p-6 dash-shadow-soft">
                     <CheckCircle className="dash-size-5 dash-text-primary" />
                     <p className="dash-mt-2 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
-                        {loading ? '—' : approvedToday ?? '—'}
+                        {loading ? DASH : stats.approvedToday}
                     </p>
-                    <p className="dash-text-xs dash-text-muted-foreground">Approved today</p>
+                    <p className="dash-text-xs dash-text-muted-foreground">
+                        Approved today
+                    </p>
                 </div>
 
                 <div className="dash-card dash-p-6 dash-shadow-soft">
                     <XCircle className="dash-size-5 dash-text-destructive" />
                     <p className="dash-mt-2 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
-                        {loading ? '—' : rejectedToday ?? '—'}
+                        {loading ? DASH : stats.rejectedToday}
                     </p>
-                    <p className="dash-text-xs dash-text-muted-foreground">Rejected today</p>
+                    <p className="dash-text-xs dash-text-muted-foreground">
+                        Rejected today
+                    </p>
                 </div>
 
                 <div className="dash-card dash-p-6 dash-shadow-soft">
                     <Users className="dash-size-5 dash-text-accent" />
                     <p className="dash-mt-2 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
-                        {loading ? '—' : totalUsers ?? '—'}
+                        {DASH}
                     </p>
-                    <p className="dash-text-xs dash-text-muted-foreground">Total users</p>
+                    <p className="dash-text-xs dash-text-muted-foreground">
+                        Total users
+                    </p>
                 </div>
             </div>
-
         </div>
     )
 }
