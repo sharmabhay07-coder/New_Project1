@@ -1,17 +1,27 @@
 const asyncHandler = require("../utils/asyncHandler");
 const Video = require("../models/Video");
-const ROLES = require("../constants/Roles");
+
+// 5 coins per 30 seconds (30s = 5, 60s = 10, 90s = 15...)
+const calculateReward = (durationInSeconds) => {
+    const blocks = Math.ceil(durationInSeconds / 30);
+    return blocks * 5;
+};
 
 const createVideo = asyncHandler(async (req, res) => {
+    console.log("Upload request received:", req.body, req.file);   // ← ADD THIS LINE
 
-    const {
-        title,
-        description,
-        videoUrl,
-        thumbnail,
-        reward,
-        duration,
-    } = req.body;
+    const { title, description, thumbnail, duration } = req.body;
+
+    if (!req.file) {
+        return res.status(400).json({
+            success: false,
+            message: "Video file is required",
+        });
+    }
+
+    const durationInSeconds = Number(duration) || 0;
+    const reward = calculateReward(durationInSeconds);
+    const videoUrl = `/uploads/videos/${req.file.filename}`;
 
     const video = await Video.create({
         title,
@@ -19,12 +29,11 @@ const createVideo = asyncHandler(async (req, res) => {
         videoUrl,
         thumbnail,
         reward,
-        duration,
+        duration: durationInSeconds,
         uploadedBy: req.user._id,
 
-        status: req.user.role === ROLES.ADMIN
-            ? "approved"
-            : "pending",
+        // TEMP: auto-approve until admin panel is built
+        status: "approved",
     });
 
     res.status(201).json({
@@ -37,7 +46,6 @@ const createVideo = asyncHandler(async (req, res) => {
 });
 
 const getVideos = asyncHandler(async (req, res) => {
-
     const videos = await Video.find({
         status: "approved",
     })
