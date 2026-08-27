@@ -72,6 +72,42 @@ export const getAdminUsers = async (token) => {
     return data;
 };
 
+export const updateAdminUser = async (token, id, updates) => {
+    const res = await fetch(`${API_BASE}/users/admin/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updates),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to update user');
+    }
+
+    return data;
+};
+
+export const deleteAdminUser = async (token, id) => {
+    const res = await fetch(`${API_BASE}/users/admin/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to delete user');
+    }
+
+    return data;
+};
+
 export const getLeaderboard = async (token) => {
     const res = await fetch(`${API_BASE}/leaderboard`, {
         method: 'GET',

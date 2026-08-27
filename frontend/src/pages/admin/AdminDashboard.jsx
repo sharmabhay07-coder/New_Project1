@@ -102,28 +102,6 @@ export default function AdminDashboard() {
 
     return (
         <div className="dash-page dash-space-y-6">
-            <header className="dash-flex dash-h-16 dash-items-center dash-justify-between dash-w-full dash-rounded-xl dash-border dash-border-border dash-bg-card dash-px-4 dash-md:px-6">
-                <div className="dash-flex dash-items-center dash-gap-2">
-                    <h1 className="dash-text-xl dash-font-bold dash-text-foreground">
-                        Earn Hub
-                    </h1>
-                    <span className="dash-ml-1 dash-text-xs dash-font-semibold dash-text-muted-foreground">
-                        Admin
-                    </span>
-                </div>
-
-                <nav className="dash-flex dash-items-center dash-gap-2">
-                    <NavLink className={adminNavLinkClass} to="/admin" end>
-                        Dashboard
-                    </NavLink>
-                    <NavLink className={adminNavLinkClass} to="/admin/users">
-                        Users
-                    </NavLink>
-                    <NavLink className={adminNavLinkClass} to="/admin/videos">
-                        Videos
-                    </NavLink>
-                </nav>
-            </header>
 
             {error ? (
                 <div className="dash-rounded-2xl dash-border dash-border-destructive dash-bg-background dash-p-4 dash-text-sm dash-text-destructive">

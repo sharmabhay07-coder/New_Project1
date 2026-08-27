@@ -1,22 +1,35 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import useAuth from '@/hooks/useAuth'
-import { getAdminUsers } from '@/lib/api/userApi'
+import {
+  deleteAdminUser,
+  getAdminUsers,
+  updateAdminUser,
+} from '@/lib/api/userApi'
 
 import AdminTable from '../components/AdminTable'
+import AdminUserEditModal from '../components/AdminUserEditModal'
+import AdminDeleteConfirmModal from '../components/AdminDeleteConfirmModal'
 
 const columns = [
   { key: 'name', label: 'Name' },
   { key: 'email', label: 'Email' },
   { key: 'role', label: 'Role' },
 ]
+
+const actionButtonClass =
+  'dash-rounded-lg dash-px-3 dash-py-1.5 dash-text-xs dash-font-bold dash-text-white dash-disabled:opacity-60 dash-transition-transform dash-hover:scale-105 dash-active:scale-95'
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [error, setError] = useState('')
+  const [actionId, setActionId] = useState('')
+  const [editUser, setEditUser] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
 
-  const { token } = useAuth()
+  const { token, user: currentUser } = useAuth()
 
   const fetchUsers = useCallback(async () => {
     if (!token) {
@@ -39,6 +52,44 @@ export default function AdminUsersPage() {
       setLoading(false)
     }
   }, [token])
+
+  const currentUserId = currentUser?._id || currentUser?.id
+
+  const handleEdit = async (updates) => {
+    if (!token || !editUser?._id) return
+
+    setActionId(`edit:${editUser._id}`)
+    setError('')
+
+    try {
+      await updateAdminUser(token, editUser._id, updates)
+      setEditUser(null)
+      await fetchUsers()
+    } catch (err) {
+      console.error('Failed to update admin user:', err)
+      setError(err.message || 'Failed to update user')
+    } finally {
+      setActionId('')
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!token || !deleteTarget?._id) return
+
+    setActionId(`delete:${deleteTarget._id}`)
+    setError('')
+
+    try {
+      await deleteAdminUser(token, deleteTarget._id)
+      setDeleteTarget(null)
+      await fetchUsers()
+    } catch (err) {
+      console.error('Failed to delete admin user:', err)
+      setError(err.message || 'Failed to delete user')
+    } finally {
+      setActionId('')
+    }
+  }
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -67,7 +118,7 @@ export default function AdminUsersPage() {
   return (
     <div className="dash-page dash-space-y-6">
       <div>
-        <h1 className="dash-text-2xl dash-font-bold dash-text-foreground">
+        <h1 className="dash-text-2xl dash-p-3 dash-font-bold dash-text-foreground">
           Users
         </h1>
       </div>
@@ -104,8 +155,49 @@ export default function AdminUsersPage() {
           columns={columns}
           data={rows}
           emptyMessage="No users found"
+          actions={[
+            {
+              key: 'edit',
+              label: 'Edit',
+              className: `${actionButtonClass} dash-bg-primary`,
+              isDisabled: (row) => Boolean(actionId),
+              onClick: (row) => {
+                setEditUser(users.find((user) => user._id === row.id))
+              },
+            },
+            {
+              key: 'delete',
+              label: 'Delete',
+              className: `${actionButtonClass} dash-bg-destructive`,
+              isDisabled: (row) => row.id === currentUserId || Boolean(actionId),
+              onClick: (row) => {
+                setDeleteTarget(users.find((user) => user._id === row.id))
+              },
+            },
+          ]}
         />
       )}
+
+      <AdminUserEditModal
+        user={editUser}
+        isOpen={Boolean(editUser)}
+        disableRole={editUser?._id === currentUserId}
+        onSave={handleEdit}
+        onCancel={() => setEditUser(null)}
+      />
+
+      <AdminDeleteConfirmModal
+        title="Delete user"
+        message={
+          <>
+            Are you sure you want to delete <strong className="dash-text-foreground">{deleteTarget?.name || 'this user'}</strong>
+            {deleteTarget?.email ? ` (${deleteTarget.email})` : ''}? This action cannot be undone.
+          </>
+        }
+        isOpen={Boolean(deleteTarget)}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+      />
     </div>
   )
 }

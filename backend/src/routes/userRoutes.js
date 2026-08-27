@@ -4,6 +4,8 @@ const {
     getMyBalance,
     getDashboardSummary,
     getAdminUsers,
+    updateAdminUser,
+    deleteAdminUser,
 } = require("../controllers/userController");
 const protect = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
@@ -33,5 +35,19 @@ router.get(
     protect,
     authorizeRoles(ROLES.ADMIN),
     getAdminUsers
+);
+
+router.patch(
+    "/admin/:id",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    updateAdminUser
+);
+
+router.delete(
+    "/admin/:id",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    deleteAdminUser
 );
 module.exports = router;

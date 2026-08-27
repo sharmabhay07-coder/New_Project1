@@ -91,3 +91,20 @@ export const uploadVideo = async (formData, token) => {
 
     return data;
 };
+
+export const deleteAdminVideo = async (token, id) => {
+    const res = await fetch(`${API_BASE}/videos/admin/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to delete video');
+    }
+
+    return data;
+};

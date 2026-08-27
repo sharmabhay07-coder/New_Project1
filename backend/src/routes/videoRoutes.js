@@ -10,6 +10,7 @@ const {
     getAdminVideos,
     approveVideo,
     rejectVideo,
+    deleteVideo,
 } = require("../controllers/adminVideoController");
 
 const protect = require("../middleware/authMiddleware");
@@ -51,6 +52,13 @@ router.patch(
     protect,
     authorizeRoles(ROLES.ADMIN),
     rejectVideo
+);
+
+router.delete(
+    "/admin/:id",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    deleteVideo
 );
 
 module.exports = router;
