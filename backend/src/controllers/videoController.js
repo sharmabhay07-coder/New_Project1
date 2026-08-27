@@ -8,7 +8,6 @@ const calculateReward = (durationInSeconds) => {
 };
 
 const createVideo = asyncHandler(async (req, res) => {
-    console.log("Upload request received:", req.body, req.file);   // ← ADD THIS LINE
 
     const { title, description, thumbnail, duration } = req.body;
 

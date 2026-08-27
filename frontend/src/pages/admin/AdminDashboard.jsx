@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Clock, CheckCircle, XCircle, Users } from 'lucide-react'
 
 import { getAdminVideos } from '@/lib/api/videoApi'
+import { getAdminUsers } from '@/lib/api/userApi'
 import useAuth from '@/hooks/useAuth'
 
 const DASH = '\u2014'
@@ -11,7 +12,6 @@ const emptyStats = {
     pendingReview: 0,
     approvedToday: 0,
     rejectedToday: 0,
-    // TODO: needs GET /users/admin/count endpoint
     totalUsers: null,
 }
 
@@ -63,8 +63,13 @@ export default function AdminDashboard() {
             setError('')
 
             try {
-                const res = await getAdminVideos(token)
-                const videos = res.data?.videos || []
+                const [videosRes, usersRes] = await Promise.all([
+                    getAdminVideos(token),
+                    getAdminUsers(token),
+                ])
+
+                const videos = videosRes.data?.videos || []
+                const users = usersRes.data?.users || []
 
                 setStats({
                     pendingReview: videos.filter(
@@ -81,8 +86,7 @@ export default function AdminDashboard() {
                             video.status?.toLowerCase() === 'rejected' &&
                             isToday(video.updatedAt)
                     ).length,
-                    // TODO: needs GET /users/admin/count endpoint
-                    totalUsers: null,
+                    totalUsers: users.length,
                 })
             } catch (err) {
                 console.error('Failed to fetch admin dashboard stats:', err)
@@ -161,7 +165,7 @@ export default function AdminDashboard() {
                 <div className="dash-card dash-p-6 dash-shadow-soft">
                     <Users className="dash-size-5 dash-text-accent" />
                     <p className="dash-mt-2 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
-                        {DASH}
+                        {loading || stats.totalUsers === null ? DASH : stats.totalUsers}
                     </p>
                     <p className="dash-text-xs dash-text-muted-foreground">
                         Total users

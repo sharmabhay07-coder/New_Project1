@@ -54,6 +54,24 @@ export const getMySubmissions = async (token) => {
     return data;
 };
 
+export const getAdminUsers = async (token) => {
+    const res = await fetch(`${API_BASE}/users/admin/all`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to load users');
+    }
+
+    return data;
+};
+
 export const getLeaderboard = async (token) => {
     const res = await fetch(`${API_BASE}/leaderboard`, {
         method: 'GET',

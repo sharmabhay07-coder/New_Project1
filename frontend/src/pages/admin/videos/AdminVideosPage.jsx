@@ -8,6 +8,7 @@ import {
 import useAuth from '@/hooks/useAuth'
 
 import AdminTable from '../components/AdminTable'
+import AdminConfirmModal from '../components/AdminConfirmModal'
 
 const columns = [
   { key: 'video', label: 'Video' },
@@ -48,6 +49,7 @@ export default function AdminVideosPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [actionId, setActionId] = useState('')
   const [error, setError] = useState('')
+  const [confirmTarget, setConfirmTarget] = useState(null)
 
   const { token } = useAuth()
 
@@ -242,7 +244,10 @@ export default function AdminVideosPage() {
               className: `${actionButtonClass} dash-bg-success`,
               isVisible: (row) => row.statusValue === 'pending',
               isDisabled: () => Boolean(actionId),
-              onClick: (row) => handleVideoAction(row, 'approve'),
+              onClick: (row) => {
+                const videoObj = videos.find((v) => v._id === row.id)
+                setConfirmTarget({ video: videoObj, action: 'approve' })
+              },
             },
             {
               key: 'reject',
@@ -250,11 +255,27 @@ export default function AdminVideosPage() {
               className: `${actionButtonClass} dash-bg-destructive`,
               isVisible: (row) => row.statusValue === 'pending',
               isDisabled: () => Boolean(actionId),
-              onClick: (row) => handleVideoAction(row, 'reject'),
+              onClick: (row) => {
+                const videoObj = videos.find((v) => v._id === row.id)
+                setConfirmTarget({ video: videoObj, action: 'reject' })
+              },
             },
           ]}
         />
       )}
+
+      <AdminConfirmModal
+        isOpen={Boolean(confirmTarget)}
+        video={confirmTarget?.video}
+        action={confirmTarget?.action}
+        onCancel={() => setConfirmTarget(null)}
+        onConfirm={() => {
+          if (confirmTarget?.video) {
+            handleVideoAction({ id: confirmTarget.video._id }, confirmTarget.action)
+            setConfirmTarget(null)
+          }
+        }}
+      />
     </div>
   )
 }

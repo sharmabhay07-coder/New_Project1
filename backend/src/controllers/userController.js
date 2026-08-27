@@ -74,8 +74,21 @@ const getDashboardSummary = asyncHandler(async (req, res) => {
 
 });
 
+const getAdminUsers = asyncHandler(async (req, res) => {
+    const users = await User.find().select("-password").sort({ createdAt: -1 });
+
+    res.status(200).json({
+        success: true,
+        message: "Users fetched successfully",
+        data: {
+            users,
+        },
+    });
+});
+
 module.exports = {
     getMySubmissions,
     getMyBalance,
     getDashboardSummary,
+    getAdminUsers,
 };

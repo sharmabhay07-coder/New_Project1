@@ -1,8 +1,10 @@
 .video-upload-card {
-  background: #fff;
+  background: var(--card-bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-soft);
   margin-bottom: 16px;
 }
 
@@ -10,14 +12,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #16a34a;
+  color: var(--primary);
   margin-bottom: 12px;
 }
 
 .video-upload-header h4 {
   font-size: 15px;
   font-weight: 700;
-  color: #111827;
+  color: var(--fg);
   margin: 0;
 }
 
@@ -33,32 +35,38 @@
   gap: 4px;
   font-size: 12px;
   font-weight: 600;
-  color: #374151;
+  color: var(--fg);
 }
 
 .video-upload-input,
 .video-upload-textarea,
 .video-upload-file {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 13px;
   font-weight: 400;
   font-family: inherit;
-  color: #111827;
+  color: var(--fg);
+  background: var(--bg);
   resize: vertical;
+}
+
+.video-upload-input::placeholder,
+.video-upload-textarea::placeholder {
+  color: var(--muted-fg);
 }
 
 .video-upload-input:focus,
 .video-upload-textarea:focus {
   outline: none;
-  border-color: #16a34a;
+  border-color: var(--primary);
 }
 
 .video-upload-btn {
   margin-top: 4px;
-  background: #16a34a;
-  color: #fff;
+  background: var(--primary);
+  color: var(--primary-fg);
   border: none;
   border-radius: 8px;
   padding: 9px;
@@ -82,13 +90,13 @@
 }
 
 .video-upload-error {
-  color: #dc2626;
+  color: var(--destructive);
   font-size: 12px;
   margin: 0;
 }
 
 .video-upload-success {
-  color: #16a34a;
+  color: var(--success);
   font-size: 12px;
   margin: 0;
 }
@@ -98,5 +106,7 @@
 }
 
 @keyframes video-upload-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
