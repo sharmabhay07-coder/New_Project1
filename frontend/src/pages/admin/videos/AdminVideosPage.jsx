@@ -4,11 +4,13 @@ import {
   approveAdminVideo,
   getAdminVideos,
   rejectAdminVideo,
+  deleteAdminVideo,
 } from '@/lib/api/videoApi'
 import useAuth from '@/hooks/useAuth'
 
 import AdminTable from '../components/AdminTable'
 import AdminConfirmModal from '../components/AdminConfirmModal'
+import AdminDeleteConfirmModal from '../components/AdminDeleteConfirmModal'
 
 const columns = [
   { key: 'video', label: 'Video' },
@@ -50,6 +52,7 @@ export default function AdminVideosPage() {
   const [actionId, setActionId] = useState('')
   const [error, setError] = useState('')
   const [confirmTarget, setConfirmTarget] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
 
   const { token } = useAuth()
 
@@ -176,10 +179,28 @@ export default function AdminVideosPage() {
     }
   }
 
+  const handleDeleteVideo = async () => {
+    if (!token || !deleteTarget?._id) return
+
+    setActionId(`delete:${deleteTarget._id}`)
+    setError('')
+
+    try {
+      await deleteAdminVideo(token, deleteTarget._id)
+      setDeleteTarget(null)
+      await fetchVideos({ showLoading: false })
+    } catch (err) {
+      console.error('Failed to delete video:', err)
+      setError(err.message || 'Failed to delete video')
+    } finally {
+      setActionId('')
+    }
+  }
+
   return (
     <div className="dash-page dash-space-y-6">
       <div>
-        <h1 className="dash-text-2xl dash-font-bold dash-text-foreground">
+        <h1 className="dash-text-2xl dash-p-3 dash-font-bold dash-text-foreground">
           Videos
         </h1>
       </div>
@@ -260,6 +281,16 @@ export default function AdminVideosPage() {
                 setConfirmTarget({ video: videoObj, action: 'reject' })
               },
             },
+            {
+              key: 'delete',
+              label: 'Delete',
+              className: `${actionButtonClass} dash-bg-destructive`,
+              isDisabled: () => Boolean(actionId),
+              onClick: (row) => {
+                const videoObj = videos.find((v) => v._id === row.id)
+                setDeleteTarget(videoObj)
+              },
+            },
           ]}
         />
       )}
@@ -275,6 +306,18 @@ export default function AdminVideosPage() {
             setConfirmTarget(null)
           }
         }}
+      />
+
+      <AdminDeleteConfirmModal
+        title="Delete video"
+        message={
+          <>
+            Are you sure you want to delete <strong className="dash-text-foreground">{deleteTarget?.title || 'this video'}</strong>? This will permanently remove it and cannot be undone.
+          </>
+        }
+        isOpen={Boolean(deleteTarget)}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteVideo}
       />
     </div>
   )

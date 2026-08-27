@@ -3,6 +3,7 @@ const TaskSubmission = require("../models/TaskSubmission");
 const Task = require("../models/Task");
 const User = require("../models/User");
 const SUBMISSION_STATUS = require("../constants/submissionStatus");
+const ROLES = require("../constants/Roles");
 
 const getMySubmissions = asyncHandler(async (req, res) => {
 
@@ -86,9 +87,77 @@ const getAdminUsers = asyncHandler(async (req, res) => {
     });
 });
 
+const updateAdminUser = asyncHandler(async (req, res) => {
+    const { name, email, mobileNumber, role } = req.body;
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found",
+        });
+    }
+
+    if (
+        req.user._id.toString() === req.params.id &&
+        role &&
+        role !== ROLES.ADMIN
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "You cannot change your own admin role",
+        });
+    }
+
+    if (name !== undefined) user.name = name;
+    if (email !== undefined) user.email = email;
+    if (mobileNumber !== undefined) user.mobileNumber = mobileNumber;
+    if (role !== undefined) user.role = role;
+
+    await user.save();
+
+    const updatedUser = await User.findById(user._id).select("-password");
+
+    res.status(200).json({
+        success: true,
+        message: "User updated successfully",
+        data: {
+            user: updatedUser,
+        },
+    });
+});
+
+const deleteAdminUser = asyncHandler(async (req, res) => {
+    if (req.user._id.toString() === req.params.id) {
+        return res.status(400).json({
+            success: false,
+            message: "You cannot delete your own account",
+        });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found",
+        });
+    }
+
+    await user.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+    });
+});
+
 module.exports = {
     getMySubmissions,
     getMyBalance,
     getDashboardSummary,
     getAdminUsers,
+    updateAdminUser,
+    deleteAdminUser,
 };

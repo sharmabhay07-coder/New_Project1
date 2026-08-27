@@ -66,8 +66,27 @@ const rejectVideo = asyncHandler(async (req, res) => {
     });
 });
 
+const deleteVideo = asyncHandler(async (req, res) => {
+    const video = await Video.findById(req.params.id);
+
+    if (!video) {
+        return res.status(404).json({
+            success: false,
+            message: "Video not found",
+        });
+    }
+
+    await video.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: "Video deleted successfully",
+    });
+});
+
 module.exports = {
     getAdminVideos,
     approveVideo,
     rejectVideo,
+    deleteVideo,
 };
