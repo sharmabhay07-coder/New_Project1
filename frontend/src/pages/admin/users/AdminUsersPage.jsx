@@ -100,6 +100,7 @@ export default function AdminUsersPage() {
     const query = searchQuery.trim().toLowerCase()
 
     return users
+      .filter((user) => user.role !== 'admin')
       .filter((user) => {
         if (!query) return true
 

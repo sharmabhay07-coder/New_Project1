@@ -165,3 +165,55 @@
   color: var(--primary);
   font-weight: 600;
 }
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .selection-grid {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .selection-page-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .selection-title {
+    font-size: 2.2rem;
+  }
+
+  .selection-card {
+    min-height: auto;
+    padding: 1.75rem;
+  }
+
+  .selection-card h3 {
+    margin-top: 1.25rem;
+    font-size: 1.35rem;
+  }
+
+  .selection-card p {
+    font-size: 0.95rem;
+  }
+
+  .selection-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .selection-title {
+    font-size: 1.8rem;
+  }
+
+  .selection-description {
+    font-size: 0.9rem;
+  }
+
+  .selection-card {
+    padding: 1.25rem;
+  }
+}

@@ -17,6 +17,41 @@ export const getVideos = async (token) => {
 
     return data;
 };
+export const startVideoWatch = async (token, id) => {
+    const res = await fetch(`${API_BASE}/videos/${id}/start`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to start video tracking');
+    }
+
+    return data;
+};
+
+export const completeVideoReward = async (token, id) => {
+    const res = await fetch(`${API_BASE}/videos/${id}/complete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to complete video');
+    }
+
+    return data;
+};
 
 export const getAdminVideos = async (token, status) => {
     const query = status ? `?status=${encodeURIComponent(status)}` : '';
@@ -74,13 +109,16 @@ export const rejectAdminVideo = async (token, id) => {
     return data;
 };
 
-export const uploadVideo = async (formData, token) => {
+export const uploadVideo = async (payload, token) => {
+    const isFormData = payload instanceof FormData;
+
     const res = await fetch(`${API_BASE}/videos`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
+            ...(isFormData ? {} : { 'Content-Type': 'application/json' })
         },
-        body: formData,
+        body: isFormData ? payload : JSON.stringify(payload),
     });
 
     const data = await res.json().catch(() => ({}));

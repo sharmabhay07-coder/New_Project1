@@ -2,15 +2,15 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
-const resolveVideoUrl = (videoUrl) => {
-  if (!videoUrl) return ''
+const resolveVideoUrl = (url) => {
+  if (!url) return ''
 
-  if (/^(https?:)?\/\//i.test(videoUrl) || /^(blob|data):/i.test(videoUrl)) {
-    return videoUrl
+  if (/^(https?:)?\/\//i.test(url) || /^(blob|data):/i.test(url)) {
+    return url
   }
 
   const uploadBase = API_BASE.replace(/\/api\/?$/, '').replace(/\/+$/, '')
-  const normalizedPath = videoUrl.startsWith('/') ? videoUrl : `/${videoUrl}`
+  const normalizedPath = url.startsWith('/') ? url : `/${url}`
 
   return `${uploadBase}${normalizedPath}`
 }
@@ -42,7 +42,7 @@ export default function AdminConfirmModal({
   const isReject = action === 'reject'
   const confirmLabel = isReject ? 'Reject' : 'Approve'
   const confirmColorClass = isReject ? 'dash-bg-destructive' : 'dash-bg-success'
-  const videoSrc = resolveVideoUrl(video?.videoUrl)
+  const videoSrc = resolveVideoUrl(video?.secure_url)
 
   return (
     <AnimatePresence>

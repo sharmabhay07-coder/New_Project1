@@ -11,6 +11,7 @@ export default function VideoUploadForm({ onUploaded }) {
   const [description, setDescription] = useState('')
   const [file, setFile] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -27,10 +28,53 @@ export default function VideoUploadForm({ onUploaded }) {
     })
   }
 
+  const uploadToCloudinary = (file, cloudName, uploadPreset) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const url = `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`;
+      
+      xhr.open('POST', url, true);
+      
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          const percent = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(percent);
+        }
+      };
+      
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          let errorMsg = 'Failed to upload to Cloudinary. Check your Unsigned Preset.';
+          try {
+            const errData = JSON.parse(xhr.responseText);
+            if (errData.error && errData.error.message) {
+              errorMsg = `Cloudinary Error: ${errData.error.message}`;
+            }
+          } catch (e) {
+            console.error('Failed to parse Cloudinary error:', xhr.responseText);
+          }
+          console.error('Cloudinary upload failed:', xhr.responseText);
+          reject(new Error(errorMsg));
+        }
+      };
+      
+      xhr.onerror = () => reject(new Error('Network error during upload.'));
+      
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', uploadPreset);
+      
+      xhr.send(fd);
+    });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setSuccess('')
+    setUploadProgress(0)
 
     if (!title.trim()) {
       setError('Title is required')
@@ -44,14 +88,16 @@ export default function VideoUploadForm({ onUploaded }) {
     try {
       setSubmitting(true)
       const duration = await getVideoDuration(file)
+      const backendData = new FormData();
+      backendData.append('title', title);
+      backendData.append('description', description);
+      backendData.append('duration', duration);
+      backendData.append('file', file);
 
-      const formData = new FormData()
-      formData.append('title', title)
-      formData.append('description', description)
-      formData.append('duration', duration)
-      formData.append('video', file)
+      setUploadProgress(50);
 
-      await uploadVideo(formData, token)
+      await uploadVideo(backendData, token)
+      setUploadProgress(100);
 
       setSuccess('Video uploaded successfully')
       setTitle('')
@@ -116,12 +162,24 @@ export default function VideoUploadForm({ onUploaded }) {
         <button type="submit" className="video-upload-btn" disabled={submitting}>
           {submitting ? (
             <>
-              <Loader2 size={14} className="video-upload-spin" /> Uploading...
+              <Loader2 size={14} className="video-upload-spin" /> {uploadProgress < 100 ? 'Uploading...' : 'Finalizing...'}
             </>
           ) : (
             'Upload'
           )}
         </button>
+
+        {submitting && (
+          <div style={{ marginTop: '12px', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#888', marginBottom: '4px' }}>
+              <span>Upload Progress</span>
+              <span>{uploadProgress}%</span>
+            </div>
+            <div style={{ width: '100%', height: '6px', backgroundColor: '#333', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ width: `${uploadProgress}%`, height: '100%', backgroundColor: 'var(--primary)', transition: 'width 0.2s ease-out' }} />
+            </div>
+          </div>
+        )}
       </form>
     </motion.div>
   )

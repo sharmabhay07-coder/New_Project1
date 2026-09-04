@@ -33,6 +33,9 @@ const AdminVideosPage = lazy(() =>
 const AdminUsersPage = lazy(() =>
   import('../../pages/admin/users/AdminUsersPage')
 )
+const AdminTasksPage = lazy(() =>
+  import('../../pages/admin/tasks/AdminTasksPage')
+)
 
 const PlansPage = lazy(() =>
   import('../../pages/dashboard/plans/PlansPage')
@@ -180,6 +183,14 @@ const router = createBrowserRouter([
                 element: (
                   <SuspenseWrapper>
                     <AdminUsersPage />
+                  </SuspenseWrapper>
+                ),
+              },
+              {
+                path: 'tasks',
+                element: (
+                  <SuspenseWrapper>
+                    <AdminTasksPage />
                   </SuspenseWrapper>
                 ),
               },

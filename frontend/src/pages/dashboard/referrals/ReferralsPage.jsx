@@ -50,15 +50,15 @@ export default function ReferralsPage() {
 
       <div className="dash-rounded-2xl dash-border dash-border-border dash-bg-card dash-p-5 dash-shadow-soft">
         <p className="dash-mb-2 dash-text-xs dash-font-semibold dash-uppercase dash-tracking-widest dash-text-muted-foreground">Your Referral Link</p>
-        <div className="dash-flex dash-items-center dash-gap-3">
-          <div className="dash-flex dash-flex-1 dash-items-center dash-gap-2 dash-rounded-xl dash-border dash-border-border dash-bg-secondary dash-px-4 dash-py-3">
+        <div className="dash-flex dash-flex-wrap dash-items-stretch dash-gap-3">
+          <div className="dash-flex dash-flex-1 dash-min-w-0 dash-items-center dash-gap-2 dash-rounded-xl dash-border dash-border-border dash-bg-secondary dash-px-4 dash-py-3">
             <Link2 className="dash-size-4 dash-shrink-0 dash-text-muted-foreground" />
             <span className="dash-flex-1 dash-truncate dash-font-mono dash-text-sm dash-text-foreground">{referralLink || 'Loading...'}</span>
           </div>
           <button
             onClick={copy}
             disabled={!referralLink}
-            className="dash-flex dash-items-center dash-gap-1.5 dash-rounded-xl dash-bg-primary dash-px-4 dash-py-3 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
+            className="dash-flex dash-shrink-0 dash-items-center dash-justify-center dash-gap-1.5 dash-rounded-xl dash-bg-primary dash-px-6 dash-py-3 dash-text-sm dash-font-bold dash-text-primary-foreground dash-shadow-soft-primary dash-transition-transform dash-hover:scale-105 dash-active:scale-95"
           >
             {copied ? <CheckCircle className="dash-size-4" /> : <Copy className="dash-size-4" />}
             {copied ? 'Copied!' : 'Copy'}
@@ -87,7 +87,7 @@ export default function ReferralsPage() {
         </p>
       </div>
 
-      <div className="dash-grid dash-grid-cols-1 dash-gap-4">
+      <div className="dash-grid dash-grid-cols-1 dash-md:grid-cols-2 dash-gap-4">
         {[
           { label: 'Total Invited', value: loading ? '—' : invited, icon: Users, color: 'dash-text-primary' },
           { label: 'Bonus Earned', value: loading ? '—' : `₹${bonusEarned.toFixed(2)}`, icon: TrendingUp, color: 'dash-text-success' },

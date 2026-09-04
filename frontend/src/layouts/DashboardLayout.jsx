@@ -287,9 +287,13 @@ export default function DashboardLayout() {
                   }}
                 >
 
-                  <span className="dash-user-avatar">
-                    {initials}
-                  </span>
+                  {user?.profilePicture ? (
+                    <img src={user.profilePicture} alt={userName} className="dash-user-avatar" style={{ objectFit: 'cover' }} />
+                  ) : (
+                    <span className="dash-user-avatar">
+                      {initials}
+                    </span>
+                  )}
 
                   <span className="dash-user-name">
                     {userName}
@@ -311,9 +315,13 @@ export default function DashboardLayout() {
 
                     <div className="dash-user-info">
 
-                      <span className="dash-user-avatar-lg">
-                        {initials}
-                      </span>
+                      {user?.profilePicture ? (
+                        <img src={user.profilePicture} alt={userName} className="dash-user-avatar-lg" style={{ objectFit: 'cover' }} />
+                      ) : (
+                        <span className="dash-user-avatar-lg">
+                          {initials}
+                        </span>
+                      )}
 
                       <div>
 

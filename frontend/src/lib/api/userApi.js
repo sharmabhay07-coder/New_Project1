@@ -143,3 +143,41 @@ export const getMe = async (token) => {
 
     return data;
 };
+
+export const uploadProfilePicture = async (token, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`${API_BASE}/users/upload-profile-picture`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to upload profile picture');
+    }
+
+    return data;
+};
+
+export const removeProfilePicture = async (token) => {
+    const res = await fetch(`${API_BASE}/users/remove-profile-picture`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+        throw new Error(data?.message || 'Failed to remove profile picture');
+    }
+
+    return data;
+};

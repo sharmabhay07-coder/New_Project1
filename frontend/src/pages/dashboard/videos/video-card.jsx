@@ -121,17 +121,26 @@ export function VideoCard({ video, className, style }) {
           )}
         </div>
 
-        <button className={'dash-video-card-btn ' + btnClass}>
-          {video.completed ? (
-            'Watch Again'
-          ) : video.progress > 0 ? (
-            'Continue Watching'
-          ) : (
-            <>
-              <Play style={{ width: 16, height: 16 }} fill="currentColor" /> Watch &amp; Earn
-            </>
-          )}
-        </button>
+        {!video.completed ? (
+          <button className={'dash-video-card-btn ' + btnClass}>
+            {video.progress > 0 ? (
+              'Continue Watching'
+            ) : (
+              <>
+                <Play style={{ width: 16, height: 16 }} fill="currentColor" /> Watch &amp; Earn
+              </>
+            )}
+          </button>
+        ) : (
+          <div className="dash-flex dash-items-center dash-justify-between dash-w-full dash-mt-2 dash-pt-3">
+            <span className="dash-flex dash-items-center dash-gap-1 dash-text-primary dash-font-bold dash-text-sm">
+               <Coins style={{ width: 14, height: 14 }} /> ₹{video.reward}
+            </span>
+            <span className="dash-text-primary dash-font-medium dash-text-sm dash-flex dash-items-center dash-gap-1">
+               Earned <Check style={{ width: 14, height: 14, strokeWidth: 3 }} />
+            </span>
+          </div>
+        )}
       </div>
     </motion.article>
   )

@@ -60,12 +60,17 @@ export default function AdminHeader() {
           <NavLink to="/admin" end>Dashboard</NavLink>
           <NavLink to="/admin/users">Users</NavLink>
           <NavLink to="/admin/videos">Videos</NavLink>
+          <NavLink to="/admin/tasks">Tasks</NavLink>
         </nav>
 
         <div className="dash-header-right">
           <ThemeToggle />
           <div className="dash-user-btn" style={{ cursor: 'default' }}>
-            <span className="dash-user-avatar">{initials}</span>
+            {user?.profilePicture ? (
+              <img src={user.profilePicture} alt={userName} className="dash-user-avatar" style={{ objectFit: 'cover' }} />
+            ) : (
+              <span className="dash-user-avatar">{initials}</span>
+            )}
             <span className="dash-user-name">{userName}</span>
           </div>
         </div>
