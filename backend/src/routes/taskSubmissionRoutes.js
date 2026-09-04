@@ -1,6 +1,7 @@
 const express = require("express");
 
-const { submitTask, reviewSubmission, getAllSubmissions, } = require("../controllers/taskSubmissionController");
+const { startTask, submitTask, reviewSubmission, getAllSubmissions, } = require("../controllers/taskSubmissionController");
+const upload = require("../middleware/uploadMiddleware");
 
 const protect = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
@@ -16,8 +17,15 @@ const {
 } = require("../validators/taskValidator");
 
 router.post(
+    "/start",
+    protect,
+    startTask
+);
+
+router.post(
     "/",
     protect,
+    upload.single("file"),
     submitTaskValidation,
     validate,
     submitTask

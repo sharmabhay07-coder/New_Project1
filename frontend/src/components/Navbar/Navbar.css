@@ -277,6 +277,13 @@ body {
 
 @media (max-width: 1024px) {
 
+  /* Ensure the navbar remains sticky & fixed to top to prevent it from disappearing during scroll */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 5000;
+  }
+
   .nav-links,
   .login-btn,
   .signup-btn {

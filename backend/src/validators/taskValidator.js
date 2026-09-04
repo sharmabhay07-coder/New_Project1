@@ -27,9 +27,7 @@ const createTaskValidation = [
         .withMessage("Reward must be zero or greater"),
 
     body("taskLink")
-        .trim()
-        .notEmpty()
-        .withMessage("Task link is required")
+        .optional({ values: "falsy" })
         .isURL()
         .withMessage("Task link must be a valid URL"),
 
@@ -43,11 +41,6 @@ const submitTaskValidation = [
     body("taskId")
         .isMongoId()
         .withMessage("Valid Task ID is required"),
-    body("proofImage")
-        .notEmpty()
-        .withMessage("Proof image is required")
-        .isURL()
-        .withMessage("Proof image must be a valid URL"),
     body("submissionNote")
         .optional({ values: "falsy" })
         .trim()

@@ -17,3 +17,47 @@
 .tasks-card:hover {
     box-shadow: var(--shadow-soft-lg);
 }
+
+.tasks-page-grid {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr) 280px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.tasks-col-fixed {
+    position: sticky;
+    top: 96px; /* 72px navbar + 24px padding/margin */
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.tasks-col-fixed::-webkit-scrollbar {
+    display: none;
+}
+
+.tasks-col-scroll {
+    /* No longer needs to scroll independently, flows with the document */
+}
+
+/* Make it responsive for mobile just in case */
+@media (max-width: 1024px) {
+    .tasks-page-grid {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+    .tasks-col-fixed {
+        position: static;
+        height: auto;
+        overflow-y: visible;
+    }
+    .tasks-col-scroll {
+        height: auto;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+    /* Change order so tasks are first or leave as is */
+}

@@ -49,11 +49,21 @@ function Navbar() {
         <div className="navbar-row">
 
           {/* LOGO */}
-          <div className="logo" onClick={closeMenu}>
+          <Link 
+            to="/"
+            className="logo" 
+            onClick={() => {
+              closeMenu();
+              if (location.pathname === '/') {
+                window.location.reload();
+              }
+            }}
+            style={{ textDecoration: 'none', cursor: 'pointer' }}
+          >
             <h1 className="logo-text">
               Earn <span>Hub</span>
             </h1>
-          </div>
+          </Link>
 
           {/* DESKTOP LINKS */}
           <ul className="nav-links">
@@ -147,9 +157,19 @@ function Navbar() {
 
         {/* HEADER */}
         <div className="drawer-top">
-          <h2 className="drawer-logo">
+          <Link 
+            to="/"
+            className="drawer-logo"
+            onClick={() => {
+              closeMenu();
+              if (location.pathname === '/') {
+                window.location.reload();
+              }
+            }}
+            style={{ textDecoration: 'none', cursor: 'pointer' }}
+          >
             Earn <span>Hub</span>
-          </h2>
+          </Link>
 
           <motion.button
             className="close-btn"

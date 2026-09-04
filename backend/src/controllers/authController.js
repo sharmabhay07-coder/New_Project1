@@ -20,6 +20,7 @@ const buildAuthResponse = (user) => ({
         role: user.role,
         isVerified: user.isVerified,
         balance: user.balance,
+        profilePicture: user.profilePicture,
     },
 });
 

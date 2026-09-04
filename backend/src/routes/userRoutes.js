@@ -24,6 +24,22 @@ router.get(
     getMyBalance
 );
 
+const upload = require("../middleware/uploadMiddleware");
+const { uploadProfilePicture, removeProfilePicture } = require("../controllers/userController");
+
+router.post(
+    "/upload-profile-picture",
+    protect,
+    upload.single("file"),
+    uploadProfilePicture
+);
+
+router.delete(
+    "/remove-profile-picture",
+    protect,
+    removeProfilePicture
+);
+
 router.get(
     "/dashboard",
     protect,

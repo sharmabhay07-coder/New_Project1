@@ -17,7 +17,7 @@ const taskSubmissionSchema = new mongoose.Schema(
 
         proofImage: {
             type: String,
-            required: true,
+            default: "",
         },
 
         submissionNote: {
@@ -42,6 +42,44 @@ const taskSubmissionSchema = new mongoose.Schema(
             type: String,
             default: "",
             maxlength: 500,
+        },
+
+        verificationCode: {
+            type: String,
+            default: "",
+        },
+        expectedCode: {
+            type: String,
+            default: "",
+        },
+        codeExpiresAt: {
+            type: Date,
+        },
+        fraudStatus: {
+            type: String,
+            enum: ["MATCH", "MISMATCH", "EXPIRED", "PENDING", ""],
+            default: "",
+        },
+        proofHash: {
+            type: String,
+            default: "",
+        },
+        isDuplicate: {
+            type: Boolean,
+            default: false,
+        },
+        duplicateOf: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "TaskSubmission",
+            default: null,
+        },
+        suspicious: {
+            type: Boolean,
+            default: false,
+        },
+        adminReviewRequired: {
+            type: Boolean,
+            default: true,
         },
     },
     {

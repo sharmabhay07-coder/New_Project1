@@ -57,6 +57,29 @@ const userSchema = new mongoose.Schema(
             default: null,
         },
 
+        profilePicture: {
+            type: String,
+            default: "",
+        },
+
+        completedVideos: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Video"
+        }],
+
+        trustScore: {
+            type: Number,
+            default: 100,
+            min: 0,
+            max: 100,
+        },
+
+        riskLevel: {
+            type: String,
+            enum: ["LOW", "MEDIUM", "HIGH"],
+            default: "LOW",
+        },
+
     },
     {
         timestamps: true,

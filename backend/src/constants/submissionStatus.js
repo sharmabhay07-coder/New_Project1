@@ -1,4 +1,5 @@
 const SUBMISSION_STATUS = {
+    STARTED: "started",
     PENDING: "pending",
     APPROVED: "approved",
     REJECTED: "rejected",

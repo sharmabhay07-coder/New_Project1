@@ -7,8 +7,6 @@
   flex-direction: column;
   gap: 16px;
   height: fit-content;
-  position: sticky;
-  top: 20px;
 }
 
 .mini-profile-top {
@@ -31,17 +29,29 @@
   flex-shrink: 0;
 }
 
+.mini-profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .mini-profile-info h4 {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
   color: var(--fg);
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mini-profile-info span {
   font-size: 12px;
   color: var(--muted-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mini-profile-earning {

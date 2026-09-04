@@ -3,4 +3,19 @@
   border-radius: 16px;
   border: 1px solid var(--border);
   background-color: var(--card-bg);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-avatar {
+  border-radius: 50%;
+  background-color: var(--muted);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-text {
+  height: 12px;
+  border-radius: 4px;
+  background-color: var(--muted);
+  margin-bottom: 8px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

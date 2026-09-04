@@ -51,7 +51,11 @@ export default function DashboardMiniProfile() {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="mini-profile-top">
-        <div className="mini-profile-avatar">{initials}</div>
+        {summary?.profilePicture || user?.profilePicture ? (
+          <img src={summary?.profilePicture || user?.profilePicture} alt={name} className="mini-profile-avatar" style={{ objectFit: 'cover' }} />
+        ) : (
+          <div className="mini-profile-avatar">{initials}</div>
+        )}
         <div className="mini-profile-info">
           <h4>{loading ? "Loading..." : name}</h4>
           <span>{user?.email || ""}</span>
