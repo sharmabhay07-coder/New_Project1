@@ -30,7 +30,7 @@ const taskSchema = new mongoose.Schema(
 
         taskLink: {
             type: String,
-            required: true,
+            default: "",
         },
 
         image: {

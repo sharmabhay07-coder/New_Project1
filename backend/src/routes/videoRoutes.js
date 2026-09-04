@@ -4,6 +4,8 @@ const upload = require("../middleware/uploadMiddleware");
 const {
     createVideo,
     getVideos,
+    startVideoWatch,
+    completeVideo,
 } = require("../controllers/videoController");
 
 const {
@@ -22,7 +24,7 @@ const router = express.Router();
 router.post(
     "/",
     protect,
-    upload.single("video"),
+    upload.single("file"),
     createVideo
 );
 
@@ -30,6 +32,18 @@ router.get(
     "/",
     protect,
     getVideos
+);
+
+router.post(
+    "/:id/start",
+    protect,
+    startVideoWatch
+);
+
+router.post(
+    "/:id/complete",
+    protect,
+    completeVideo
 );
 
 // ADMIN ROUTES

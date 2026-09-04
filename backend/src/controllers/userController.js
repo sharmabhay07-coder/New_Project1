@@ -70,6 +70,7 @@ const getDashboardSummary = asyncHandler(async (req, res) => {
             email: req.user.email,
             referralCode: req.user.referralCode || '',
             referredUsers,
+            profilePicture: req.user.profilePicture,
         },
     });
 
@@ -153,6 +154,58 @@ const deleteAdminUser = asyncHandler(async (req, res) => {
     });
 });
 
+const { uploadOnCloudinary } = require("../utils/cloudinary");
+
+const uploadProfilePicture = asyncHandler(async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({
+            success: false,
+            message: "No image file provided",
+        });
+    }
+
+    try {
+        const cloudData = await uploadOnCloudinary(req.file.buffer, req.file.originalname);
+        if (!cloudData || !cloudData.secure_url) {
+            return res.status(500).json({
+                success: false,
+                message: "Failed to upload image to Cloudinary",
+            });
+        }
+
+        const user = await User.findById(req.user._id);
+        user.profilePicture = cloudData.secure_url;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Profile picture updated successfully",
+            data: {
+                profilePicture: user.profilePicture,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: `Cloudinary Error: ${error.message || error}`,
+        });
+    }
+});
+
+const removeProfilePicture = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    user.profilePicture = "";
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Profile picture removed successfully",
+        data: {
+            profilePicture: "",
+        },
+    });
+});
+
 module.exports = {
     getMySubmissions,
     getMyBalance,
@@ -160,4 +213,6 @@ module.exports = {
     getAdminUsers,
     updateAdminUser,
     deleteAdminUser,
+    uploadProfilePicture,
+    removeProfilePicture,
 };
