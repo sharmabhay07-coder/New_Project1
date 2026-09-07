@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { RefreshCw, Search, Loader2, ChevronRight } from 'lucide-react'
+import { RefreshCw, Search, Loader2, ChevronRight, ClipboardList, Star, CheckCircle } from 'lucide-react'
 import { getTasks, submitTask } from '@/lib/api/taskApi'
 import useAuth from '@/hooks/useAuth'
 import DashboardMiniProfile from '@/pages/dashboard/components/dashboard-mini-profile'
@@ -16,12 +16,16 @@ export default function TasksPage() {
   const [formData, setFormData] = useState({})
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
+  const [todayEarned, setTodayEarned] = useState(0)
   const { token } = useAuth()
 
   const fetchTasks = () => {
     setLoading(true)
     getTasks(token)
-      .then(res => setTasks(res.data?.tasks || []))
+      .then(res => {
+        setTasks(res.data?.tasks || [])
+        setTodayEarned(res.data?.todayCoins ?? 0)
+      })
       .catch(() => setTasks([]))
       .finally(() => setLoading(false))
   }
@@ -36,18 +40,18 @@ export default function TasksPage() {
       setSubmitting(s => ({ ...s, [taskId]: 'starting' }))
       const { startTask } = await import('@/lib/api/taskApi')
       const res = await startTask(token, taskId)
-      
+
       if (taskLink) window.open(taskLink, '_blank')
       setSubmitting(s => ({ ...s, [taskId]: 'started' }))
-      setFormData(s => ({ 
-        ...s, 
-        [taskId]: { 
-          proofFile: null, 
+      setFormData(s => ({
+        ...s,
+        [taskId]: {
+          proofFile: null,
           submissionNote: '',
           verificationCode: res.data.verificationCode,
           codeExpiresAt: res.data.codeExpiresAt,
           inputCode: ''
-        } 
+        }
       }))
     } catch (err) {
       alert(err.message || 'Failed to start task')
@@ -66,13 +70,13 @@ export default function TasksPage() {
         alert('Verification Code is required')
         return
       }
-      
+
       setSubmitting(s => ({ ...s, [taskId]: 'submitting' }))
       await submitTask(token, taskId, proofFile, submissionNote, inputCode)
-      
+
       setSubmitting(s => ({ ...s, [taskId]: 'completed' }))
       alert('Proof submitted successfully. Waiting for admin approval.')
-      
+
       fetchTasks()
     } catch (err) {
       alert(err.message || 'Failed to submit')
@@ -81,7 +85,7 @@ export default function TasksPage() {
   }
 
   const getCategoryColor = (type) => {
-    switch(type?.toLowerCase()) {
+    switch (type?.toLowerCase()) {
       case 'app': return '🟣'
       case 'signup': return '🔵'
       case 'survey': return '🟢'
@@ -93,22 +97,62 @@ export default function TasksPage() {
 
   const filteredTasks = tasks.filter(t => {
     const matchesCat = activeCategory === 'All' || t.taskType?.toLowerCase() === activeCategory.toLowerCase()
-    const matchesSearch = (t.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) || 
-                          (t.description?.toLowerCase() || '').includes(searchQuery.toLowerCase())
+    const matchesSearch = (t.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+      (t.description?.toLowerCase() || '').includes(searchQuery.toLowerCase())
     return matchesCat && matchesSearch
   })
+
+  const avgReward = tasks.length
+    ? (tasks.reduce((sum, t) => sum + (Number(t.reward) || 0), 0) / tasks.length).toFixed(2)
+    : '0.00'
 
   return (
     <div className="tasks-page-grid">
       <div className="tasks-col-fixed">
-        <DashboardMiniProfile />
+        <div className="dash-flex dash-flex-col dash-gap-4">
+          <DashboardMiniProfile />
+          <div className="tasks-stats-grid">
+            {[
+              {
+                label: 'Tasks Available',
+                value: tasks.length,
+                icon: ClipboardList,
+                color: 'dash-text-primary',
+              },
+              {
+                label: 'Avg Reward',
+                value: `${avgReward} Coins`,
+                icon: Star,
+                color: 'dash-text-warning',
+              },
+              {
+                label: 'Total Earned Today',
+                value: `${todayEarned} Coins`,
+                icon: CheckCircle,
+                color: 'dash-text-success',
+              },
+            ].map((stat) => (
+              <div key={stat.label} className="dash-card dash-p-6 dash-shadow-soft">
+                <div className="dash-flex dash-items-center dash-gap-2">
+                  <stat.icon className={'dash-size-4 ' + stat.color} />
+                  <span className="dash-text-xs dash-text-muted-foreground">
+                    {stat.label}
+                  </span>
+                </div>
+                <p className="dash-mt-1 dash-text-xl dash-font-bold dash-tabular-nums dash-text-foreground">
+                  {stat.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="tasks-col-scroll dash-page">
         {/* ── HEADER ── */}
         <div className="dash-flex dash-items-center dash-justify-between dash-mb-6">
           <h1 className="dash-text-2xl dash-font-bold dash-text-foreground">Tasks</h1>
-          <button 
+          <button
             onClick={fetchTasks}
             className="dash-flex dash-items-center dash-gap-2 dash-text-sm dash-font-medium dash-text-muted-foreground dash-hover:text-foreground"
           >
@@ -121,9 +165,9 @@ export default function TasksPage() {
         <div className="dash-card dash-p-2 dash-mb-6 dash-flex dash-items-center dash-gap-2 dash-shadow-soft">
           <div className="dash-flex-1 dash-flex dash-items-center dash-gap-2 dash-px-3">
             <Search className="dash-size-4 dash-text-muted-foreground" />
-            <input 
-              type="text" 
-              placeholder="Search tasks..." 
+            <input
+              type="text"
+              placeholder="Search tasks..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="dash-w-full dash-bg-transparent dash-border-none dash-outline-none dash-text-sm"
@@ -145,11 +189,10 @@ export default function TasksPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`dash-px-4 dash-py-1.5 dash-rounded-full dash-text-sm dash-font-medium dash-transition-colors ${
-                  activeCategory === cat 
-                    ? 'dash-bg-primary dash-text-primary-foreground' 
+                className={`dash-px-4 dash-py-1.5 dash-rounded-full dash-text-sm dash-font-medium dash-transition-colors ${activeCategory === cat
+                    ? 'dash-bg-primary dash-text-primary-foreground'
                     : 'dash-bg-muted/50 dash-text-muted-foreground dash-hover:bg-muted'
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -158,15 +201,15 @@ export default function TasksPage() {
         </div>
 
         {/* ── TASK LIST ── */}
-          {loading ? (
-            <div className="dash-flex dash-items-center dash-justify-center dash-py-12">
-              <Loader2 className="dash-size-8 dash-animate-spin dash-text-primary" />
-            </div>
-          ) : filteredTasks.length === 0 ? (
-            <div className="dash-card dash-p-8 dash-text-center dash-text-muted-foreground">
-              No tasks found. Try adjusting your filters.
-            </div>
-          ) : (
+        {loading ? (
+          <div className="dash-flex dash-items-center dash-justify-center dash-py-12">
+            <Loader2 className="dash-size-8 dash-animate-spin dash-text-primary" />
+          </div>
+        ) : filteredTasks.length === 0 ? (
+          <div className="dash-card dash-p-8 dash-text-center dash-text-muted-foreground">
+            No tasks found. Try adjusting your filters.
+          </div>
+        ) : (
           <div className="dash-flex dash-flex-col dash-gap-4">
             {filteredTasks.map((task, i) => (
               <motion.div
@@ -177,13 +220,13 @@ export default function TasksPage() {
                 className="dash-card dash-p-5 dash-shadow-soft dash-border dash-border-border dash-transition-all dash-hover:shadow-md"
               >
                 <div className="dash-flex dash-flex-col md:dash-flex-row dash-gap-4 dash-justify-between">
-                  
+
                   {/* Task Info */}
                   <div className="dash-flex-1">
                     <h3 className="dash-text-lg dash-font-bold dash-text-foreground dash-flex dash-items-center dash-gap-2">
                       <span>{getCategoryColor(task.taskType)}</span> {task.title}
                     </h3>
-                    
+
                     <p className="dash-mt-2 dash-text-sm dash-text-muted-foreground dash-leading-relaxed">
                       {task.description}
                     </p>
@@ -193,7 +236,7 @@ export default function TasksPage() {
                       <span className="dash-flex dash-items-center dash-gap-1">👥 1 available</span>
                       {task.taskType?.toLowerCase() === 'survey' && <span className="dash-flex dash-items-center dash-gap-1">⭐ Easy</span>}
                     </div>
-                    
+
                     {/* Submission Form */}
                     {submitting[task._id] === 'started' && (
                       <div className="dash-mt-5 dash-rounded-xl dash-bg-muted/30 dash-p-4 dash-border dash-border-border">
@@ -208,8 +251,8 @@ export default function TasksPage() {
                         </div>
                         <div className="dash-mb-3">
                           <label className="dash-block dash-text-xs dash-font-medium dash-text-muted-foreground dash-mb-1">Enter Verification Code *</label>
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
                             placeholder="EH-XXXXX"
                             className="dash-w-full dash-rounded-lg dash-border dash-border-border dash-bg-background dash-px-3 dash-py-2 dash-text-sm"
                             onChange={(e) => setFormData(s => ({ ...s, [task._id]: { ...s[task._id], inputCode: e.target.value } }))}
@@ -217,8 +260,8 @@ export default function TasksPage() {
                         </div>
                         <div className="dash-mb-3">
                           <label className="dash-block dash-text-xs dash-font-medium dash-text-muted-foreground dash-mb-1">Proof Image File *</label>
-                          <input 
-                            type="file" 
+                          <input
+                            type="file"
                             accept="image/*"
                             className="dash-w-full dash-rounded-lg dash-border dash-border-border dash-bg-background dash-px-3 dash-py-2 dash-text-sm"
                             onChange={(e) => setFormData(s => ({ ...s, [task._id]: { ...s[task._id], proofFile: e.target.files[0] } }))}
@@ -226,7 +269,7 @@ export default function TasksPage() {
                         </div>
                         <div className="dash-mb-4">
                           <label className="dash-block dash-text-xs dash-font-medium dash-text-muted-foreground dash-mb-1">Note (Optional)</label>
-                          <textarea 
+                          <textarea
                             placeholder="Any details about your submission..."
                             className="dash-w-full dash-rounded-lg dash-border dash-border-border dash-bg-background dash-px-3 dash-py-2 dash-text-sm"
                             rows={2}
@@ -234,13 +277,13 @@ export default function TasksPage() {
                           />
                         </div>
                         <div className="dash-flex dash-justify-end dash-gap-2">
-                          <button 
+                          <button
                             onClick={() => setSubmitting(s => ({ ...s, [task._id]: null }))}
                             className="dash-rounded-lg dash-px-4 dash-py-2 dash-text-sm dash-font-medium dash-text-muted-foreground dash-hover:bg-muted"
                           >
                             Cancel
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleSubmitProof(task._id)}
                             className="dash-rounded-lg dash-bg-primary dash-px-4 dash-py-2 dash-text-sm dash-font-bold dash-text-primary-foreground"
                           >
@@ -256,7 +299,7 @@ export default function TasksPage() {
                     <span className="dash-text-base dash-font-bold dash-text-foreground dash-flex dash-items-center dash-gap-1">
                       🪙 +{task.reward} Coins
                     </span>
-                    
+
                     {task.submissionStatus === 'approved' ? (
                       <div className="dash-flex dash-flex-col dash-items-end dash-gap-1">
                         <span className="dash-w-full dash-text-center dash-rounded-lg dash-bg-success/10 dash-px-4 dash-py-2 dash-text-sm dash-font-bold dash-text-success">

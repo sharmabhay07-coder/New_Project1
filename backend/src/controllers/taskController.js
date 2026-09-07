@@ -54,7 +54,7 @@ const getAllTasks = asyncHandler(async (req, res) => {
     const tasksWithSubmissionStatus = tasks.map(task => {
         const taskObj = task.toObject();
         const submission = userSubmissionsMap[taskObj._id.toString()];
-        
+
         taskObj.hasSubmitted = !!submission;
         if (submission) {
             taskObj.submissionStatus = submission.status;
@@ -63,11 +63,26 @@ const getAllTasks = asyncHandler(async (req, res) => {
         return taskObj;
     });
 
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const approvedToday = await TaskSubmission.find({
+        user: req.user._id,
+        status: 'approved',
+        updatedAt: { $gte: startOfDay },
+    }).populate('task', 'reward');
+
+    const todayCoins = approvedToday.reduce(
+        (sum, s) => sum + (s.task?.reward || 0),
+        0
+    );
+
     res.status(200).json({
         success: true,
         message: "Tasks fetched successfully",
         data: {
             tasks: tasksWithSubmissionStatus,
+            todayCoins,
         },
     });
 });

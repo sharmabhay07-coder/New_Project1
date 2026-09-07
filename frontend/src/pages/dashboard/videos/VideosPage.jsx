@@ -82,6 +82,7 @@ export default function VideosPage() {
         })) || []
 
       setVideos(mapped)
+      setTodayEarned(res.data?.todayCoins ?? 0)
       setVideoErrors({})
     } catch (error) {
       console.error('Failed to fetch videos:', error)
@@ -97,31 +98,31 @@ export default function VideosPage() {
 
   const searchFiltered = searchQuery
     ? videos.filter(
-        (video) =>
-          video.title.toLowerCase().includes(searchQuery) ||
-          video.creator.toLowerCase().includes(searchQuery)
-      )
+      (video) =>
+        video.title.toLowerCase().includes(searchQuery) ||
+        video.creator.toLowerCase().includes(searchQuery)
+    )
     : videos
 
   const displayVideos = searchFiltered
 
   const avgReward = videos.length
     ? (
-        videos.reduce(
-          (total, video) => total + (video.reward || 0),
-          0
-        ) / videos.length
-      ).toFixed(2)
+      videos.reduce(
+        (total, video) => total + (video.reward || 0),
+        0
+      ) / videos.length
+    ).toFixed(2)
     : '0.00'
 
   useEffect(() => {
     const scrollContainer = document.querySelector('.videos-col-scroll');
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const videoEl = entry.target;
-          
+
           // Pause if scrolling out of view
           if (entry.intersectionRatio < 0.4) {
             if (!videoEl.paused) {
@@ -135,7 +136,7 @@ export default function VideosPage() {
               videoEl.play().catch((err) => {
                 if (err.name === 'NotAllowedError') {
                   videoEl.muted = true;
-                  videoEl.play().catch(() => {});
+                  videoEl.play().catch(() => { });
                 }
               });
             }
@@ -156,7 +157,7 @@ export default function VideosPage() {
         setTimeout(attach, 100);
       }
     };
-    
+
     attach();
 
     return () => {
@@ -166,7 +167,7 @@ export default function VideosPage() {
 
   const handlePlay = async (videoId) => {
     setPlayingId(videoId)
-    
+
     // Auto-pause any other playing videos
     const allVideos = document.querySelectorAll('video');
     allVideos.forEach((vid) => {
@@ -197,7 +198,7 @@ export default function VideosPage() {
 
     // Only claim if not already completed
     if (video.completed) return;
-    
+
     // Set this flag immediately in case called twice quickly
     rewardClaimed.current[video.id] = true;
 
@@ -234,7 +235,7 @@ export default function VideosPage() {
     if (video.completed) return;
 
     const vid = e.target;
-    
+
     if (timeTracker.current[video.id] === undefined) {
       timeTracker.current[video.id] = 0;
     }
@@ -250,8 +251,8 @@ export default function VideosPage() {
     const duration = vid.duration || 1;
     const currentProgress = (timeTracker.current[video.id] / duration) * 100;
     if (currentProgress >= 90 && !rewardClaimed.current[video.id]) {
-       rewardClaimed.current[video.id] = true;
-       handleVideoEnded(video);
+      rewardClaimed.current[video.id] = true;
+      handleVideoEnded(video);
     }
   }
 
@@ -260,9 +261,9 @@ export default function VideosPage() {
 
       {/* ───── MOBILE OVERLAY ───── */}
       {(leftOpen || rightOpen) && (
-        <div 
-          className="dash-mobile-overlay" 
-          onClick={() => { setLeftOpen(false); setRightOpen(false); }} 
+        <div
+          className="dash-mobile-overlay"
+          onClick={() => { setLeftOpen(false); setRightOpen(false); }}
         />
       )}
 
@@ -291,13 +292,13 @@ export default function VideosPage() {
               },
               {
                 label: 'Avg Reward',
-                value: `₹${avgReward}`,
+                value: `${avgReward} Coins`,
                 icon: Star,
                 color: 'dash-text-warning',
               },
               {
                 label: 'Total Earned Today',
-                value: `₹${todayEarned.toFixed(2)}`,
+                value: `${todayEarned} Coins`,
                 icon: CheckCircle,
                 color: 'dash-text-success',
               },
@@ -341,8 +342,8 @@ export default function VideosPage() {
                     width: '100%'
                   }}
                 >
-                  <div 
-                    className="dash-rounded-xl dash-bg-muted" 
+                  <div
+                    className="dash-rounded-xl dash-bg-muted"
                     style={{ aspectRatio: '9/16' }}
                   />
 
@@ -463,13 +464,13 @@ export default function VideosPage() {
                           const rect = e.target.getBoundingClientRect();
                           // Native controls are roughly the bottom 60px of the video
                           const isClickOnControls = e.clientY > rect.bottom - 60;
-                          
+
                           // If they clicked the controls, let the browser handle it natively
                           if (isClickOnControls) return;
 
                           e.target.muted = false;
                           if (e.target.paused) {
-                            e.target.play().catch(() => {});
+                            e.target.play().catch(() => { });
                           } else {
                             e.target.pause();
                           }
@@ -506,19 +507,19 @@ export default function VideosPage() {
                             const videoEl = document.getElementById(`vid-${video.id}`)
                             if (videoEl) {
                               videoEl.muted = false;
-                              videoEl.play().catch(() => {})
+                              videoEl.play().catch(() => { })
                             }
                           }}
                         >
                           <motion.div whileHover={{ scale: 1.15 }} transition={{ type: 'spring', stiffness: 400, damping: 10 }}>
-                            <Play 
-                              style={{ 
-                                width: 72, 
-                                height: 72, 
-                                color: 'white', 
-                                filter: 'drop-shadow(0px 4px 8px rgba(0,0,0,0.6))' 
-                              }} 
-                              fill="white" 
+                            <Play
+                              style={{
+                                width: 72,
+                                height: 72,
+                                color: 'white',
+                                filter: 'drop-shadow(0px 4px 8px rgba(0,0,0,0.6))'
+                              }}
+                              fill="white"
                             />
                           </motion.div>
                         </button>
@@ -528,7 +529,7 @@ export default function VideosPage() {
                           style={{ zIndex: 3, pointerEvents: 'none' }}
                         >
                           <Star style={{ width: 14, height: 14 }} />
-                          +₹{video.reward.toFixed(2)}
+                          +{video.reward} Coins
                         </div>
 
                         <div
@@ -556,14 +557,14 @@ export default function VideosPage() {
 
                     <div className="dash-mt-3 dash-flex dash-items-center dash-justify-between">
 
-                      <span className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg dash-bg-primary/10 dash-px-2 dash-py-0.5 dash-text-xs dash-font-bold dash-text-primary">
+                      <span className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg reward-badge-bg dash-px-2 dash-py-0.5 dash-text-xs dash-font-bold dash-text-primary">
                         <Star className="dash-size-3" />
-                        ₹{video.reward}
+                        {video.reward} Coins
                       </span>
 
                       <span className="dash-text-xs dash-text-muted-foreground">
                         {video.completed
-                          ? <span style={{color: 'var(--success)'}}>Earned ✓</span>
+                          ? <span style={{ color: 'var(--success)' }}>Earned ✓</span>
                           : playingId === video.id
                             ? 'Playing'
                             : 'Ready to watch'}

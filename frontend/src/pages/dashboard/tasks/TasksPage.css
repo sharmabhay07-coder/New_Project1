@@ -27,7 +27,8 @@
 
 .tasks-col-fixed {
     position: sticky;
-    top: 96px; /* 72px navbar + 24px padding/margin */
+    top: 96px;
+    /* 72px navbar + 24px padding/margin */
     height: calc(100vh - 120px);
     overflow-y: auto;
     -ms-overflow-style: none;
@@ -38,9 +39,6 @@
     display: none;
 }
 
-.tasks-col-scroll {
-    /* No longer needs to scroll independently, flows with the document */
-}
 
 /* Make it responsive for mobile just in case */
 @media (max-width: 1024px) {
@@ -49,15 +47,24 @@
         flex-direction: column;
         height: auto;
     }
+
     .tasks-col-fixed {
         position: static;
         height: auto;
         overflow-y: visible;
     }
+
     .tasks-col-scroll {
         height: auto;
         overflow-y: visible;
         padding-right: 0;
     }
+
     /* Change order so tasks are first or leave as is */
+}
+
+.tasks-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }

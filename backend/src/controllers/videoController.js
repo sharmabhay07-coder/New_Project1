@@ -21,7 +21,7 @@ const createVideo = asyncHandler(async (req, res) => {
                 message: "Video file or Cloudinary secure_url & public_id are required",
             });
         }
-        
+
         try {
             const cloudData = await uploadOnCloudinary(req.file.buffer, req.file.originalname);
             if (!cloudData || !cloudData.secure_url) {
@@ -78,11 +78,26 @@ const getVideos = asyncHandler(async (req, res) => {
         return vidObj;
     });
 
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const completedToday = await VideoProgress.find({
+        user: req.user._id,
+        isCompleted: true,
+        updatedAt: { $gte: startOfDay },
+    }).populate('video', 'reward');
+
+    const todayCoins = completedToday.reduce(
+        (sum, p) => sum + (p.video?.reward || 0),
+        0
+    );
+
     res.status(200).json({
         success: true,
         message: "Videos fetched successfully",
         data: {
             videos: videosWithStatus,
+            todayCoins,
         },
     });
 });
@@ -125,9 +140,9 @@ const completeVideo = asyncHandler(async (req, res) => {
     if (!video) {
         return res.status(404).json({ success: false, message: "Video not found" });
     }
-    
+
     const user = req.user;
-    
+
     // Check if already completed
     if (user.completedVideos && user.completedVideos.includes(video._id)) {
         return res.status(400).json({ success: false, message: "Reward already claimed for this video" });
@@ -144,9 +159,9 @@ const completeVideo = asyncHandler(async (req, res) => {
     const requiredSeconds = video.duration * 0.90; // 90% genuine watch requirement to avoid drift issues
 
     if (elapsedSeconds < requiredSeconds) {
-        return res.status(400).json({ 
-            success: false, 
-            message: `Video completed too fast. Please watch the full video without skipping. Elapsed: ${Math.floor(elapsedSeconds)}s, Required: ${Math.floor(requiredSeconds)}s.` 
+        return res.status(400).json({
+            success: false,
+            message: `Video completed too fast. Please watch the full video without skipping. Elapsed: ${Math.floor(elapsedSeconds)}s, Required: ${Math.floor(requiredSeconds)}s.`
         });
     }
 
@@ -154,7 +169,7 @@ const completeVideo = asyncHandler(async (req, res) => {
     await progress.save();
 
     // Give reward to user
-    user.balance += video.reward;
+    user.coins = (user.coins || 0) + video.reward;
     if (!user.completedVideos) user.completedVideos = [];
     user.completedVideos.push(video._id);
     await user.save();
@@ -163,7 +178,7 @@ const completeVideo = asyncHandler(async (req, res) => {
         success: true,
         message: "Video completed, reward added",
         reward: video.reward,
-        newBalance: user.balance
+        newCoins: user.coins
     });
 });
 
