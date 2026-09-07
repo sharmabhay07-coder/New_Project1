@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Loader2, CheckCircle, XCircle, Search, Clock, ExternalLink, Plus } from 'lucide-react'
 import useAuth from '@/hooks/useAuth'
-import { getTaskSubmissions, reviewTaskSubmission } from '@/lib/api/taskApi'
+import { getTaskSubmissions, reviewTaskSubmission, deleteTaskSubmission, deleteBulkTaskSubmissions } from '@/lib/api/taskApi'
 import AdminConfirmModal from '../components/AdminConfirmModal'
 import AdminCreateTaskModal from './components/AdminCreateTaskModal'
+import AdminDeleteConfirmModal from '../components/AdminDeleteConfirmModal'
 
 const ProofViewer = ({ url }) => {
   const [error, setError] = useState(false);
@@ -46,6 +47,7 @@ export default function AdminTasksPage() {
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('pending') // pending, approved, rejected
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, submissionId: null, action: null })
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, type: null, id: null })
   const [processing, setProcessing] = useState(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { token } = useAuth()
@@ -86,6 +88,25 @@ export default function AdminTasksPage() {
     }
   }
 
+  const handleDelete = async () => {
+    const { type, id } = deleteModal
+    setProcessing(true)
+    try {
+      if (type === 'single') {
+        await deleteTaskSubmission(token, id)
+        setSubmissions(prev => prev.filter(s => s._id !== id))
+      } else if (type === 'bulk') {
+        await deleteBulkTaskSubmissions(token, activeTab)
+        setSubmissions(prev => prev.filter(s => s.status !== activeTab))
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to delete')
+    } finally {
+      setProcessing(false)
+      setDeleteModal({ isOpen: false, type: null, id: null })
+    }
+  }
+
   const filteredSubmissions = submissions.filter(s => s.status === activeTab)
 
   return (
@@ -119,25 +140,35 @@ export default function AdminTasksPage() {
       )}
 
       {/* TABS */}
-      <div className="dash-flex dash-items-center dash-gap-2 dash-border-b dash-border-border dash-pb-4">
-        {['pending', 'approved', 'rejected'].map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`dash-rounded-lg dash-px-4 dash-py-2 dash-text-sm dash-font-semibold dash-capitalize dash-transition-colors ${
-              activeTab === tab 
-                ? 'dash-bg-primary dash-text-primary-foreground' 
-                : 'dash-bg-muted/50 dash-text-muted-foreground dash-hover:bg-muted dash-hover:text-foreground'
-            }`}
+      <div className="dash-flex dash-items-center dash-justify-between dash-border-b dash-border-border dash-pb-4">
+        <div className="dash-flex dash-items-center dash-gap-2">
+          {['pending', 'approved', 'rejected'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`dash-rounded-lg dash-px-4 dash-py-2 dash-text-sm dash-font-semibold dash-capitalize dash-transition-colors ${
+                activeTab === tab 
+                  ? 'dash-bg-primary dash-text-primary-foreground' 
+                  : 'dash-bg-muted/50 dash-text-muted-foreground dash-hover:bg-muted dash-hover:text-foreground'
+              }`}
+            >
+              {tab}
+              {tab === 'pending' && submissions.filter(s => s.status === 'pending').length > 0 && (
+                <span className="dash-ml-2 dash-inline-flex dash-items-center dash-justify-center dash-rounded-full dash-bg-white/20 dash-px-2 dash-py-0.5 dash-text-xs">
+                  {submissions.filter(s => s.status === 'pending').length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+        {(activeTab === 'approved' || activeTab === 'rejected') && filteredSubmissions.length > 0 && (
+          <button 
+            onClick={() => setDeleteModal({ isOpen: true, type: 'bulk', id: null })}
+            className="dash-rounded-lg dash-bg-destructive/10 dash-text-destructive dash-px-3 dash-py-1.5 dash-text-xs dash-font-bold dash-hover:bg-destructive/20"
           >
-            {tab}
-            {tab === 'pending' && submissions.filter(s => s.status === 'pending').length > 0 && (
-              <span className="dash-ml-2 dash-inline-flex dash-items-center dash-justify-center dash-rounded-full dash-bg-white/20 dash-px-2 dash-py-0.5 dash-text-xs">
-                {submissions.filter(s => s.status === 'pending').length}
-              </span>
-            )}
+            Delete All {activeTab}
           </button>
-        ))}
+        )}
       </div>
 
       {loading ? (
@@ -216,8 +247,16 @@ export default function AdminTasksPage() {
                     </button>
                   </>
                 ) : (
-                  <div className="dash-w-full dash-text-center dash-text-sm dash-font-medium dash-text-muted-foreground">
-                    Reviewed on {new Date(sub.updatedAt).toLocaleDateString()}
+                  <div className="dash-flex dash-items-center dash-justify-between dash-w-full">
+                    <span className="dash-text-xs dash-font-medium dash-text-muted-foreground">
+                      Reviewed on {new Date(sub.updatedAt).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => setDeleteModal({ isOpen: true, type: 'single', id: sub._id })}
+                      className="dash-text-destructive dash-text-xs dash-font-bold dash-hover:underline"
+                    >
+                      Delete
+                    </button>
                   </div>
                 )}
               </div>
@@ -226,7 +265,7 @@ export default function AdminTasksPage() {
         </div>
       )}
 
-      {/* CONFIRM MODAL */}
+      {/* CONFIRM MODALS */}
       <AdminConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={() => !processing && setConfirmModal({ isOpen: false, submissionId: null, action: null })}
@@ -241,6 +280,19 @@ export default function AdminTasksPage() {
         isLoading={processing}
         isDestructive={confirmModal.action === 'rejected'}
       />
+      
+      <AdminDeleteConfirmModal
+        isOpen={deleteModal.isOpen}
+        onCancel={() => !processing && setDeleteModal({ isOpen: false, type: null, id: null })}
+        onConfirm={handleDelete}
+        title={deleteModal.type === 'bulk' ? `Delete All ${activeTab}?` : 'Delete Submission?'}
+        message={
+          deleteModal.type === 'bulk' 
+            ? `Are you sure you want to permanently delete all ${activeTab} submissions? This cannot be undone.` 
+            : 'Are you sure you want to permanently delete this submission record? This cannot be undone.'
+        }
+      />
+
       <AnimatePresence>
         <AdminCreateTaskModal
           isOpen={isCreateModalOpen}

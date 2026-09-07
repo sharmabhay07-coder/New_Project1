@@ -78,3 +78,27 @@ export const reviewTaskSubmission = async (token, submissionId, status, reviewNo
   if (!res.ok) throw new Error(data?.message || 'Failed to review submission');
   return data;
 };
+
+export const deleteTaskSubmission = async (token, submissionId) => {
+  const res = await fetch(`${API_BASE}/submissions/${submissionId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.message || 'Failed to delete submission');
+  return data;
+};
+
+export const deleteBulkTaskSubmissions = async (token, status) => {
+  const res = await fetch(`${API_BASE}/submissions/bulk?status=${status}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.message || 'Failed to bulk delete submissions');
+  return data;
+};

@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { startTask, submitTask, reviewSubmission, getAllSubmissions, } = require("../controllers/taskSubmissionController");
+const { startTask, submitTask, reviewSubmission, getAllSubmissions, deleteSubmission, deleteBulkSubmissions } = require("../controllers/taskSubmissionController");
 const upload = require("../middleware/uploadMiddleware");
 
 const protect = require("../middleware/authMiddleware");
@@ -45,6 +45,20 @@ router.put(
     reviewSubmissionValidation,
     validate,
     reviewSubmission
+);
+
+router.delete(
+    "/bulk",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    deleteBulkSubmissions
+);
+
+router.delete(
+    "/:id",
+    protect,
+    authorizeRoles(ROLES.ADMIN),
+    deleteSubmission
 );
 
 module.exports = router;

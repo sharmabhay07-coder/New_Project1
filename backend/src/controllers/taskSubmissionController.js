@@ -190,9 +190,43 @@ const getAllSubmissions = asyncHandler(async (req, res) => {
     });
 });
 
+const deleteSubmission = asyncHandler(async (req, res) => {
+    const submission = await TaskSubmission.findById(req.params.id);
+
+    if (!submission) {
+        res.status(404);
+        throw new Error("Submission not found");
+    }
+
+    await submission.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: "Submission deleted successfully",
+    });
+});
+
+const deleteBulkSubmissions = asyncHandler(async (req, res) => {
+    const { status } = req.query;
+
+    if (!status || !["approved", "rejected"].includes(status)) {
+        res.status(400);
+        throw new Error("Invalid status. Can only bulk delete 'approved' or 'rejected' submissions.");
+    }
+
+    const result = await TaskSubmission.deleteMany({ status });
+
+    res.status(200).json({
+        success: true,
+        message: `${result.deletedCount} ${status} submissions deleted successfully`,
+    });
+});
+
 module.exports = {
     startTask,
     submitTask,
     reviewSubmission,
     getAllSubmissions,
+    deleteSubmission,
+    deleteBulkSubmissions,
 };
