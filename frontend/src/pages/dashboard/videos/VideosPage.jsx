@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 
 import { getVideos, completeVideoReward, startVideoWatch } from '@/lib/api/videoApi'
+import { API_BASE_URL } from '@/lib/api/config'
 import useAuth from '@/hooks/useAuth'
 
 import DashboardMiniProfile from '../components/dashboard-mini-profile'
@@ -19,10 +20,7 @@ import VideoUploadForm from './video-upload-form'
 
 import './VideosPage.css'
 
-const API_BASE =
-  import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-
-const BACKEND_BASE = API_BASE.replace(/\/api\/?$/, '')
+const BACKEND_BASE = API_BASE_URL.replace(/\/api\/?$/, '')
 
 export default function VideosPage() {
   const [videos, setVideos] = useState([])
@@ -349,7 +347,7 @@ export default function VideosPage() {
 
                   <div className="dash-mt-3 dash-space-y-2">
                     <div className="dash-h-4 dash-rounded dash-bg-muted" />
-                    <div className="dash-h-3 dash-w-2/3 dash-rounded dash-bg-muted" />
+                    <div className="dash-h-3 videos-skeleton-line-short dash-rounded dash-bg-muted" />
                   </div>
                 </div>
               ))}
@@ -557,8 +555,7 @@ export default function VideosPage() {
 
                     <div className="dash-mt-3 dash-flex dash-items-center dash-justify-between">
 
-                      <span className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg reward-badge-bg dash-px-2 dash-py-0.5 dash-text-xs dash-font-bold dash-text-primary">
-                        <Star className="dash-size-3" />
+                      <span className="dash-flex dash-items-center dash-gap-1 dash-rounded-lg reward-badge-bg dash-px-2 reward-badge-py dash-text-xs dash-font-bold dash-text-primary">                        <Star className="dash-size-3" />
                         {video.reward} Coins
                       </span>
 

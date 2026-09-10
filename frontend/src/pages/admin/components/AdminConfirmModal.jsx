@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+import { API_BASE_URL } from '@/lib/api/config'
 
 const resolveVideoUrl = (url) => {
   if (!url) return ''
@@ -9,7 +8,7 @@ const resolveVideoUrl = (url) => {
     return url
   }
 
-  const uploadBase = API_BASE.replace(/\/api\/?$/, '').replace(/\/+$/, '')
+  const uploadBase = API_BASE_URL.replace(/\/api\/?$/, '').replace(/\/+$/, '')
   const normalizedPath = url.startsWith('/') ? url : `/${url}`
 
   return `${uploadBase}${normalizedPath}`

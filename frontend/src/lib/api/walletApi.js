@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from './config';
+
+const API_BASE = API_BASE_URL;
 
 export const createWithdrawal = async (token, payload) => {
   const res = await fetch(`${API_BASE}/withdrawals`, {
