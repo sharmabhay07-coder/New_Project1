@@ -35,14 +35,16 @@ const allowedOrigins = new Set([
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.has(origin)) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.has(origin)) {
             callback(null, true);
-            return;
+        } else {
+            callback(new Error('Not allowed by CORS'));
         }
-
-        callback(new Error('Not allowed by CORS'));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false,
 }));
 
