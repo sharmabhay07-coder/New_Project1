@@ -10,14 +10,26 @@ async function request(path, body = null, method = 'POST') {
     options.body = JSON.stringify(body);
   }
 
-  const res = await fetch(`${API_BASE_URL}${path}`, options);
-  const data = await res.json().catch(() => ({}));
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}${path}`, options);
+  } catch (error) {
+    // This catches network errors, including CORS issues or DNS failures
+    throw new Error('Network error or CORS issue: Failed to reach the server. Please check your connection or CORS configuration.');
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (error) {
+    data = {};
+  }
 
   if (!res.ok) {
     const message =
       data?.message ||
       data?.errors?.[0]?.msg ||
-      'Something went wrong. Please try again.';
+      `HTTP Error ${res.status}: ${res.statusText}`;
     throw new Error(message);
   }
 

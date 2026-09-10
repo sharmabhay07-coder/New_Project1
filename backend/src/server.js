@@ -40,12 +40,12 @@ app.use(cors({
 
         if (!normalizedOrigin || allowedOrigins.has(normalizedOrigin)) {
             callback(null, true);
-            return;
+        } else {
+            callback(new Error('Not allowed by CORS'));
         }
-
-        callback(new Error('Not allowed by CORS'));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: false,
 }));
 
