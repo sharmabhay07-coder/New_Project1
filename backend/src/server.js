@@ -28,9 +28,22 @@ const app = express();
 
 app.use(express.json());
 
+const allowedOrigins = new Set([
+    'https://new-project1-chi.vercel.app',
+    process.env.CORS_ORIGIN,
+].filter(Boolean));
+
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    credentials: true,
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.has(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error('Not allowed by CORS'));
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    credentials: false,
 }));
 
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));

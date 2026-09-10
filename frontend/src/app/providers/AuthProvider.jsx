@@ -4,6 +4,7 @@ import {
   useCallback,
   useMemo,
   useEffect,
+  useRef,
 } from 'react';
 
 import { getMe } from '@/lib/api/userApi';
@@ -29,10 +30,14 @@ export default function AuthProvider({ children }) {
     }
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => Boolean(localStorage.getItem(TOKEN_KEY)) && !localStorage.getItem(USER_KEY));
+  const fetchInFlightRef = useRef(false);
 
   const fetchUser = useCallback(async (authToken) => {
     if (!authToken) return;
+    if (fetchInFlightRef.current) return;
+
+    fetchInFlightRef.current = true;
 
     try {
       const res = await getMe(authToken);
@@ -44,20 +49,46 @@ export default function AuthProvider({ children }) {
       }
     } catch (err) {
       console.error('Failed to fetch user profile:', err);
+    } finally {
+      fetchInFlightRef.current = false;
     }
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadUser = async () => {
-      if (token) {
-        await fetchUser(token);
+      if (!token) {
+        if (isMounted) {
+          setLoading(false);
+        }
+        return;
       }
 
-      setLoading(false);
+      if (user) {
+        if (isMounted) {
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (isMounted) {
+        setLoading(true);
+      }
+
+      await fetchUser(token);
+
+      if (isMounted) {
+        setLoading(false);
+      }
     };
 
     loadUser();
-  }, [token, fetchUser]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token, user, fetchUser]);
 
   const login = useCallback((newToken, newUser) => {
     localStorage.setItem(TOKEN_KEY, newToken);
