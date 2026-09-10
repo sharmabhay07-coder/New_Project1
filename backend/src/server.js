@@ -28,14 +28,17 @@ const app = express();
 
 app.use(express.json());
 
+const normalizeOrigin = (value) => value?.trim().replace(/\/+$/, '') || '';
 const allowedOrigins = new Set([
     'https://new-project1-chi.vercel.app',
-    process.env.CORS_ORIGIN,
+    normalizeOrigin(process.env.CORS_ORIGIN),
 ].filter(Boolean));
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.has(origin)) {
+        const normalizedOrigin = normalizeOrigin(origin);
+
+        if (!normalizedOrigin || allowedOrigins.has(normalizedOrigin)) {
             callback(null, true);
             return;
         }
