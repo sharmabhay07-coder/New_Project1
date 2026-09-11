@@ -32,7 +32,7 @@ const setEmailDeliveryError = (res, error) => {
 
     if (error.code === "EMAIL_DELIVERY_FAILED") {
         res.status(502);
-        const detailedMessage = error.cause ? `: ${error.cause.message}` : "";
+        const detailedMessage = error.message ? ` (${error.message})` : "";
         throw new Error(`OTP email could not be delivered. Please try again shortly${detailedMessage}`);
     }
 

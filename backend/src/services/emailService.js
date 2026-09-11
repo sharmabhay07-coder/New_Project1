@@ -98,10 +98,17 @@ const sendOtpEmail = async ({ to, name, otp, expiresInMinutes = 5 }) => {
     const recipient = maskEmail(to);
 
     try {
+        const senderEmail = process.env.SMTP_USER.trim().replace(/^["']|["']$/g, '');
+        const senderName = process.env.EMAIL_FROM 
+            ? process.env.EMAIL_FROM.replace(senderEmail, '').trim().replace(/^["']|["']$/g, '') 
+            : 'EarnHub';
+            
+        const formattedFrom = `"${senderName}" <${senderEmail}>`;
+
         const info = await getTransporter().sendMail({
-            from: process.env.EMAIL_FROM,
+            from: formattedFrom,
             to,
-            replyTo: process.env.EMAIL_REPLY_TO || undefined,
+            replyTo: process.env.EMAIL_REPLY_TO ? process.env.EMAIL_REPLY_TO.trim().replace(/^["']|["']$/g, '') : undefined,
             subject: `${otp} is your EarnHub verification code`,
             text: [
                 `Hello ${name || "there"},`,
@@ -140,11 +147,11 @@ const sendOtpEmail = async ({ to, name, otp, expiresInMinutes = 5 }) => {
         if (error instanceof EmailServiceError) throw error;
 
         console.error(
-            `[EMAIL] OTP delivery failed recipient=${recipient} code=${error.code || "unknown"} command=${error.command || "unknown"} responseCode=${error.responseCode || "unknown"} message=${error.message}`
+            `[EMAIL] OTP delivery failed recipient=${recipient} code=${error.code || "unknown"} command=${error.command || "unknown"} responseCode=${error.responseCode || "unknown"} message=${error.message}\nFull Error:`, error
         );
 
         throw new EmailServiceError(
-            "The email provider rejected or failed to send the OTP email",
+            `The email provider rejected or failed to send the OTP email. Reason: ${error.message}`,
             "EMAIL_DELIVERY_FAILED",
             error
         );
