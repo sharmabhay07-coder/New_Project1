@@ -1,4 +1,18 @@
-const apiBaseUrl = import.meta.env.VITE_API_URL;
+const normalizeApiBaseUrl = (value) => {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return '';
+  }
+
+  const withoutTrailingSlash = trimmed.replace(/\/+$/, '');
+
+  return withoutTrailingSlash.endsWith('/api')
+    ? withoutTrailingSlash
+    : `${withoutTrailingSlash}/api`;
+};
+
+const apiBaseUrl = normalizeApiBaseUrl(import.meta.env.VITE_API_URL);
 
 const isLocalhostUrl = (value) => {
   try {
@@ -20,6 +34,7 @@ if (import.meta.env.PROD && isLocalhostUrl(apiBaseUrl)) {
   throw new Error('VITE_API_URL must not point to localhost in production');
 }
 
+<<<<<<< HEAD
 let finalApiUrl = apiBaseUrl;
 
 // Force localhost for local development so it doesn't hit the broken Render deployment
@@ -29,3 +44,6 @@ if (!import.meta.env.PROD && !isLocalhostUrl(apiBaseUrl)) {
 }
 
 export const API_BASE_URL = finalApiUrl.replace(/\/+$/, '');
+=======
+export const API_BASE_URL = apiBaseUrl;
+>>>>>>> main

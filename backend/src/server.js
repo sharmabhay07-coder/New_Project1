@@ -28,31 +28,17 @@ const app = express();
 
 app.use(express.json());
 
-// Default dev origins + production origin + anything from .env (comma-separated)
-const envOrigins = (process.env.CORS_ORIGIN || "")
-    .split(",")
-    .map((o) => o.trim())
-    .filter(Boolean);
-
+const normalizeOrigin = (value) => value?.trim().replace(/\/+$/, '') || '';
 const allowedOrigins = new Set([
     'https://new-project1-chi.vercel.app',
-    'http://localhost:5173',   // Vite default dev port
-    'http://localhost:3000',   // fallback, if used
-    ...envOrigins,
-]);
+    normalizeOrigin(process.env.CORS_ORIGIN),
+].filter(Boolean));
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        // Allow any localhost or local network IP (192.168.*.*, 10.*.*.*, 172.*.*.*)
-        const isLocal = /^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+)(:\d+)?$/.test(origin);
-        
-        // Allow any vercel.app subdomain
-        const isVercel = /^https:\/\/.*\.vercel\.app$/.test(origin);
+        const normalizedOrigin = normalizeOrigin(origin);
 
-        if (allowedOrigins.has(origin) || isLocal || isVercel) {
+        if (!normalizedOrigin || allowedOrigins.has(normalizedOrigin)) {
             callback(null, true);
         } else {
             console.log("Blocked by CORS:", origin); // helps debug in server logs
