@@ -20,4 +20,12 @@ if (import.meta.env.PROD && isLocalhostUrl(apiBaseUrl)) {
   throw new Error('VITE_API_URL must not point to localhost in production');
 }
 
-export const API_BASE_URL = apiBaseUrl.replace(/\/+$/, '');
+let finalApiUrl = apiBaseUrl;
+
+// Force localhost for local development so it doesn't hit the broken Render deployment
+if (!import.meta.env.PROD && !isLocalhostUrl(apiBaseUrl)) {
+  console.warn('Forcing API to localhost for local development to avoid Render deployment issues.');
+  finalApiUrl = 'http://localhost:5000/api';
+}
+
+export const API_BASE_URL = finalApiUrl.replace(/\/+$/, '');

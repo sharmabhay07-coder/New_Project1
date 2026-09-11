@@ -49,10 +49,19 @@ const getEmailConfig = () => {
         );
     }
 
+    let finalPort = port;
+    let finalSecure = secureValue ? secureValue === "true" : port === 465;
+
+    // Force port 465 for Gmail to avoid outbound SMTP blocks on port 587
+    if (process.env.SMTP_HOST.trim().toLowerCase() === 'smtp.gmail.com') {
+        finalPort = 465;
+        finalSecure = true;
+    }
+
     return {
         host: process.env.SMTP_HOST.trim(),
-        port,
-        secure: secureValue ? secureValue === "true" : port === 465,
+        port: finalPort,
+        secure: finalSecure,
         auth: {
             user: process.env.SMTP_USER.trim(),
             pass: process.env.SMTP_PASS.trim(),
