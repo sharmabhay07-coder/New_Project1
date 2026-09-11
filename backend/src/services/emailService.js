@@ -49,22 +49,25 @@ const getEmailConfig = () => {
         );
     }
 
+    let host = process.env.SMTP_HOST.trim().replace(/^["']|["']$/g, '');
     let finalPort = port;
     let finalSecure = secureValue ? secureValue === "true" : port === 465;
 
     // Force port 465 for Gmail to avoid outbound SMTP blocks on port 587
-    if (process.env.SMTP_HOST.trim().toLowerCase() === 'smtp.gmail.com') {
+    if (host.toLowerCase() === 'smtp.gmail.com') {
         finalPort = 465;
         finalSecure = true;
     }
 
     return {
-        host: process.env.SMTP_HOST.trim(),
+        host: host,
         port: finalPort,
         secure: finalSecure,
+        // Force IPv4 because Node sometimes tries IPv6 and fails with ENETUNREACH
+        family: 4, 
         auth: {
-            user: process.env.SMTP_USER.trim(),
-            pass: process.env.SMTP_PASS.trim(),
+            user: process.env.SMTP_USER.trim().replace(/^["']|["']$/g, ''),
+            pass: process.env.SMTP_PASS.trim().replace(/^["']|["']$/g, ''),
         },
     };
 };
@@ -151,8 +154,9 @@ const sendOtpEmail = async ({ to, name, otp, expiresInMinutes = 5 }) => {
 const verifyEmailTransport = async () => {
     try {
         await getTransporter().verify();
+        const config = getEmailConfig();
         console.info(
-            `[EMAIL] SMTP connection verified host=${process.env.SMTP_HOST} port=${process.env.SMTP_PORT || 587}`
+            `[EMAIL] SMTP connection verified host=${config.host} port=${config.port}`
         );
         return true;
     } catch (error) {
