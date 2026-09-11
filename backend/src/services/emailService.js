@@ -55,7 +55,7 @@ const getEmailConfig = () => {
         secure: secureValue ? secureValue === "true" : port === 465,
         auth: {
             user: process.env.SMTP_USER.trim(),
-            pass: process.env.SMTP_PASS,
+            pass: process.env.SMTP_PASS.trim(),
         },
     };
 };
